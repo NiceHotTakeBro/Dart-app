@@ -29,18 +29,22 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
 </style></head><body>
+<div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
 <div class="card"><h2>Kamera (Test)</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
-<div class="card"><div style="position:relative;line-height:0"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas></div></div>
-<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
+<div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
+<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
 <div class="row" style="margin-top:8px"><button id="c5">Stimmt</button><button id="c6">Falsch</button><button id="c7">In Training übernehmen</button><select id="tm" style="min-height:48px;font:inherit"><option value="n">Spitze: nahe Mitte</option><option value="m">Spitze: Schwerpunkt</option></select></div>
 <div class="mu" id="cst" style="margin-top:8px"></div></section>
 <script>
 const $=s=>document.querySelector(s), K="dart_v1";
-let DB={sessions:[]};try{DB=JSON.parse(localStorage.getItem(K))||DB}catch(e){}
-const save=()=>{try{localStorage.setItem(K,JSON.stringify(DB))}catch(e){}};
+let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
+if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
+ ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
+const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.cur);
+const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST))}catch(e){}};
 const B=(t,n,g)=>({t,n,g,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 const P={
@@ -100,7 +104,7 @@ function render(){const m=$("#m");if(view==3)return;if(view==0)m.innerHTML=plan(
  if(q("fin"))q("fin").onclick=fin;if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
- if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){DB={sessions:[]};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}}}
+ if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}}}
 
 function plan(){return DAYS.map((k,i)=>`<div class="card ${i==today?"today":""}"><div class="row"><div><h2>${DN[i]}${i==today?" (heute)":""} · ${P[k].n}</h2><div class="mu">${P[k].x}</div></div><button class="${i==today?"pri":""}" data-start="${i}">Training starten</button></div></div>`).join("")}
 
@@ -139,10 +143,10 @@ function hist(){const S=DB.sessions;let t=wk();
   else if(r.bl){const d=r.bl.reduce((a,b)=>a+b.d,0),h=r.bl.reduce((a,b)=>a+b.h,0);e=`Treffer ${h}/${d} (${Math.round(h/d*100)}%)`}
   else if(r.legs)e=`${r.legs.length} Legs`;
   return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
- return t+'<button id="reset">Alle Daten löschen</button><div class="mu" style="margin-top:8px">Die Daten bleiben nur in diesem Browser auf diesem Tablet gespeichert.</div>'}
+ return t+'<button id="reset">Alle Daten dieses Profils löschen</button><div class="mu" style="margin-top:8px">Die Daten bleiben nur in diesem Browser auf diesem Tablet gespeichert.</div>'}
 // Kamera
 DB.cam=DB.cam||{};
-let cal=[],HB=null,Hi=null,ref=null,det=null,ca=false;
+let Z=1,cal=[],HB=null,Hi=null,ref=null,det=null,ca=false;
 const BP=[[0,-170],[170,0],[0,170],[-170,0]],cm=t=>$("#cmsg").textContent=t,cv=$("#cv"),ovc=$("#ov");
 function hom(S,D){const A=[];S.forEach((p,i)=>{const[x,y]=p,[u,v]=D[i];A.push([x,y,1,0,0,0,-u*x,-u*y,u],[0,0,0,x,y,1,-v*x,-v*y,v])});
  for(let i=0;i<8;i++){let m=i;for(let r=i+1;r<8;r++)if(Math.abs(A[r][i])>Math.abs(A[m][i]))m=r;[A[i],A[m]]=[A[m],A[i]];
@@ -160,21 +164,21 @@ function ov(){ovc.width=cv.clientWidth||640;ovc.height=cv.clientHeight||360;cons
  [170,162,107,99,15.9].forEach(r=>pl([...Array(73)].map((_,i)=>[r*Math.sin(i*Math.PI/36),-r*Math.cos(i*Math.PI/36)])));
  for(let i=0;i<20;i++){const a=(i*18-9)*Math.PI/180;pl([[15.9*Math.sin(a),-15.9*Math.cos(a)],[170*Math.sin(a),-170*Math.cos(a)]])}
  if(det){const[x,y]=ap(Hi,det.x,det.y);g.strokeStyle="#f0f";g.lineWidth=3;g.beginPath();g.moveTo(x*W-10,y*Ht);g.lineTo(x*W+10,y*Ht);g.moveTo(x*W,y*Ht-10);g.lineTo(x*W,y*Ht+10);g.stroke()}}
-function frame(){if(!cv.videoWidth)return null;const c=document.createElement("canvas");c.width=320;c.height=Math.round(320*cv.videoHeight/cv.videoWidth);
- const g=c.getContext("2d");g.drawImage(cv,0,0,c.width,c.height);return g.getImageData(0,0,c.width,c.height)}
+function frame(){if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/Z,sh=vh/Z,c=document.createElement("canvas");c.width=400;c.height=Math.round(400*sh/sw);
+ const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=Z;return im}
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
 function detect(){const f=frame();if(!f||!ref||!HB)return cm("Erst Kamera starten, Scheibe markieren und Referenz setzen.");
- if(f.width!=ref.width||f.height!=ref.height)return cm("Bildgröße hat sich geändert. Bitte Referenz neu setzen.");
+ if(f.width!=ref.width||f.height!=ref.height||f.z!=ref.z)return cm("Bildgröße hat sich geändert. Bitte Referenz neu setzen.");
  const W=f.width,Ht=f.height,pts=[];
  for(let j=0;j<Ht;j++)for(let i=0;i<W;i++){const k=(j*W+i)*4,d=Math.abs(f.data[k]-ref.data[k])+Math.abs(f.data[k+1]-ref.data[k+1])+Math.abs(f.data[k+2]-ref.data[k+2]);
-  if(d>90){const[x,y]=ap(HB,i/W,j/Ht);if(x*x+y*y<176*176)pts.push([x,y])}}
+  if(d>90){const[x,y]=ap(HB,.5+(i/W-.5)/f.z,.5+(j/Ht-.5)/f.z);if(x*x+y*y<176*176)pts.push([x,y])}}
  if(pts.length<15)return cm("Nichts Neues erkannt ("+pts.length+" Pixel geändert).");
  pts.sort((a,b)=>a[0]*a[0]+a[1]*a[1]-b[0]*b[0]-b[1]*b[1]);
  const sel=$("#tm").value=="n"?pts.slice(0,Math.max(5,Math.ceil(pts.length/10))):pts,
   x=sel.reduce((a,p)=>a+p[0],0)/sel.length,y=sel.reduce((a,p)=>a+p[1],0)/sel.length,[c,v]=field(x,y);
  det={c,v,x,y};cm("Vorschlag: "+(c=="0"?"Daneben":c=="SB"?"Bull (25)":c=="DB"?"Doppel-Bull (50)":c+" ("+v+" Punkte)")+" · "+pts.length+" geänderte Pixel");ov()}
 $("#c1").onclick=()=>{const fp=document.permissionsPolicy||document.featurePolicy;if(fp&&fp.allowsFeature&&!fp.allowsFeature("camera"))return cm("Blockiert: Der Rahmen, in dem diese Seite angezeigt wird, verbietet die Kamera. Das liegt nicht an deinen Browser-Einstellungen.");if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return cm("Kamera nicht verfügbar: Dieser Browser oder diese Seite erlaubt keinen Kamerazugriff.");
- navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false}).then(st=>{cv.srcObject=st;cv.onloadedmetadata=ov;cm("Kamera läuft. Als Nächstes „Scheibe markieren“.")}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false}).then(st=>{cv.srcObject=st;cv.onloadedmetadata=()=>{HB=Hi=null;ov();cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0)}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
 $("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm("Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
 ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]);
  if(cal.length==4){ca=false;setCal(cal);DB.cam.cal=cal;save();cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
@@ -184,6 +188,49 @@ $("#c4").onclick=detect;
 $("#c5").onclick=()=>{if(!det)return;DB.cam.ok=(DB.cam.ok||0)+1;save();stt();ref=frame();det=null;ov()};
 $("#c6").onclick=()=>{if(!det)return;DB.cam.bad=(DB.cam.bad||0)+1;save();stt();ref=frame();det=null;ov()};
 $("#c7").onclick=()=>{if(s&&!s.done&&det){dart(det.c,det.v);ref=frame();det=null;ov();cm("Übernommen. Nächster Pfeil.")}else cm("Kein aktives Training oder keine Erkennung.")};
-if(DB.cam.cal)setCal(DB.cam.cal);stt();
+function autoFit(f){const W=f.width,Hh=f.height,d=f.data,P=[];
+ for(let j=0;j<Hh;j+=2)for(let i=0;i<W;i+=2){const k=(j*W+i)*4,r=d[k],g=d[k+1],b=d[k+2],red=r>110&&r>g*1.8&&r>b*1.8,grn=g>80&&g>r*1.5&&g>b*1.1;if(red||grn)P.push([i,j,red?1:0])}
+ if(P.length<200)return null;
+ let A=0,I=0;[[170,162],[107,99],[15.9,0]].forEach(([R,r])=>{A+=Math.PI*(R*R-r*r);I+=Math.PI/2*(R**4-r**4)});const sg=Math.sqrt(I/A/2);
+ function fit(P0){let c,L,Li,S=P0;if(S.length<200)return null;
+  for(let it=0;it<5;it++){c=[S.reduce((a,p)=>a+p[0],0)/S.length,S.reduce((a,p)=>a+p[1],0)/S.length];let a=0,b=0,e=0;
+   S.forEach(p=>{const x=p[0]-c[0],y=p[1]-c[1];a+=x*x;b+=x*y;e+=y*y});a/=S.length;b/=S.length;e/=S.length;
+   const sd=Math.sqrt(a*e-b*b);if(!(sd>0))return null;const t=Math.sqrt(a+e+2*sd);
+   L=[[(a+sd)/t/sg,b/t/sg],[b/t/sg,(e+sd)/t/sg]];const dt=L[0][0]*L[1][1]-L[0][1]*L[1][0];Li=[[L[1][1]/dt,-L[0][1]/dt],[-L[1][0]/dt,L[0][0]/dt]];
+   S=P0.filter(p=>{const x=p[0]-c[0],y=p[1]-c[1];return Math.hypot(Li[0][0]*x+Li[0][1]*y,Li[1][0]*x+Li[1][1]*y)<185});if(S.length<150)return null}
+  let best=-1e9,bt=0,bn=1;
+  for(let th=-18;th<=18;th++){const T=th*Math.PI/180,co=Math.cos(T),si=Math.sin(T);let sc=0,n=0;
+   S.forEach(p=>{const x=p[0]-c[0],y=p[1]-c[1],u=Li[0][0]*x+Li[0][1]*y,v=Li[1][0]*x+Li[1][1]*y,r=Math.hypot(u,v);if(r<150||r>176)return;
+    const bx=co*u+si*v,by=-si*u+co*v,sq=Math.floor((((Math.atan2(bx,-by)*180/Math.PI+9)%360)+360)%360/18);n++;sc+=((sq%2==0)==(p[2]==1))?1:-1});
+   if(sc>best){best=sc;bt=T;bn=n}}
+  if(bn<60||best/bn<.4)return null;
+  const co=Math.cos(bt),si=Math.sin(bt);
+  let q=BP.map(([x,y])=>{const rx=co*x-si*y,ry=si*x+co*y;return[(c[0]+L[0][0]*rx+L[0][1]*ry)/W,(c[1]+L[1][0]*rx+L[1][1]*ry)/Hh]});
+  const Q=S.filter((_,i)=>i%2==0),sc=z=>{const h=hom(z,BP);let t=0;Q.forEach(p=>{const[bx,by]=ap(h,p[0]/W,p[1]/Hh),r=Math.hypot(bx,by);if((r>=161&&r<=171)||(r>=98&&r<=108)||r<=16.5)t++;
+   if(r>=150&&r<=176){const sq=Math.floor((((Math.atan2(bx,-by)*180/Math.PI+9)%360)+360)%360/18);if((sq%2==0)==(p[2]==1))t+=.5}});return t};
+  let cur=sc(q);
+  [.01,.005,.0025,.00125].forEach(st=>{for(let ps=0;ps<3;ps++)for(let i=0;i<8;i++)for(const dd of[st,-st]){const q2=q.map(p=>p.slice());q2[i>>1][i&1]+=dd;const v=sc(q2);if(v>cur){cur=v;q=q2}}});
+  return{q,score:cur/(Q.length*1.5)}}
+ const cs=6,gw=Math.ceil(W/cs),G=new Map();P.forEach((p,i)=>{const k=Math.floor(p[1]/cs)*gw+Math.floor(p[0]/cs);if(!G.has(k))G.set(k,[]);G.get(k).push(i)});
+ const seen=new Set(),comps=[];
+ G.forEach((_,k0)=>{if(seen.has(k0))return;const st=[k0],comp=[];seen.add(k0);
+  while(st.length){const k=st.pop();comp.push(...G.get(k));const x=k%gw,y=(k-x)/gw;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const nk=(y+dy)*gw+x+dx;if(x+dx>=0&&x+dx<gw&&G.has(nk)&&!seen.has(nk)){seen.add(nk);st.push(nk)}}}
+  comps.push(comp)});
+ comps.sort((a,b)=>b.length-a.length);
+ const seeds=comps.slice(0,3).map(cp=>[cp.reduce((a,i)=>a+P[i][0],0)/cp.length,cp.reduce((a,i)=>a+P[i][1],0)/cp.length]);
+ let bestR=fit(P);
+ seeds.forEach(sd=>[.2,.3,.45].forEach(R=>{const r=fit(P.filter(p=>Math.hypot(p[0]-sd[0],p[1]-sd[1])<R*W));if(r&&(!bestR||r.score>bestR.score))bestR=r}));
+ return bestR&&bestR.score>=.7?bestR.q:null}
+function autoCal(){const f=frame();if(!f)return false;const q=autoFit(f);if(!q)return false;
+ const pts=q.map(([u,v])=>[.5+(u-.5)/f.z,.5+(v-.5)/f.z]);if(pts.some(p=>p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3))return false;
+ setCal(pts);DB.cam.cal=pts;save();ca=false;det=null;ov();return true}
+function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;if(autoCal())cm("Scheibe automatisch erkannt. Passt das grüne Gitter? Wenn nicht: „Scheibe markieren“.");else if(n<6)autoTry(n+1);else cm("Scheibe nicht automatisch gefunden. Bitte „Scheibe markieren“ nutzen.")},700)}
+$("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
+function setZ(z,quiet){Z=Math.max(1,Math.min(4,Math.round(z*4)/4));cv.style.transform=ovc.style.transform="scale("+Z+")";$("#zl").textContent=Z.toFixed(2).replace(/0$/,"")+"×";DB.cam.z=Z;save();if(!quiet){ref=null;det=null;ov();cm("Zoom geändert. Bitte Referenz neu setzen.")}}
+$("#zm").onclick=()=>setZ(Z-.25);$("#zp").onclick=()=>setZ(Z+.25);
+function pfBar(){const o=$("#pf");o.innerHTML=Object.keys(ST.p).map(id=>`<button class="${id==ST.cur?"on":""}" data-p="${id}">${esc(ST.p[id].name)}</button>`).join("")+'<button id="pren">Name ändern</button>';
+ o.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(id==ST.cur)return;if(s&&!s.done&&s.darts>0&&!confirm("Das laufende Training wird verworfen. Profil wechseln?"))return;s=null;H=[];useP(id);stt();pfBar();go(view)});
+ $("#pren").onclick=()=>{const n=prompt("Neuer Name für dieses Profil:",ST.p[ST.cur].name);if(n&&n.trim()){ST.p[ST.cur].name=n.trim().slice(0,20);save();pfBar()}}}
+stt();if(DB.cam.z)setZ(DB.cam.z,true);pfBar();
 go(0);
 </script></body></html>
