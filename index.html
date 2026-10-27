@@ -35,7 +35,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
 <div class="card"><h2>Kamera (Test)</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
-<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
+<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c9">Standbild speichern</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
 <div class="row" style="margin-top:8px"><button id="c5">Stimmt</button><button id="c6">Falsch</button><button id="c7">In Training übernehmen</button><select id="tm" style="min-height:48px;font:inherit"><option value="n">Spitze: nahe Mitte</option><option value="m">Spitze: Schwerpunkt</option></select></div>
 <div class="mu" id="cst" style="margin-top:8px"></div></section>
 <script>
@@ -164,8 +164,8 @@ function ov(){ovc.width=cv.clientWidth||640;ovc.height=cv.clientHeight||360;cons
  [170,162,107,99,15.9].forEach(r=>pl([...Array(73)].map((_,i)=>[r*Math.sin(i*Math.PI/36),-r*Math.cos(i*Math.PI/36)])));
  for(let i=0;i<20;i++){const a=(i*18-9)*Math.PI/180;pl([[15.9*Math.sin(a),-15.9*Math.cos(a)],[170*Math.sin(a),-170*Math.cos(a)]])}
  if(det){const[x,y]=ap(Hi,det.x,det.y);g.strokeStyle="#f0f";g.lineWidth=3;g.beginPath();g.moveTo(x*W-10,y*Ht);g.lineTo(x*W+10,y*Ht);g.moveTo(x*W,y*Ht-10);g.lineTo(x*W,y*Ht+10);g.stroke()}}
-function frame(){if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/Z,sh=vh/Z,c=document.createElement("canvas");c.width=400;c.height=Math.round(400*sh/sw);
- const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=Z;return im}
+function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=400;c.height=Math.round(400*sh/sw);
+ const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=zz;return im}
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
 function detect(){const f=frame();if(!f||!ref||!HB)return cm("Erst Kamera starten, Scheibe markieren und Referenz setzen.");
  if(f.width!=ref.width||f.height!=ref.height||f.z!=ref.z)return cm("Bildgröße hat sich geändert. Bitte Referenz neu setzen.");
@@ -188,22 +188,26 @@ $("#c4").onclick=detect;
 $("#c5").onclick=()=>{if(!det)return;DB.cam.ok=(DB.cam.ok||0)+1;save();stt();ref=frame();det=null;ov()};
 $("#c6").onclick=()=>{if(!det)return;DB.cam.bad=(DB.cam.bad||0)+1;save();stt();ref=frame();det=null;ov()};
 $("#c7").onclick=()=>{if(s&&!s.done&&det){dart(det.c,det.v);ref=frame();det=null;ov();cm("Übernommen. Nächster Pfeil.")}else cm("Kein aktives Training oder keine Erkennung.")};
-function autoFit(f){const W=f.width,Hh=f.height,d=f.data,P=[];
- for(let j=0;j<Hh;j+=2)for(let i=0;i<W;i+=2){const k=(j*W+i)*4,r=d[k],g=d[k+1],b=d[k+2],red=r>110&&r>g*1.8&&r>b*1.8,grn=g>80&&g>r*1.5&&g>b*1.1;if(red||grn)P.push([i,j,red?1:0])}
- if(P.length<200)return null;
+let LAST=null;
+function cls(r,g,b,L){const mx=Math.max(r,g,b),mn=Math.min(r,g,b),dl=mx-mn,v=mx/255,sat=mx?dl/mx:0;if(v<(L?.15:.25)||sat<(L?.35:.5))return 0;
+ let h;if(mx==r)h=((g-b)/dl+6)%6;else if(mx==g)h=(b-r)/dl+2;else h=(r-g)/dl+4;h*=60;
+ if(h<(L?22:16)||h>(L?335:342))return 1;if(h>(L?75:85)&&h<(L?175:170))return 2;return 0}
+function autoFit(f,L0){const W=f.width,Hh=f.height,d=f.data,P=[];let nr=0,ng=0;
+ for(let j=0;j<Hh;j+=2)for(let i=0;i<W;i+=2){const k=(j*W+i)*4,c=cls(d[k],d[k+1],d[k+2],L0);if(c){P.push([i,j,c==1?1:0]);c==1?nr++:ng++}}
+ LAST={P,W,Hh,z:f.z,nr,ng};if(P.length<(L0?120:200))return null;
  let A=0,I=0;[[170,162],[107,99],[15.9,0]].forEach(([R,r])=>{A+=Math.PI*(R*R-r*r);I+=Math.PI/2*(R**4-r**4)});const sg=Math.sqrt(I/A/2);
- function fit(P0){let c,L,Li,S=P0;if(S.length<200)return null;
+ function fit(P0){let c,L,Li,S=P0;if(S.length<(L0?100:200))return null;
   for(let it=0;it<5;it++){c=[S.reduce((a,p)=>a+p[0],0)/S.length,S.reduce((a,p)=>a+p[1],0)/S.length];let a=0,b=0,e=0;
    S.forEach(p=>{const x=p[0]-c[0],y=p[1]-c[1];a+=x*x;b+=x*y;e+=y*y});a/=S.length;b/=S.length;e/=S.length;
    const sd=Math.sqrt(a*e-b*b);if(!(sd>0))return null;const t=Math.sqrt(a+e+2*sd);
    L=[[(a+sd)/t/sg,b/t/sg],[b/t/sg,(e+sd)/t/sg]];const dt=L[0][0]*L[1][1]-L[0][1]*L[1][0];Li=[[L[1][1]/dt,-L[0][1]/dt],[-L[1][0]/dt,L[0][0]/dt]];
-   S=P0.filter(p=>{const x=p[0]-c[0],y=p[1]-c[1];return Math.hypot(Li[0][0]*x+Li[0][1]*y,Li[1][0]*x+Li[1][1]*y)<185});if(S.length<150)return null}
+   S=P0.filter(p=>{const x=p[0]-c[0],y=p[1]-c[1];return Math.hypot(Li[0][0]*x+Li[0][1]*y,Li[1][0]*x+Li[1][1]*y)<185});if(S.length<(L0?80:150))return null}
   let best=-1e9,bt=0,bn=1;
   for(let th=-18;th<=18;th++){const T=th*Math.PI/180,co=Math.cos(T),si=Math.sin(T);let sc=0,n=0;
    S.forEach(p=>{const x=p[0]-c[0],y=p[1]-c[1],u=Li[0][0]*x+Li[0][1]*y,v=Li[1][0]*x+Li[1][1]*y,r=Math.hypot(u,v);if(r<150||r>176)return;
     const bx=co*u+si*v,by=-si*u+co*v,sq=Math.floor((((Math.atan2(bx,-by)*180/Math.PI+9)%360)+360)%360/18);n++;sc+=((sq%2==0)==(p[2]==1))?1:-1});
    if(sc>best){best=sc;bt=T;bn=n}}
-  if(bn<60||best/bn<.4)return null;
+  if(bn<40||best/bn<(L0?.25:.4))return null;
   const co=Math.cos(bt),si=Math.sin(bt);
   let q=BP.map(([x,y])=>{const rx=co*x-si*y,ry=si*x+co*y;return[(c[0]+L[0][0]*rx+L[0][1]*ry)/W,(c[1]+L[1][0]*rx+L[1][1]*ry)/Hh]});
   const Q=S.filter((_,i)=>i%2==0),sc=z=>{const h=hom(z,BP);let t=0;Q.forEach(p=>{const[bx,by]=ap(h,p[0]/W,p[1]/Hh),r=Math.hypot(bx,by);if((r>=161&&r<=171)||(r>=98&&r<=108)||r<=16.5)t++;
@@ -220,12 +224,20 @@ function autoFit(f){const W=f.width,Hh=f.height,d=f.data,P=[];
  const seeds=comps.slice(0,3).map(cp=>[cp.reduce((a,i)=>a+P[i][0],0)/cp.length,cp.reduce((a,i)=>a+P[i][1],0)/cp.length]);
  let bestR=fit(P);
  seeds.forEach(sd=>[.2,.3,.45].forEach(R=>{const r=fit(P.filter(p=>Math.hypot(p[0]-sd[0],p[1]-sd[1])<R*W));if(r&&(!bestR||r.score>bestR.score))bestR=r}));
- return bestR&&bestR.score>=.7?bestR.q:null}
-function autoCal(){const f=frame();if(!f)return false;const q=autoFit(f);if(!q)return false;
- const pts=q.map(([u,v])=>[.5+(u-.5)/f.z,.5+(v-.5)/f.z]);if(pts.some(p=>p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3))return false;
+ return bestR&&bestR.score>=(L0?.5:.7)?bestR.q:null}
+function showDbg(){if(!LAST)return;ov();const g=ovc.getContext("2d"),{P,W,Hh,z}=LAST;P.forEach((p,i)=>{if(i%2)return;g.fillStyle=p[2]?"#f0f":"#0ff";g.fillRect((.5+(p[0]/W-.5)/z)*ovc.width-1,(.5+(p[1]/Hh-.5)/z)*ovc.height-1,2,2)})}
+function autoCal(){let f=frame();if(!f)return false;const tr=g=>autoFit(g,false)||autoFit(g,true);let q=tr(f);
+ if(!q&&Z>1){const f2=frame(1);if(f2){const q2=tr(f2);if(q2){q=q2;f=f2}}}
+ if(!q){showDbg();return false}
+ const pts=q.map(([u,v])=>[.5+(u-.5)/f.z,.5+(v-.5)/f.z]);if(pts.some(p=>p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3)){showDbg();return false}
  setCal(pts);DB.cam.cal=pts;save();ca=false;det=null;ov();return true}
-function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;if(autoCal())cm("Scheibe automatisch erkannt. Passt das grüne Gitter? Wenn nicht: „Scheibe markieren“.");else if(n<6)autoTry(n+1);else cm("Scheibe nicht automatisch gefunden. Bitte „Scheibe markieren“ nutzen.")},700)}
+function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpunkte: rot "+(LAST?LAST.nr:0)+", grün "+(LAST?LAST.ng:0);
+ if(autoCal())cm("Scheibe automatisch erkannt. Passt das grüne Gitter? Wenn nicht: „Scheibe markieren“.");
+ else if(n<6){cm("Suche die Scheibe … Versuch "+(n+2)+" von 7 ("+fc()+")");autoTry(n+1)}
+ else cm("Scheibe nicht automatisch gefunden ("+fc()+"). Prüfe: Zoom auf 1.0×, ganze Scheibe im Bild, gutes Licht. Sonst „Scheibe markieren“. Pink und türkis sind die erkannten Farbpunkte.")},700)}
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
+$("#c9").onclick=()=>{if(!cv.videoWidth)return cm("Kein Kamerabild.");const c=document.createElement("canvas");c.width=cv.videoWidth;c.height=cv.videoHeight;c.getContext("2d").drawImage(cv,0,0);
+ c.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="scheibe.jpg";a.click()},"image/jpeg",.9)};
 function setZ(z,quiet){Z=Math.max(1,Math.min(4,Math.round(z*4)/4));cv.style.transform=ovc.style.transform="scale("+Z+")";$("#zl").textContent=Z.toFixed(2).replace(/0$/,"")+"×";DB.cam.z=Z;save();if(!quiet){ref=null;det=null;ov();cm("Zoom geändert. Bitte Referenz neu setzen.")}}
 $("#zm").onclick=()=>setZ(Z-.25);$("#zp").onclick=()=>setZ(Z+.25);
 function pfBar(){const o=$("#pf");o.innerHTML=Object.keys(ST.p).map(id=>`<button class="${id==ST.cur?"on":""}" data-p="${id}">${esc(ST.p[id].name)}</button>`).join("")+'<button id="pren">Name ändern</button>';
