@@ -2,6 +2,7 @@
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dart-Training</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache">
 <style>
 :root{--bg:#f4f5f7;--cd:#fff;--tx:#1b1f27;--mu:#667085;--ac:#1f6feb;--ok:#1a7f4b;--bd:#d9dde3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151b;--cd:#1c212b;--tx:#eef0f4;--mu:#9aa3b2;--ac:#5aa2ff;--ok:#4cc38a;--bd:#2d3441;color-scheme:dark}}
@@ -33,9 +34,10 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test)</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 5</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
-<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c9">Standbild speichern</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
+<div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
+<div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
 <div class="row" style="margin-top:8px"><button id="c5">Stimmt</button><button id="c6">Falsch</button><button id="c7">In Training übernehmen</button><select id="tm" style="min-height:48px;font:inherit"><option value="n">Spitze: nahe Mitte</option><option value="m">Spitze: Schwerpunkt</option></select></div>
 <div class="mu" id="cst" style="margin-top:8px"></div></section>
 <script>
