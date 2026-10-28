@@ -34,7 +34,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 5</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 6</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
@@ -166,7 +166,7 @@ function ov(){ovc.width=cv.clientWidth||640;ovc.height=cv.clientHeight||360;cons
  [170,162,107,99,15.9].forEach(r=>pl([...Array(73)].map((_,i)=>[r*Math.sin(i*Math.PI/36),-r*Math.cos(i*Math.PI/36)])));
  for(let i=0;i<20;i++){const a=(i*18-9)*Math.PI/180;pl([[15.9*Math.sin(a),-15.9*Math.cos(a)],[170*Math.sin(a),-170*Math.cos(a)]])}
  if(det){const[x,y]=ap(Hi,det.x,det.y);g.strokeStyle="#f0f";g.lineWidth=3;g.beginPath();g.moveTo(x*W-10,y*Ht);g.lineTo(x*W+10,y*Ht);g.moveTo(x*W,y*Ht-10);g.lineTo(x*W,y*Ht+10);g.stroke()}}
-function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=400;c.height=Math.round(400*sh/sw);
+function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=640;c.height=Math.round(640*sh/sw);
  const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=zz;return im}
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
 function detect(){const f=frame();if(!f||!ref||!HB)return cm("Erst Kamera starten, Scheibe markieren und Referenz setzen.");
@@ -194,8 +194,29 @@ let LAST=null;
 function cls(r,g,b,L){const mx=Math.max(r,g,b),mn=Math.min(r,g,b),dl=mx-mn,v=mx/255,sat=mx?dl/mx:0;if(v<(L?.15:.25)||sat<(L?.35:.5))return 0;
  let h;if(mx==r)h=((g-b)/dl+6)%6;else if(mx==g)h=(b-r)/dl+2;else h=(r-g)/dl+4;h*=60;
  if(h<(L?22:16)||h>(L?335:342))return 1;if(h>(L?75:85)&&h<(L?175:170))return 2;return 0}
+function locate(M0,W,Hh){const M=new Uint8Array(W*Hh);
+ for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const c=M0[j*W+i];if(c)for(let y=Math.max(0,j-3);y<=Math.min(Hh-1,j+3);y++)for(let x=Math.max(0,i-3);x<=Math.min(W-1,i+3);x++)if(!M[y*W+x])M[y*W+x]=c}
+ const T=[...Array(24)].map((_,i)=>[Math.cos(i*Math.PI/12),Math.sin(i*Math.PI/12)]);
+ const ring=(cx,cy,r)=>{let a=0,b=0;for(const t of T){const x=Math.round(cx+t[0]*r),y=Math.round(cy+t[1]*r);if(x<0||y<0||x>=W||y>=Hh)return null;const m=M[y*W+x];if(m==1)a++;else if(m==2)b++}return[(a+b)/24,a,b]};
+ const sc=(cx,cy,R)=>{const s=R/170,d=ring(cx,cy,166*s);if(!d||d[0]<.3)return -9;if(Math.min(d[1],d[2])/(d[1]+d[2])<.25)return -9;const t=ring(cx,cy,103*s);if(!t)return -9;
+  const o1=ring(cx,cy,135*s),o2=ring(cx,cy,60*s);return(d[0]+t[0])/2-.7*((o1?o1[0]:0)+(o2?o2[0]:0))/2};
+ let best=null,bs=.25;
+ for(let R=.06*W;R<=.46*W;R*=1.06)for(let cy=0;cy<Hh;cy+=6)for(let cx=0;cx<W;cx+=6){const v=sc(cx,cy,R);if(v>bs){bs=v;best=[cx,cy,R]}}
+ if(!best)return null;
+ [4,2,1].forEach(st=>{for(let k=0;k<8;k++){let imp=false;for(const[dx,dy,f]of[[st,0,1],[-st,0,1],[0,st,1],[0,-st,1],[0,0,1.03],[0,0,.97]]){const c=[best[0]+dx,best[1]+dy,best[2]*f],v=sc(c[0],c[1],c[2]);if(v>bs){bs=v;best=c;imp=true}}if(!imp)break}});
+ return best}
+function refine(q,S,W,Hh){const Q=S.filter((_,i)=>i%2==0),sc=z=>{const h=hom(z,BP);let t=0;Q.forEach(p=>{const[bx,by]=ap(h,p[0]/W,p[1]/Hh),r=Math.hypot(bx,by);if((r>=159&&r<=173)||(r>=96&&r<=110)||r<=17.5)t++;
+  if(r>=150&&r<=176){const sq=Math.floor((((Math.atan2(bx,-by)*180/Math.PI+9)%360)+360)%360/18);if((sq%2==0)==(p[2]==1))t+=.5}});return t};
+ let cur=sc(q);[.01,.005,.0025,.00125].forEach(st=>{for(let ps=0;ps<3;ps++)for(let i=0;i<8;i++)for(const dd of[st,-st]){const q2=q.map(p=>p.slice());q2[i>>1][i&1]+=dd;const v=sc(q2);if(v>cur){cur=v;q=q2}}});
+ return{q,score:cur/(Q.length*1.5)}}
+function fitC(lc,P,W,Hh){const s=lc[2]/170,S=P.filter(p=>Math.hypot(p[0]-lc[0],p[1]-lc[1])<1.25*lc[2]);if(S.length<60)return null;
+ let best=-1e9,bt=0;for(let th=-18;th<=18;th++){const T=th*Math.PI/180,co=Math.cos(T),si=Math.sin(T);let sc=0;
+  S.forEach(p=>{const u=(p[0]-lc[0])/s,v=(p[1]-lc[1])/s,r=Math.hypot(u,v);if(r<150||r>176)return;const bx=co*u+si*v,by=-si*u+co*v,sq=Math.floor((((Math.atan2(bx,-by)*180/Math.PI+9)%360)+360)%360/18);sc+=((sq%2==0)==(p[2]==1))?1:-1});
+  if(sc>best){best=sc;bt=T}}
+ const co=Math.cos(bt),si=Math.sin(bt);
+ return refine(BP.map(([x,y])=>[(lc[0]+s*(co*x-si*y))/W,(lc[1]+s*(si*x+co*y))/Hh]),S,W,Hh)}
 function autoFit(f,L0){const W=f.width,Hh=f.height,d=f.data,P=[];let nr=0,ng=0;
- for(let j=0;j<Hh;j+=2)for(let i=0;i<W;i+=2){const k=(j*W+i)*4,c=cls(d[k],d[k+1],d[k+2],L0);if(c){P.push([i,j,c==1?1:0]);c==1?nr++:ng++}}
+ const M=new Uint8Array(W*Hh);for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const k=(j*W+i)*4,c=cls(d[k],d[k+1],d[k+2],L0);if(c){M[j*W+i]=c;if(!(i&1)&&!(j&1)){P.push([i,j,c==1?1:0]);c==1?nr++:ng++}}}
  LAST={P,W,Hh,z:f.z,nr,ng};if(P.length<(L0?120:200))return null;
  let A=0,I=0;[[170,162],[107,99],[15.9,0]].forEach(([R,r])=>{A+=Math.PI*(R*R-r*r);I+=Math.PI/2*(R**4-r**4)});const sg=Math.sqrt(I/A/2);
  function fit(P0){let c,L,Li,S=P0;if(S.length<(L0?100:200))return null;
@@ -224,9 +245,9 @@ function autoFit(f,L0){const W=f.width,Hh=f.height,d=f.data,P=[];let nr=0,ng=0;
   comps.push(comp)});
  comps.sort((a,b)=>b.length-a.length);
  const seeds=comps.slice(0,3).map(cp=>[cp.reduce((a,i)=>a+P[i][0],0)/cp.length,cp.reduce((a,i)=>a+P[i][1],0)/cp.length]);
- let bestR=fit(P);
- seeds.forEach(sd=>[.2,.3,.45].forEach(R=>{const r=fit(P.filter(p=>Math.hypot(p[0]-sd[0],p[1]-sd[1])<R*W));if(r&&(!bestR||r.score>bestR.score))bestR=r}));
- return bestR&&bestR.score>=(L0?.5:.7)?bestR.q:null}
+ let res=null;const lc=locate(M,W,Hh);if(lc){const r=fitC(lc,P,W,Hh);if(r&&r.score>=.45)res=r.q}
+ if(!res){let bestR=fit(P);seeds.forEach(sd=>[.2,.3,.45].forEach(R=>{const r=fit(P.filter(p=>Math.hypot(p[0]-sd[0],p[1]-sd[1])<R*W));if(r&&(!bestR||r.score>bestR.score))bestR=r}));if(bestR&&bestR.score>=(L0?.5:.7))res=bestR.q}
+ return res}
 function showDbg(){if(!LAST)return;ov();const g=ovc.getContext("2d"),{P,W,Hh,z}=LAST;P.forEach((p,i)=>{if(i%2)return;g.fillStyle=p[2]?"#f0f":"#0ff";g.fillRect((.5+(p[0]/W-.5)/z)*ovc.width-1,(.5+(p[1]/Hh-.5)/z)*ovc.height-1,2,2)})}
 function autoCal(){let f=frame();if(!f)return false;const tr=g=>autoFit(g,false)||autoFit(g,true);let q=tr(f);
  if(!q&&Z>1){const f2=frame(1);if(f2){const q2=tr(f2);if(q2){q=q2;f=f2}}}
