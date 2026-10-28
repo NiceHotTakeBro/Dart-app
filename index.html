@@ -34,7 +34,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 16.1</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 17</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button></div>
@@ -290,7 +290,7 @@ const MR=290;// Suchbereich in mm um die Mitte (Doppelring 170 mm, Rand der Sche
 function boardMask(W,Hh,toBoard){const inB=new Uint8Array(W*Hh),sub=[];let n=0;
  for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const[x,y]=toBoard(i,j);if(x*x+y*y<MR*MR){const p=j*W+i;inB[p]=1;n++;if(!(i%2)&&!(j%2))sub.push(p)}}
  return{inB,n,sub}}
-let EDG=60,LSH=[0,0],RUNF=2,KE=0,SHR=0,AVGON=true,NCONF=3,EMA=.25;
+let EDG=60,LSH=[0,0],RUNF=2,KE=0,SHR=0,AVGON=true,NCONF=3,EMA=.25,SOFT=true,XANG=35;
 function traceShaft(D,W,Hh,s0,u0,Lmax,TL,G){let best=null;const RUN=RUNF;
  for(let th=-30;th<=30;th+=1.5){const t=th*Math.PI/180,u=[u0[0]*Math.cos(t)-u0[1]*Math.sin(t),u0[0]*Math.sin(t)+u0[1]*Math.cos(t)],nv=[-u[1],u[0]];let end=0,gap=0,cov=0,run=0;
   for(let s=0;s<=Lmax;s++){let m=0;for(let w=-2;w<=2;w++){const X=Math.round(s0[0]+u[0]*s+nv[0]*w),Y=Math.round(s0[1]+u[1]*s+nv[1]*w);if(X<0||Y<0||X>=W||Y>=Hh)continue;const v=D[Y*W+X];if(v>m)m=v}
@@ -314,7 +314,13 @@ function shiftImg(im,dx,dy){const W=im.width,Hh=im.height,a=im.data,o=new Uint8C
  for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){let x=i+dx,y=j+dy;x=x<0?0:x>W-1.001?W-1.001:x;y=y<0?0:y>Hh-1.001?Hh-1.001:y;const xi=x|0,yi=y|0,fx=x-xi,fy=y-yi,p=(yi*W+xi)*4,q=p+W*4,k=(j*W+i)*4;
   for(let c=0;c<3;c++)o[k+c]=(a[p+c]*(1-fx)+a[p+4+c]*fx)*(1-fy)+(a[q+c]*(1-fx)+a[q+4+c]*fx)*fy;o[k+3]=255}
  return{...im,data:o}}
-function findDart(f,ref,toBoard,Hp,MK,strict){MK=MK||boardMask(f.width,f.height,toBoard);const sh=alignShift(f,ref,MK);LSH=sh;if(sh[0]||sh[1])ref=shiftImg(ref,sh[0],sh[1]);const RR=strict?2:1,MINC=strict?40:15;const W=f.width,Hh=f.height,a=f.data,b=ref.data,N=W*Hh,sa=[0,0,0],sb=[0,0,0];MK=MK||boardMask(W,Hh,toBoard);const inB=MK.inB,nB=MK.n;
+function softImg(im){// gleichmäßig leicht weichzeichnen (Binomialfilter 1-2-1, zweimal): Rauschen, Nachschärfen und Zittern unter einem Pixel fallen weg
+ const W=im.width,Hh=im.height,a=im.data,t=new Float32Array(a.length),o=new Uint8ClampedArray(a.length);
+ for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const p=(j*W+i)*4,l=i>1?p-8:p,r=i<W-2?p+8:p,l1=i>0?p-4:p,r1=i<W-1?p+4:p;for(let c=0;c<3;c++)t[p+c]=(a[l+c]+4*a[l1+c]+6*a[p+c]+4*a[r1+c]+a[r+c])/16}
+ for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const p=(j*W+i)*4,u=j>1?p-8*W:p,d=j<Hh-2?p+8*W:p,u1=j>0?p-4*W:p,d1=j<Hh-1?p+4*W:p;for(let c=0;c<3;c++)o[p+c]=(t[u+c]+4*t[u1+c]+6*t[p+c]+4*t[d1+c]+t[d+c])/16;o[p+3]=255}
+ return{...im,data:o}}
+function findDart(f,ref,toBoard,Hp,MK,strict){MK=MK||boardMask(f.width,f.height,toBoard);const sh=alignShift(f,ref,MK);LSH=sh;if(sh[0]||sh[1])ref=shiftImg(ref,sh[0],sh[1]);
+ const fO=f,rO=ref,aO=f.data,bO=ref.data;if(SOFT){f=softImg(f);ref=softImg(ref)}const RR=strict?2:1,MINC=strict?40:15;const W=f.width,Hh=f.height,a=f.data,b=ref.data,N=W*Hh,sa=[0,0,0],sb=[0,0,0];MK=MK||boardMask(W,Hh,toBoard);const inB=MK.inB,nB=MK.n;
  for(const p of MK.sub){const k=p*4;for(let c=0;c<3;c++){sa[c]+=a[k+c];sb[c]+=b[k+c]}}
  if(nB<500)return{err:"Die Scheibe ist nicht im Bild."};
  const g=sa.map((v,c)=>Math.max(.5,Math.min(2,(v+1)/(sb[c]+1)))),D=new Uint16Array(N),hist=new Uint32Array(800);
@@ -329,6 +335,12 @@ function findDart(f,ref,toBoard,Hp,MK,strict){MK=MK||boardMask(f.width,f.height,
   for(let dy=-RR;dy<=RR;dy++)for(let dx=-RR;dx<=RR;dx++){const q=(p+dy*W+dx)*4,v=dc(a[k],g0*b[q],b[q])+dc(a[k+1],g1*b[q+1],b[q+1])+dc(a[k+2],g2*b[q+2],b[q+2]);if(v<best)best=v}
   D[p]=Math.min(799,best|0);hist[D[p]]++}
  let acc=0,med=0;for(let v=0;v<800;v++){acc+=hist[v];if(acc>=nB/2){med=v;break}}
+ // scharfes Differenzbild für die genaue Lage der Spitze (die dünne Spitze verliert beim Weichzeichnen an Kontrast)
+ let DS=D,medS=med;if(SOFT){DS=new Uint16Array(N);const hs=new Uint32Array(800),A0=aO,B0=bO;
+  for(let j=RR;j<Hh-RR;j++)for(let i=RR;i<W-RR;i++){const p=j*W+i;if(!inB[p])continue;const k=p*4,g0=gl(i,j,0),g1=gl(i,j,1),g2=gl(i,j,2);let best=1e9;
+   for(let dy=-RR;dy<=RR;dy++)for(let dx=-RR;dx<=RR;dx++){const q=(p+dy*W+dx)*4,v=dc(A0[k],g0*B0[q],B0[q])+dc(A0[k+1],g1*B0[q+1],B0[q+1])+dc(A0[k+2],g2*B0[q+2],B0[q+2]);if(v<best)best=v}
+   DS[p]=Math.min(799,best|0);hs[DS[p]]++}
+  let ac2=0;for(let v=0;v<800;v++){ac2+=hs[v];if(ac2>=nB/2){medS=v;break}}}
  const T=Math.max(45,med*4+20),M=new Uint8Array(N),Lr=p=>{const k=p*4;return b[k]+b[k+1]+b[k+2]};let nC=0;
  // an schon vorhandenen Kanten (Schrift, Drähte, Ringe) muss die Änderung deutlich größer sein
  for(let p=W;p<N-W;p++)if(inB[p]&&D[p]>T&&D[p]>T+KE*(Math.abs(Lr(p+1)-Lr(p-1))+Math.abs(Lr(p+W)-Lr(p-W)))){M[p]=1;nC++}
@@ -343,10 +355,14 @@ function findDart(f,ref,toBoard,Hp,MK,strict){MK=MK||boardMask(f.width,f.height,
  const thin=c=>{const n=c.length;let mx=0,my=0;c.forEach(p=>{mx+=p%W;my+=(p-p%W)/W});mx/=n;my/=n;let a=0,b=0,e=0;c.forEach(p=>{const x=p%W-mx,y=(p-p%W)/W-my;a+=x*x;b+=x*y;e+=y*y});a/=n;b/=n;e/=n;
   return(a+e)/2-Math.sqrt(Math.max(0,(a-e)**2/4+b*b))<.36};// schmaler als etwa 1 Pixel: Linie an einem Draht, kein Pfeil
  const lum=(d,p)=>{const k=p*4;return d[k]+d[k+1]+d[k+2]},grd=(d,p)=>Math.abs(lum(d,p+1)-lum(d,p-1))+Math.abs(lum(d,p+W)-lum(d,p-W));
- const oldEdge=c=>c.filter(p=>grd(b,p)>120).length/c.length;// Geisterflecken liegen nur auf schon vorhandenen Kanten (Schrift, Drähte)
- const edgy=c=>{let t=0;c.forEach(p=>{t+=Math.abs(grd(a,p)-grd(b,p))});return t/c.length>=EDG};
- const R2=nB/Math.PI*(170/MR)**2,ci=comps.findIndex(c=>c.length>=Math.max(MINC,.004*R2)&&c.length<=.25*R2&&!thin(c)&&edgy(c)&&oldEdge(c)<.75);let C=ci>=0?comps.splice(ci,1)[0]:null;
- if(!C)return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat(),quiet:!comps.some(c=>c.length>=MINC)};
+ const oldEdge=c=>c.filter(p=>grd(bO,p)>120&&grd(aO,p)>120).length/c.length;// Kanten, die in beiden Bildern da sind (Schrift, Drähte) – nicht die Kanten eines Pfeils// Geisterflecken liegen nur auf schon vorhandenen Kanten (Schrift, Drähte)
+ const edgy=c=>{let t=0;c.forEach(p=>{t+=Math.abs(grd(aO,p)-grd(bO,p))});return t/c.length>=EDG};
+ // deutlich langgestreckte Flecken müssen in Pfeilrichtung zeigen (Ringbögen, Schrift und Drähte liegen quer)
+ const crossDir=c=>{const n=c.length;let mx=0,my=0;c.forEach(p=>{mx+=p%W;my+=(p-p%W)/W});mx/=n;my/=n;let A2=0,B2=0,E2=0;c.forEach(p=>{const x=p%W-mx,y=(p-p%W)/W-my;A2+=x*x;B2+=x*y;E2+=y*y});A2/=n;B2/=n;E2/=n;
+  const de=Math.sqrt(Math.max(0,(A2-E2)**2/4+B2*B2)),l1=(A2+E2)/2+de,l2=Math.max(1e-6,(A2+E2)/2-de);if(Math.sqrt(l1/l2)<2.5)return false;
+  const th=.5*Math.atan2(2*B2,A2-E2),dd=camDir(Hp,W,Hh,f.z||1,...toBoard(mx,my));return Math.acos(Math.min(1,Math.abs(Math.cos(th)*dd[0]+Math.sin(th)*dd[1])))*180/Math.PI>XANG};
+ const R2=nB/Math.PI*(170/MR)**2,ci=comps.findIndex(c=>c.length>=Math.max(MINC,.004*R2)&&c.length<=.25*R2&&!thin(c)&&edgy(c)&&oldEdge(c)<.75&&!crossDir(c));let C=ci>=0?comps.splice(ci,1)[0]:null;
+ if(!C){const big=comps.filter(c=>c.length>=Math.max(MINC,.004*R2));return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat(),quiet:!comps.some(c=>c.length>=MINC),why:big.length?big.slice(0,3).map(c=>c.length+(c.length>.25*R2?":groß":thin(c)?":dünn":!edgy(c)?":keine Kanten":oldEdge(c)>=.75?":alte Kanten":crossDir(c)?":quer":"")).join(","):"nichts"}}
  if(nC-C.length>.04*nB)return{err:"Bild unruhig",nC,noise:comps.flat()};
  comps.unshift([]);
  // schwächere Pixel am Fleck mitnehmen, damit die dünne Spitze nicht verloren geht
@@ -355,16 +371,16 @@ function findDart(f,ref,toBoard,Hp,MK,strict){MK=MK||boardMask(f.width,f.height,
   if(!inC[q]&&inB[q]&&D[q]>TL){inC[q]=1;C.push(q);st.push(q);grown++}}}
  const second=comps[1]?comps[1].length:0;
  const P=C.map(p=>[p%W,(p-p%W)/W]),n=P.length,mx=P.reduce((s,p)=>s+p[0],0)/n,my=P.reduce((s,p)=>s+p[1],0)/n;
- const[bx,by]=toBoard(mx,my),d=camDir(Hp,W,Hh,f.z||1,bx,by),Rpx=Math.sqrt(R2),TS2=T+15,how="Schaft";
+ const[bx,by]=toBoard(mx,my),d=camDir(Hp,W,Hh,f.z||1,bx,by),Rpx=Math.sqrt(R2),TS2=Math.max(45,medS*4+20)+15,how="Schaft";
  // vom Fleck aus dem Schaft zur Spitze folgen (Richtung aus der Kameralage, genaue Richtung wird in ±30° gesucht)
- const TR=traceShaft(D,W,Hh,[mx,my],[-d[0],-d[1]],1.6*Rpx,TS2,Math.max(6,.11*Rpx)),tip=TR.tip,ext=TR.end,el=0;
+ const TR=traceShaft(DS,W,Hh,[mx,my],[-d[0],-d[1]],1.6*Rpx,TS2,Math.max(6,.11*Rpx)),tip=TR.tip,ext=TR.end,el=0;
  const dLen=Math.max(...P.map(p=>p[0]*d[0]+p[1]*d[1]))-(tip[0]*d[0]+tip[1]*d[1]);
  let shaft=0;{const u=TR.u,nv=[-u[1],u[0]];let gap=0;for(let s2=0;s2<=1.6*Rpx;s2++){let m=0;for(let w=-2;w<=2;w++){const X=Math.round(tip[0]-u[0]*s2+nv[0]*w),Y=Math.round(tip[1]-u[1]*s2+nv[1]*w);if(X<0||Y<0||X>=W||Y>=Hh)continue;const v=D[Y*W+X];if(v>m)m=v}
   if(m>TS2){shaft=s2;gap=0}else if(++gap>2)break}}
  let covL=0,hitL=0;{const vx=mx-tip[0],vy=my-tip[1],L=Math.hypot(vx,vy),u=[vx/(L||1),vy/(L||1)],nv=[-u[1],u[0]];for(let s2=0;s2<=L;s2++){let m=0;for(let w=-2;w<=2;w++){const X=Math.round(tip[0]+u[0]*s2+nv[0]*w),Y=Math.round(tip[1]+u[1]*s2+nv[1]*w);if(X<0||Y<0||X>=W||Y>=Hh)continue;const v=D[Y*W+X];if(v>m)m=v}covL++;if(m>TS2)hitL++}}
  const cover=covL?hitL/covL:0,lineLen=covL;
  if(shaft<SHR*Rpx)return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat(),quiet:false,shaft,cover,lineLen};
- if(dLen<.18*Rpx)return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat(),quiet:false,short:dLen};
+ if(dLen<.18*Rpx)return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat(),quiet:false,short:dLen,why:"zu kurz "+Math.round(dLen)+"<"+Math.round(.18*Rpx)};
  return{tip,comp:C,noise:comps.slice(1).flat(),nC,T,med,how,el,d,second,grown,ext,trace:TR,shaft,Rpx,cover,lineLen,dLen}}
 
 function autoCal(){let f=frame();if(!f)return false;const tr=g=>autoFit(g,false)||autoFit(g,true);let q=tr(f);
@@ -380,7 +396,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 16.1 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+Z+"x | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht"];
+ lines=["Version 17 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+Z+"x | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht"];
  const c=document.createElement("canvas");c.width=w;c.height=h*pn+120;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
  g.drawImage(cv,0,0,w,h);g.drawImage(cv,0,h,w,h);g.drawImage(ovc,0,h,w,h);
  if(ref){const t=document.createElement("canvas");t.width=ref.width;t.height=ref.height;t.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(ref.data),ref.width,ref.height),0,0);const sw=w/ref.z,sh=h/ref.z;g.fillStyle="#000";g.fillRect(0,2*h,w,h);g.drawImage(t,(w-sw)/2,2*h+(h-sh)/2,sw,sh)}
