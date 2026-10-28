@@ -34,7 +34,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 6</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 7</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
@@ -187,8 +187,10 @@ ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.c
  else cm("Punkt "+(cal.length+1)+" von 4: "+["","6 (rechts)","3 (unten)","11 (links)"][cal.length]+". Tippe die Außenkante des Doppelrings.");ov()};
 $("#c3").onclick=()=>{ref=frame();det=null;ov();cm(ref?"Referenz gespeichert. Wirf einen Pfeil, warte bis die Hand weg ist, dann „Pfeil erkennen“.":"Kein Kamerabild vorhanden.")};
 $("#c4").onclick=detect;
-$("#c5").onclick=()=>{if(!det)return;DB.cam.ok=(DB.cam.ok||0)+1;save();stt();ref=frame();det=null;ov()};
-$("#c6").onclick=()=>{if(!det)return;DB.cam.bad=(DB.cam.bad||0)+1;save();stt();ref=frame();det=null;ov()};
+const nxt=(had,ok)=>{if(had){const k=ok?"ok":"bad";DB.cam[k]=(DB.cam[k]||0)+1;save();stt()}ref=frame();det=null;ov();
+ cm(!ref?"Kein Kamerabild. Bitte „Referenz setzen“ drücken.":(had?(ok?"Gespeichert: stimmt. ":"Gespeichert: falsch. "):"Es gab keinen Vorschlag. ")+"Neue Referenz ist gesetzt. Wirf den nächsten Pfeil, nimm die Hand aus dem Bild und tippe auf „Pfeil erkennen“.")};
+$("#c5").onclick=()=>nxt(!!det,true);
+$("#c6").onclick=()=>nxt(true,false);
 $("#c7").onclick=()=>{if(s&&!s.done&&det){dart(det.c,det.v);ref=frame();det=null;ov();cm("Übernommen. Nächster Pfeil.")}else cm("Kein aktives Training oder keine Erkennung.")};
 let LAST=null;
 function cls(r,g,b,L){const mx=Math.max(r,g,b),mn=Math.min(r,g,b),dl=mx-mn,v=mx/255,sat=mx?dl/mx:0;if(v<(L?.15:.25)||sat<(L?.35:.5))return 0;
