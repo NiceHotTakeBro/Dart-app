@@ -34,7 +34,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 12</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 13</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button></div>
@@ -167,12 +167,15 @@ function ov(){ovc.width=cv.clientWidth||640;ovc.height=cv.clientHeight||360;cons
  for(let i=0;i<20;i++){const a=(i*18-9)*Math.PI/180;pl([[15.9*Math.sin(a),-15.9*Math.cos(a)],[170*Math.sin(a),-170*Math.cos(a)]])}
  if(DPX){const dp=p=>g.fillRect((.5+(p[0]/DPX.W-.5)/DPX.z)*W-1,(.5+(p[1]/DPX.Hh-.5)/DPX.z)*Ht-1,2,2);g.fillStyle="#f80";(DPX.nz||[]).forEach((p,i)=>{if(!(i%2))dp(p)});g.fillStyle="#ff0";DPX.px.forEach(dp)}
  TURN.forEach((t,i)=>{const[x,y]=ap(Hi,t.x,t.y);g.strokeStyle="#f0f";g.lineWidth=3;g.beginPath();g.moveTo(x*W-10,y*Ht);g.lineTo(x*W+10,y*Ht);g.moveTo(x*W,y*Ht-10);g.lineTo(x*W,y*Ht+10);g.stroke();g.fillStyle="#f0f";g.font="bold 16px Arial";g.fillText(String(i+1),x*W+8,y*Ht-8)})}
-function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=640;c.height=Math.round(640*sh/sw);
+let AW=960,PERF=[],ADAPT=0;
+function maxRes(st){try{const tr=st.getVideoTracks()[0],cap=tr.getCapabilities&&tr.getCapabilities();if(!cap||!cap.width||!cap.height)return;
+ const w=cap.width.max,h=Math.min(cap.height.max,Math.round(w*3/4));tr.applyConstraints({width:{ideal:w},height:{ideal:h}}).catch(()=>{})}catch(e){}}
+function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=AW;c.height=Math.round(AW*sh/sw);
  const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=zz;return im}
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
 function fname(c,v){return c=="0"?"Daneben":c=="SB"?"Bull (25)":c=="DB"?"Doppel-Bull (50)":({S:"Single ",D:"Doppel ",T:"Triple "}[c[0]])+c.slice(1)+" ("+v+" Punkte)"}
 $("#c1").onclick=()=>{const fp=document.permissionsPolicy||document.featurePolicy;if(fp&&fp.allowsFeature&&!fp.allowsFeature("camera"))return cm("Blockiert: Der Rahmen, in dem diese Seite angezeigt wird, verbietet die Kamera. Das liegt nicht an deinen Browser-Einstellungen.");if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return cm("Kamera nicht verfügbar: Dieser Browser oder diese Seite erlaubt keinen Kamerazugriff.");
- navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:1600},height:{ideal:1200},aspectRatio:{ideal:4/3}},audio:false}).then(st=>{cv.srcObject=st;cv.onloadedmetadata=()=>{HB=Hi=null;BASE=null;PREV=null;ref=null;EMPTY=null;TURN=[];MASK=null;renderTurn();ov();setSt("search");cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0);startMon()}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:4096},height:{ideal:3072},aspectRatio:{ideal:4/3}},audio:false}).then(st=>{maxRes(st);cv.srcObject=st;cv.onloadedmetadata=()=>{HB=Hi=null;BASE=null;PREV=null;ref=null;EMPTY=null;TURN=[];MASK=null;renderTurn();ov();setSt("search");cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0);startMon()}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
 $("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm("Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
 ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]);
  if(cal.length==4){ca=false;let pc=cal;const fr=frame();if(fr){const PO=polish(cal.map(([u,v])=>[.5+(u-.5)*fr.z,.5+(v-.5)*fr.z]),fr);BASE=PO.s;pc=PO.q.map(([u,v])=>[.5+(u-.5)/fr.z,.5+(v-.5)/fr.z])}setCal(pc);setSt("ok");DB.cam.cal=pc;save();cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
@@ -347,8 +350,8 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
  else if(n<6){cm("Suche die Scheibe … Versuch "+(n+2)+" von 7 ("+fc()+")");autoTry(n+1)}
  else cm("Scheibe noch nicht gefunden ("+fc()+"). Ich suche automatisch weiter, sobald das Bild ruhig ist. Prüfe: ganze Scheibe im Bild, gutes Licht. Sonst „Scheibe markieren“.")},700)}
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
-$("#c9").onclick=()=>{if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1280/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 12 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+Z+"x | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht"];
+$("#c9").onclick=()=>{if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
+ lines=["Version 13 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+Z+"x | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht"];
  const c=document.createElement("canvas");c.width=w;c.height=h*pn+120;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
  g.drawImage(cv,0,0,w,h);g.drawImage(cv,0,h,w,h);g.drawImage(ovc,0,h,w,h);
  if(ref){const t=document.createElement("canvas");t.width=ref.width;t.height=ref.height;t.getContext("2d").putImageData(ref,0,0);const sw=w/ref.z,sh=h/ref.z;g.fillStyle="#000";g.fillRect(0,2*h,w,h);g.drawImage(t,(w-sw)/2,2*h+(h-sh)/2,sw,sh)}
@@ -397,8 +400,8 @@ function camGeo(f){const W=f.width,Ht=f.height,z=f.z,h=Hi,a=W*(.5-.5*z),b=Ht*(.5
 function addOrRemove(C,f,R0,E){// ist der Fleck ein neuer Pfeil (add) oder ein gezogener (rem)?
  const W=f.width,dist=(A,p)=>{let best=1e9;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const q=(p+dy*W+dx)*4,k=p*4,v=Math.abs(A.data[k]-E.data[q])+Math.abs(A.data[k+1]-E.data[q+1])+Math.abs(A.data[k+2]-E.data[q+2]);if(v<best)best=v}return best};
  let dc=0,dr=0;C.forEach(p=>{dc+=dist(f,p);dr+=dist(R0,p)});return dc<dr?"rem":"add"}
-function dartCheck(f,force){if(ref.width!=f.width||ref.height!=f.height)return(ref=null);
- if(ref.z!=f.z){ref=warpImg(ref,Hi,f);ref.warped=1;if(EMPTY){EMPTY=warpImg(EMPTY,Hi,f);EMPTY.warped=1}}
+function dartCheck(f,force){
+ if(ref.z!=f.z||ref.width!=f.width||ref.height!=f.height){ref=warpImg(ref,Hi,f);ref.warped=1;if(EMPTY&&(EMPTY.z!=f.z||EMPTY.width!=f.width||EMPTY.height!=f.height)){EMPTY=warpImg(EMPTY,Hi,f);EMPTY.warped=1}}
  const G=camGeo(f),key=f.width+"x"+f.height+":"+f.z+":"+JSON.stringify(cal);if(!MASK||MASK.key!=key){MASK=boardMask(f.width,f.height,G.toB);MASK.key=key}
  const R=findDart(f,ref,G.toB,G.Hp,MASK,!!ref.warped),big=!R.err?R.comp.length>MASK.n*.06:R.err!="Kein Pfeil erkannt.";
  if(big){PDART=null;if(++BIGN>=3){ref=f;if(EMPTY&&!TURN.length)EMPTY=f;BIGN=0;cm("Das Bild hat sich dauerhaft verändert (zum Beispiel Licht). Die Referenz wurde neu gesetzt.")}
@@ -406,7 +409,7 @@ function dartCheck(f,force){if(ref.width!=f.width||ref.height!=f.height)return(r
  BIGN=0;
  if(R.err){PDART=null;if(ref.warped)ref=f;if(force)cm("Kein neuer Pfeil gefunden.");return}
  const kind=EMPTY?addOrRemove(R.comp,f,ref,EMPTY):"add";
- if(!force&&!(PDART&&PDART.kind==kind&&Math.hypot(PDART.tip[0]-R.tip[0],PDART.tip[1]-R.tip[1])<7)){PDART={kind,tip:R.tip};return}
+ if(!force&&!(PDART&&PDART.kind==kind&&Math.hypot(PDART.tip[0]-R.tip[0],PDART.tip[1]-R.tip[1])<7*f.width/640)){PDART={kind,tip:R.tip};return}
  PDART=null;const W=f.width,xy=p=>[p%W,(p-p%W)/W];
  if(kind=="rem"){ref=f;const rest=findDart(f,EMPTY,G.toB,G.Hp,MASK,!!EMPTY.warped);if(rest.err=="Kein Pfeil erkannt.")EMPTY=f;
   TURN=[];det=null;DPX=null;renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");return}
@@ -421,7 +424,12 @@ function tick(){if(!cv.srcObject||!cv.videoWidth){if(MST!="off")setSt("off");PRE
  if(!HB||MST!="ok")return;
  if(!ref||WANT=="ref"){setRefs(f,WANT=="ref");WANT=null;return}
  const force=WANT=="det";WANT=null;dartCheck(f,force)}
-function startMon(){if(!MON)MON=setInterval(tick,700)}
+function loop(){const t0=performance.now();try{tick()}catch(e){}const dt=performance.now()-t0;
+ if(MST=="ok"&&ref&&dt>5&&ADAPT<3){PERF.push(dt);if(PERF.length>=4){const av=PERF.reduce((a,b)=>a+b,0)/PERF.length;PERF=[];let n=AW;
+  if(av>350)n=AW>800?800:640;else if(av<110&&AW<1280&&cv.videoWidth>=1600)n=1280;
+  if(n!=AW){AW=n;ADAPT++;BASE=null;PREV=null;MASK=null}else ADAPT=3}}
+ MON=setTimeout(loop,Math.max(250,700-dt))}
+function startMon(){if(!MON)loop()}
 function setZ(z,quiet){Z=Math.max(1,Math.min(4,Math.round(z*4)/4));cv.style.transform=ovc.style.transform="scale("+Z+")";$("#zl").textContent=Z.toFixed(2).replace(/0$/,"")+"×";DB.cam.z=Z;save();BASE=null;PREV=null;MASK=null;if(!quiet){DPX=null;ov();cm("Zoom geändert. Die App passt sich an, sobald das Bild ruhig ist.")}}
 $("#zm").onclick=()=>setZ(Z-.25);$("#zp").onclick=()=>setZ(Z+.25);
 function pfBar(){const o=$("#pf");o.innerHTML=Object.keys(ST.p).map(id=>`<button class="${id==ST.cur?"on":""}" data-p="${id}">${esc(ST.p[id].name)}</button>`).join("")+'<button id="pren">Name ändern</button>';
