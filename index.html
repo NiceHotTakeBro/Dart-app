@@ -34,11 +34,11 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 8</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 9</h2><div class="mu" id="cmsg">Starte die Kamera und markiere die Scheibe.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz setzen</button><button id="c4" class="pri">Pfeil erkennen</button></div>
-<div class="row" style="margin-top:8px"><button id="c5">Stimmt</button><button id="c6">Falsch</button><button id="c7">In Training übernehmen</button><select id="tm" style="min-height:48px;font:inherit"><option value="n">Spitze: nahe Mitte</option><option value="m">Spitze: Schwerpunkt</option></select></div>
+<div class="row" style="margin-top:8px"><button id="c5">Stimmt</button><button id="c6">Falsch</button><button id="c7">In Training übernehmen</button></div>
 <div class="mu" id="cst" style="margin-top:8px"></div></section>
 <script>
 const $=s=>document.querySelector(s), K="dart_v1";
@@ -165,27 +165,26 @@ function ov(){ovc.width=cv.clientWidth||640;ovc.height=cv.clientHeight||360;cons
  const pl=a=>{g.beginPath();a.forEach((q,i)=>{const[x,y]=ap(Hi,q[0],q[1]);i?g.lineTo(x*W,y*Ht):g.moveTo(x*W,y*Ht)});g.stroke()};
  [170,162,107,99,15.9].forEach(r=>pl([...Array(73)].map((_,i)=>[r*Math.sin(i*Math.PI/36),-r*Math.cos(i*Math.PI/36)])));
  for(let i=0;i<20;i++){const a=(i*18-9)*Math.PI/180;pl([[15.9*Math.sin(a),-15.9*Math.cos(a)],[170*Math.sin(a),-170*Math.cos(a)]])}
- if(DPX){g.fillStyle="#ff0";DPX.px.forEach((p,i)=>{if(i%3)return;g.fillRect((.5+(p[0]/DPX.W-.5)/DPX.z)*W-1,(.5+(p[1]/DPX.Hh-.5)/DPX.z)*Ht-1,2,2)})}
+ if(DPX){const dp=p=>g.fillRect((.5+(p[0]/DPX.W-.5)/DPX.z)*W-1,(.5+(p[1]/DPX.Hh-.5)/DPX.z)*Ht-1,2,2);g.fillStyle="#f80";(DPX.nz||[]).forEach((p,i)=>{if(!(i%2))dp(p)});g.fillStyle="#ff0";DPX.px.forEach(dp)}
  if(det){const[x,y]=ap(Hi,det.x,det.y);g.strokeStyle="#f0f";g.lineWidth=3;g.beginPath();g.moveTo(x*W-10,y*Ht);g.lineTo(x*W+10,y*Ht);g.moveTo(x*W,y*Ht-10);g.lineTo(x*W,y*Ht+10);g.stroke()}}
 function frame(zz){zz=zz||Z;if(!cv.videoWidth)return null;const vw=cv.videoWidth,vh=cv.videoHeight,sw=vw/zz,sh=vh/zz,c=document.createElement("canvas");c.width=640;c.height=Math.round(640*sh/sw);
  const g=c.getContext("2d");g.drawImage(cv,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);const im=g.getImageData(0,0,c.width,c.height);im.z=zz;return im}
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
-function detect(){const f=frame();if(!f||!ref||!HB)return cm("Erst Kamera starten, Scheibe markieren und Referenz setzen.");
+function fname(c,v){return c=="0"?"Daneben":c=="SB"?"Bull (25)":c=="DB"?"Doppel-Bull (50)":({S:"Single ",D:"Doppel ",T:"Triple "}[c[0]])+c.slice(1)+" ("+v+" Punkte)"}
+function detect(){const f=frame();if(!f||!ref||!HB)return cm("Erst Kamera starten, Scheibe erkennen lassen und Referenz setzen.");
  if(f.width!=ref.width||f.height!=ref.height||f.z!=ref.z)return cm("Bildgröße hat sich geändert. Bitte Referenz neu setzen.");
- const W=f.width,Ht=f.height,pts=[],px=[];
- for(let j=0;j<Ht;j++)for(let i=0;i<W;i++){const k=(j*W+i)*4,d=Math.abs(f.data[k]-ref.data[k])+Math.abs(f.data[k+1]-ref.data[k+1])+Math.abs(f.data[k+2]-ref.data[k+2]);
-  if(d>90){const[x,y]=ap(HB,.5+(i/W-.5)/f.z,.5+(j/Ht-.5)/f.z);if(x*x+y*y<176*176){pts.push([x,y]);px.push([i,j])}}}
- DPX={px,W,Hh:Ht,z:f.z};
- if(pts.length<15)return cm("Nichts Neues erkannt ("+pts.length+" Pixel geändert).");
- pts.sort((a,b)=>a[0]*a[0]+a[1]*a[1]-b[0]*b[0]-b[1]*b[1]);
- const sel=$("#tm").value=="n"?pts.slice(0,Math.max(5,Math.ceil(pts.length/10))):pts,
-  x=sel.reduce((a,p)=>a+p[0],0)/sel.length,y=sel.reduce((a,p)=>a+p[1],0)/sel.length,[c,v]=field(x,y);
- det={c,v,x,y};cm("Vorschlag: "+(c=="0"?"Daneben":c=="SB"?"Bull (25)":c=="DB"?"Doppel-Bull (50)":c+" ("+v+" Punkte)")+" · "+pts.length+" geänderte Pixel");ov()}
+ const W=f.width,Ht=f.height,z=f.z,h=Hi,a=W*(.5-.5*z),b=Ht*(.5-.5*z),
+  Hp=[W*z*h[0]+a*h[6],W*z*h[1]+a*h[7],W*z*h[2]+a,Ht*z*h[3]+b*h[6],Ht*z*h[4]+b*h[7],Ht*z*h[5]+b,h[6],h[7],1],
+  toB=(i,j)=>ap(HB,.5+(i/W-.5)/z,.5+(j/Ht-.5)/z),R=findDart(f,ref,toB,Hp),xy=p=>[p%W,(p-p%W)/W];
+ DPX={px:(R.comp||[]).map(xy),nz:(R.noise||[]).map(xy),W,Hh:Ht,z};
+ if(R.err){det=null;ov();return cm(R.err)}
+ const[x,y]=toB(R.tip[0],R.tip[1]),[c,v]=field(x,y);det={c,v,x,y};
+ cm("Vorschlag: "+fname(c,v)+" · Pfeil aus "+R.comp.length+" Pixeln erkannt");ov()}
 $("#c1").onclick=()=>{const fp=document.permissionsPolicy||document.featurePolicy;if(fp&&fp.allowsFeature&&!fp.allowsFeature("camera"))return cm("Blockiert: Der Rahmen, in dem diese Seite angezeigt wird, verbietet die Kamera. Das liegt nicht an deinen Browser-Einstellungen.");if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return cm("Kamera nicht verfügbar: Dieser Browser oder diese Seite erlaubt keinen Kamerazugriff.");
  navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false}).then(st=>{cv.srcObject=st;cv.onloadedmetadata=()=>{HB=Hi=null;ov();cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0)}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
 $("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm("Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
 ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]);
- if(cal.length==4){ca=false;setCal(cal);DB.cam.cal=cal;save();cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
+ if(cal.length==4){ca=false;let pc=cal;const fr=frame();if(fr){pc=polish(cal.map(([u,v])=>[.5+(u-.5)*fr.z,.5+(v-.5)*fr.z]),fr).map(([u,v])=>[.5+(u-.5)/fr.z,.5+(v-.5)/fr.z])}setCal(pc);DB.cam.cal=pc;save();cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
  else cm("Punkt "+(cal.length+1)+" von 4: "+["","6 (rechts)","3 (unten)","11 (links)"][cal.length]+". Tippe die Außenkante des Doppelrings.");ov()};
 $("#c3").onclick=()=>{ref=frame();det=null;DPX=null;ov();cm(ref?"Referenz gespeichert. Wirf einen Pfeil, warte bis die Hand weg ist, dann „Pfeil erkennen“.":"Kein Kamerabild vorhanden.")};
 $("#c4").onclick=detect;
@@ -253,9 +252,86 @@ function autoFit(f,L0){const W=f.width,Hh=f.height,d=f.data,P=[];let nr=0,ng=0;
  if(!res){let bestR=fit(P);seeds.forEach(sd=>[.2,.3,.45].forEach(R=>{const r=fit(P.filter(p=>Math.hypot(p[0]-sd[0],p[1]-sd[1])<R*W));if(r&&(!bestR||r.score>bestR.score))bestR=r}));if(bestR&&bestR.score>=(L0?.5:.7))res=bestR.q}
  return res}
 function showDbg(){if(!LAST)return;ov();const g=ovc.getContext("2d"),{P,W,Hh,z}=LAST;P.forEach((p,i)=>{if(i%2)return;g.fillStyle=p[2]?"#f0f":"#0ff";g.fillRect((.5+(p[0]/W-.5)/z)*ovc.width-1,(.5+(p[1]/Hh-.5)/z)*ovc.height-1,2,2)})}
+// ===== Feinabstimmung des Gitters: Vergleich mit dem erwarteten Scheibenmuster =====
+let SMP=null;
+function samples(){if(SMP)return SMP;const S=[],add=(r,a,t,e)=>S.push([r*Math.sin(a*Math.PI/180),-r*Math.cos(a*Math.PI/180),t,e]);
+ for(let i=0;i<20;i++){const ev=i%2==0;
+  for(let o=-6;o<=6;o+=2){const a=i*18+o;[163.5,166,168.5].forEach(r=>add(r,a,0,ev?1:-1));[100.5,103,105.5].forEach(r=>add(r,a,1,ev?1:-1))}
+  for(let o=-5;o<=5;o+=2.5){const a=i*18+o;[38,55,72,88,118,134,150].forEach(r=>add(r,a,2,ev?-1:1))}}
+ for(let a=0;a<360;a+=20)[9.5,12,14].forEach(r=>add(r,a,3,-1));
+ for(let a=0;a<360;a+=45)[.5,2.5,4].forEach(r=>add(r,a,3,1));
+ return SMP=S}
+function fmaps(f){const W=f.width,Hh=f.height,d=f.data,n=W*Hh,rg=new Float32Array(n),L=new Float32Array(n);
+ for(let i=0,k=0;i<n;i++,k+=4){const r=d[k],g=d[k+1],b=d[k+2];rg[i]=(r-g)/(r+g+b+30);L[i]=(r+g+b)/3}
+ const bl=a=>{const o=new Float32Array(n);for(let j=1;j<Hh-1;j++)for(let i=1;i<W-1;i++){const p=j*W+i;o[p]=(a[p]+a[p-1]+a[p+1]+a[p-W]+a[p+W]+a[p-W-1]+a[p-W+1]+a[p+W-1]+a[p+W+1])/9}return o};
+ return{W,Hh,rg:bl(rg),L:bl(L)}}
+function bil(a,W,Hh,x,y){if(!(x>=1&&y>=1&&x<W-2&&y<Hh-2))return NaN;const i=x|0,j=y|0,fx=x-i,fy=y-j,p=j*W+i;return a[p]*(1-fx)*(1-fy)+a[p+1]*fx*(1-fy)+a[p+W]*(1-fx)*fy+a[p+W+1]*fx*fy}
+function polish(q,f){const F=fmaps(f),S=samples(),W=F.W,Hh=F.Hh,h0=hom(BP,q),Ls=[];
+ S.forEach(s=>{if(s[2]==2){const[u,v]=ap(h0,s[0],s[1]),l=bil(F.L,W,Hh,u*W,v*Hh);if(!isNaN(l))Ls.push(l)}});
+ if(Ls.length<100)return q;const m=Ls.reduce((a,b)=>a+b,0)/Ls.length,sd=Math.sqrt(Ls.reduce((a,b)=>a+(b-m)**2,0)/Ls.length)||1,wt=[1,1,.7,.5];
+ const sc=z=>{const h=hom(BP,z),acc=[0,0,0,0],cnt=[0,0,0,0];
+  for(const s of S){const[u,v]=ap(h,s[0],s[1]),x=u*W,y=v*Hh;let val=bil(s[2]==2?F.L:F.rg,W,Hh,x,y);cnt[s[2]]++;if(isNaN(val))continue;
+   val=s[2]==2?(val-m)/sd:val/.3;acc[s[2]]+=s[3]*Math.max(-2,Math.min(2,val))}
+  let t=0;for(let k=0;k<4;k++)if(cnt[k])t+=wt[k]*acc[k]/cnt[k];return t};
+ let cur=sc(q);
+ for(const st of[3,2,1,.5,.25]){for(let pass=0;pass<10;pass++){let imp=false;const T=[],c=[q.reduce((a,p)=>a+p[0],0)/4,q.reduce((a,p)=>a+p[1],0)/4];
+  for(let i=0;i<8;i++)for(const s of[1,-1]){const z=q.map(p=>p.slice());z[i>>1][i&1]+=s*st/((i&1)?Hh:W);T.push(z)}
+  for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]])T.push(q.map(p=>[p[0]+dx*st/W,p[1]+dy*st/Hh]));
+  for(const s of[1,-1]){const k=1+s*st/120;T.push(q.map(p=>[c[0]+(p[0]-c[0])*k,c[1]+(p[1]-c[1])*k]))}
+  for(const s of[1,-1]){const a=s*st/120,co=Math.cos(a),si=Math.sin(a);T.push(q.map(p=>{const x=(p[0]-c[0])*W,y=(p[1]-c[1])*Hh;return[c[0]+(co*x-si*y)/W,c[1]+(si*x+co*y)/Hh]}))}
+  for(const z of T){const v=sc(z);if(v>cur+1e-9){cur=v;q=z;imp=true}}
+  if(!imp)break}}
+ return q}
+// ===== Pfeil finden: Veränderung zum Referenzbild, größter zusammenhängender Fleck, Spitze am Brettende =====
+function camDir(Hp,W,Hh,z,bx,by){// Richtung im Bild von der Spitze zum Flight, aus der Lage der Kamera geschätzt
+ const fl=.8*W*z,cx=W/2,cy=Hh/2,col=k=>[(Hp[k]-cx*Hp[6+k])/fl,(Hp[3+k]-cy*Hp[6+k])/fl,Hp[6+k]];
+ let m1=col(0),m2=col(1),m3=col(2);const nn=v=>Math.hypot(v[0],v[1],v[2]);let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;
+ const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l),r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]];
+ const s=-(r3[0]*t[0]+r3[1]*t[1]+r3[2]*t[2])>0?1:-1,pr=(x,y,zz)=>{const X=[0,1,2].map(k=>x*r1[k]+y*r2[k]+zz*r3[k]+t[k]);return[fl*X[0]/X[2]+cx,fl*X[1]/X[2]+cy]};
+ const a=pr(bx,by,0),b=pr(bx,by-20,s*100),d=[b[0]-a[0],b[1]-a[1]],n=Math.hypot(d[0],d[1]);return n>1e-6&&isFinite(n)?[d[0]/n,d[1]/n]:[0,-1]}
+function findDart(f,ref,toBoard,Hp){const W=f.width,Hh=f.height,a=f.data,b=ref.data,N=W*Hh,inB=new Uint8Array(N),sa=[0,0,0],sb=[0,0,0];let nB=0;
+ for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const[x,y]=toBoard(i,j);if(x*x+y*y<215*215){const p=j*W+i;inB[p]=1;nB++;if(!(i%2)&&!(j%2)){const k=p*4;for(let c=0;c<3;c++){sa[c]+=a[k+c];sb[c]+=b[k+c]}}}}
+ if(nB<500)return{err:"Die Scheibe ist nicht im Bild."};
+ const g=sa.map((v,c)=>Math.max(.7,Math.min(1.4,(v+1)/(sb[c]+1)))),D=new Uint16Array(N),hist=new Uint32Array(800);
+ for(let j=1;j<Hh-1;j++)for(let i=1;i<W-1;i++){const p=j*W+i;if(!inB[p])continue;const k=p*4;let best=1e9;
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const q=(p+dy*W+dx)*4,v=Math.abs(a[k]-g[0]*b[q])+Math.abs(a[k+1]-g[1]*b[q+1])+Math.abs(a[k+2]-g[2]*b[q+2]);if(v<best)best=v}
+  D[p]=Math.min(799,best|0);hist[D[p]]++}
+ let acc=0,med=0;for(let v=0;v<800;v++){acc+=hist[v];if(acc>=nB/2){med=v;break}}
+ const T=Math.max(45,med*4+20),M=new Uint8Array(N);let nC=0;for(let p=0;p<N;p++)if(inB[p]&&D[p]>T){M[p]=1;nC++}
+ if(nC>nB*.2)return{err:"Zu viel hat sich verändert (Licht, Bewegung oder Hand im Bild). Bitte Referenz neu setzen.",nC};
+ // Flecken suchen (Lücken bis 2 Pixel werden überbrückt)
+ const lab=new Int32Array(N).fill(-1),comps=[];
+ for(let p0=0;p0<N;p0++){if(!M[p0]||lab[p0]>=0)continue;const id=comps.length,st=[p0],px=[];lab[p0]=id;
+  while(st.length){const p=st.pop();px.push(p);const x=p%W,y=(p-x)/W;
+   for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=W||Y>=Hh)continue;const q=Y*W+X;if(M[q]&&lab[q]<0){lab[q]=id;st.push(q)}}}
+  comps.push(px)}
+ comps.sort((u,v)=>v.length-u.length);let C=comps[0];
+ if(!C||C.length<15)return{err:"Kein Pfeil erkannt.",nC,noise:comps.flat()};
+ // schwächere Pixel am Fleck mitnehmen, damit die dünne Spitze nicht verloren geht
+ const TL=Math.max(28,med*2+12),inC=new Uint8Array(N),st=C.slice();C.forEach(p=>inC[p]=1);let grown=0;
+ while(st.length&&grown<4000){const p=st.pop(),x=p%W,y=(p-x)/W;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const X=x+dx,Y=y+dy;if(X<1||Y<1||X>=W-1||Y>=Hh-1)continue;const q=Y*W+X;
+  if(!inC[q]&&inB[q]&&D[q]>TL){inC[q]=1;C.push(q);st.push(q);grown++}}}
+ const second=comps[1]?comps[1].length:0;
+ const P=C.map(p=>[p%W,(p-p%W)/W]),n=P.length,mx=P.reduce((s,p)=>s+p[0],0)/n,my=P.reduce((s,p)=>s+p[1],0)/n;
+ let sxx=0,sxy=0,syy=0;P.forEach(p=>{const x=p[0]-mx,y=p[1]-my;sxx+=x*x;sxy+=x*y;syy+=y*y});sxx/=n;sxy/=n;syy/=n;
+ const tr=sxx+syy,de=Math.sqrt(Math.max(0,(sxx-syy)**2/4+sxy*sxy)),l1=tr/2+de,l2=Math.max(1e-6,tr/2-de),th=.5*Math.atan2(2*sxy,sxx-syy);let u=[Math.cos(th),Math.sin(th)];
+ const[bx,by]=toBoard(mx,my),d=camDir(Hp,W,Hh,f.z||1,bx,by),el=Math.sqrt(l1/l2);let how;
+ if(el>2&&Math.abs(u[0]*d[0]+u[1]*d[1])>.3){if(u[0]*d[0]+u[1]*d[1]>0)u=[-u[0],-u[1]];how="Achse"}
+ else if(el>2){// Kamerarichtung unklar: das schmalere Ende ist die Spitze
+  const pr=P.map(p=>(p[0]-mx)*u[0]+(p[1]-my)*u[1]),lo=Math.min(...pr),hi=Math.max(...pr),L=hi-lo,cl=pr.filter(v=>v<lo+.3*L).length,ch=pr.filter(v=>v>hi-.3*L).length;if(cl<ch)u=[-u[0],-u[1]];how="schmales Ende"}
+ else{u=[-d[0],-d[1]];how="Kamerarichtung"}
+ const pr=P.map(p=>p[0]*u[0]+p[1]*u[1]),top=Math.max(...pr),sel=P.filter((p,i)=>pr[i]>=top-1.5);let tip=[sel.reduce((s,p)=>s+p[0],0)/sel.length,sel.reduce((s,p)=>s+p[1],0)/sel.length],ext=0;
+ if(how!="Kamerarichtung"){// entlang der Pfeilachse weitergehen, solange dort noch Veränderung ist
+  const Dat=(x,y)=>{const X=Math.round(x),Y=Math.round(y);return X<1||Y<1||X>=W-1||Y>=Hh-1?0:D[Y*W+X]},TS=Math.max(20,med*1.5+8);let miss=0,s=0;
+  for(let k=1;k<=50;k++){const x=tip[0]+u[0]*k*.5,y=tip[1]+u[1]*k*.5,m=(Dat(x,y)+Dat(x-u[1],y+u[0])+Dat(x+u[1],y-u[0]))/3;
+   if(m>TS){s=k*.5;miss=0}else if(++miss>=3)break}
+  ext=s;tip=[tip[0]+u[0]*s,tip[1]+u[1]*s]}
+ return{tip,comp:C,noise:comps.slice(1).flat(),nC,T,med,how,el,d,second,grown,ext}}
+
 function autoCal(){let f=frame();if(!f)return false;const tr=g=>autoFit(g,false)||autoFit(g,true);let q=tr(f);
  if(!q&&Z>1){const f2=frame(1);if(f2){const q2=tr(f2);if(q2){q=q2;f=f2}}}
  if(!q){showDbg();return false}
+ q=polish(q,f);
  const pts=q.map(([u,v])=>[.5+(u-.5)/f.z,.5+(v-.5)/f.z]);if(pts.some(p=>p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3)){showDbg();return false}
  setCal(pts);DB.cam.cal=pts;save();ca=false;det=null;ov();return true}
 function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpunkte: rot "+(LAST?LAST.nr:0)+", grün "+(LAST?LAST.ng:0);
@@ -264,7 +340,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
  else cm("Scheibe nicht automatisch gefunden ("+fc()+"). Prüfe: Zoom auf 1.0×, ganze Scheibe im Bild, gutes Licht. Sonst „Scheibe markieren“. Pink und türkis sind die erkannten Farbpunkte.")},700)}
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1280/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 8 | Zoom "+Z+"x | "+($("#tm").value=="n"?"Spitze nahe Mitte":"Spitze Schwerpunkt")+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,det?"Vorschlag: "+det.c+" ("+det.v+" Punkte)":"Kein Vorschlag",DPX?"Geänderte Pixel auf der Scheibe: "+DPX.px.length:"Noch kein Vergleich gemacht"];
+ lines=["Version 9 | Zoom "+Z+"x | Erkennung: Pfeilachse | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,det?"Vorschlag: "+fname(det.c,det.v):"Kein Vorschlag",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht"];
  const c=document.createElement("canvas");c.width=w;c.height=h*pn+120;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
  g.drawImage(cv,0,0,w,h);g.drawImage(cv,0,h,w,h);g.drawImage(ovc,0,h,w,h);
  if(ref){const t=document.createElement("canvas");t.width=ref.width;t.height=ref.height;t.getContext("2d").putImageData(ref,0,0);const sw=w/ref.z,sh=h/ref.z;g.fillStyle="#000";g.fillRect(0,2*h,w,h);g.drawImage(t,(w-sw)/2,2*h+(h-sh)/2,sw,sh)}
