@@ -173,6 +173,22 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .tr .trfin{width:100%;min-height:48px;border:1px dashed rgba(127,127,127,.5);background:transparent;color:var(--lt);border-radius:12px;font-size:16px;font-weight:700;text-transform:uppercase;opacity:.75}
 .tr .trfin.warn{background:#b53a3a;color:#fff;border-style:solid;opacity:1}
 @media(max-width:500px){.tr .trbig{font-size:72px}.tr .trboxes b{font-size:30px}.tr .trbtn button{font-size:16px;min-height:56px}}
+.pfw{position:relative}
+.pfb{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px 0 6px;border-radius:999px}
+.pfa{width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none}
+.pfa.e{background:var(--bd);color:var(--tx)}
+.pfn{font-size:17px}.pfc{opacity:.6;font-size:14px}
+.pfm{position:absolute;left:0;top:calc(100% + 6px);z-index:30;background:var(--cd);border:1px solid var(--bd);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:6px;min-width:240px}
+.pfh{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu);padding:6px 10px 4px;font-weight:700}
+.pfi{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;border:0;border-radius:10px;background:transparent;text-align:left;font-size:17px;padding:0 10px}
+.pfi{color:var(--tx)}.pfi:hover{background:var(--bg)}.pfi.on{background:var(--bg);color:var(--tx);border-color:transparent}
+.pfk{margin-left:auto;color:var(--ac);font-size:18px}
+.pfs{height:1px;background:var(--bd);margin:6px 4px}
+.pft{display:flex;flex-direction:column;line-height:1.15}.pft small{font-size:13px;color:var(--mu);font-weight:400}
+.pfm{min-width:280px}
+.pff{padding:4px 6px 6px}.pff input{width:100%;box-sizing:border-box;min-height:46px;font:inherit;font-size:18px;border:1px solid var(--bd);border-radius:10px;padding:0 12px;background:var(--bg);color:var(--tx)}
+.pfe{color:#d64545;font-size:14px;min-height:18px;margin:4px 2px}
+.pfbt{display:flex;gap:8px}.pfbt button{flex:1}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3" hidden>Einrichtung</button></nav>
@@ -196,7 +212,7 @@ if(KNR){try{const P="cam"+KNR+":",S=Storage.prototype,g=S.getItem,s=S.setItem,r=
 let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
 if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
-const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.cur);
+const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.p.p1?"p1":ST.cur);
 let SAVEERR=0;const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(e){SAVEERR=1}};
 const B=(t,n,g,r)=>({t,n,g,r,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
@@ -1290,10 +1306,32 @@ function loop(){const t0=performance.now();try{tick()}catch(e){}const dt=perform
 function startMon(){if(!MON)loop()}
 function setZ(z,quiet){if(!quiet)AZ=false;setView(z,ZC,quiet)}
 $("#zm").onclick=()=>setZ(Z-.25);$("#zp").onclick=()=>setZ(Z+.25);$("#zl").onclick=()=>{AZ=!AZ;if(AZ){if(!autoZoom())setView(Z,ZC,true);cm("Auto-Zoom an: Der Ausschnitt folgt der Scheibe.")}else{setView(Z,ZC,true);cm("Auto-Zoom aus. Mit − und + selbst zoomen.")}};$("#c11").onclick=switchCam;
-function pfBar(){const o=$("#pf");o.innerHTML=Object.keys(ST.p).map(id=>`<button class="${id==ST.cur?"on":""}" data-p="${id}">${esc(ST.p[id].name)}</button>`).join("")+'<button id="pren">Name ändern</button><button id="nset" class="'+(view==3?'on':'')+'" style="margin-left:auto">⚙ Einrichtung</button>';
+// Profile: kleiner Knopf oben links, Auswahl im Menü (v23)
+// Start immer mit Profil "p1" (Lukas). Neue Profile bekommen eine eindeutige Kennung, damit sich beim Abgleich mit dem Pi nichts vermischt.
+let PFO=false,PFM="",PFE="";
+function pfNew(n){let id;do{id="p"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}while(ST.p[id]);ST.p[id]={name:n,db:{sessions:[],notes:{}}};return id}
+function pfSwitch(id){if(id==ST.cur)return true;if(s&&!s.done&&s.darts>0&&!confirm("Das laufende Training wird verworfen. Profil wechseln?"))return false;s=null;H=[];DL=[];useP(id);stt();return true}
+function pfBar(){const o=$("#pf"),P0=ST.p[ST.cur],ini=n=>esc((n||"?").trim().charAt(0).toUpperCase()),cnt=id=>((ST.p[id].db||{}).sessions||[]).length;
+ const form=PFM?`<div class="pff"><div class="pfh">${PFM=="add"?"Neues Profil":"Name ändern"}</div><input id="pfin" maxlength="20" autocomplete="off" placeholder="Name" value="${PFM=="ren"?esc(P0.name):""}"><div class="pfe">${esc(PFE)}</div><div class="pfbt"><button id="pfno">Abbrechen</button><button id="pfok" class="pri">${PFM=="add"?"Anlegen":"Speichern"}</button></div></div>`
+  :`<button class="pfi" id="pfadd"><span class="pfa e">＋</span>Profil hinzufügen</button><button class="pfi" id="pren"><span class="pfa e">✎</span>Name von „${esc(P0.name)}“ ändern</button>`;
+ o.innerHTML=`<div class="pfw"><button id="pfb" class="pfb" aria-haspopup="true"><span class="pfa">${ini(P0.name)}</span><span class="pfn">${esc(P0.name)}</span><span class="pfc">▾</span></button>
+ <div class="pfm" id="pfm"${PFO?"":" hidden"}><div class="pfh">Profil wählen</div>${Object.keys(ST.p).map(id=>`<button class="pfi${id==ST.cur?" on":""}" data-p="${id}"><span class="pfa">${ini(ST.p[id].name)}</span><span class="pft">${esc(ST.p[id].name)}<small>${cnt(id)} ${cnt(id)==1?"Einheit":"Einheiten"}${id=="p1"?" · beim Start":""}</small></span>${id==ST.cur?'<span class="pfk">✓</span>':""}</button>`).join("")}
+ <div class="pfs"></div>${form}</div></div>`+'<button id="nset" class="'+(view==3?'on':'')+'" style="margin-left:auto">⚙ Einrichtung</button>';
  $("#nset").onclick=()=>go(3);
- o.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(id==ST.cur)return;if(s&&!s.done&&s.darts>0&&!confirm("Das laufende Training wird verworfen. Profil wechseln?"))return;s=null;H=[];useP(id);stt();pfBar();go(view)});
- $("#pren").onclick=()=>{const n=prompt("Neuer Name für dieses Profil:",ST.p[ST.cur].name);if(n&&n.trim()){ST.p[ST.cur].name=n.trim().slice(0,20);save();pfBar()}}}
+ $("#pfb").onclick=e=>{e.stopPropagation();PFO=!PFO;PFM="";PFE="";pfBar()};
+ o.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(!pfSwitch(id))return;PFO=false;PFM="";pfBar();go(view)});
+ const q=x=>o.querySelector(x);
+ if(q("#pfadd"))q("#pfadd").onclick=()=>{PFM="add";PFE="";pfBar()};
+ if(q("#pren"))q("#pren").onclick=()=>{PFM="ren";PFE="";pfBar()};
+ if(q("#pfno"))q("#pfno").onclick=()=>{PFM="";PFE="";pfBar()};
+ const inp=q("#pfin");if(inp){setTimeout(()=>{try{inp.focus();inp.select()}catch(e){}},30);inp.onkeydown=e=>{if(e.key=="Enter")q("#pfok").click();if(e.key=="Escape")q("#pfno").click()}}
+ if(q("#pfok"))q("#pfok").onclick=()=>{const n=(inp.value||"").trim().slice(0,20);
+  if(!n){PFE="Bitte einen Namen eingeben.";pfBar();return}
+  if(Object.keys(ST.p).some(id=>(PFM=="add"||id!=ST.cur)&&ST.p[id].name.toLowerCase()==n.toLowerCase())){PFE="Diesen Namen gibt es schon.";pfBar();return}
+  if(PFM=="add"){if(s&&!s.done&&s.darts>0&&!confirm("Das laufende Training wird verworfen. Neues Profil anlegen und wechseln?"))return;const id=pfNew(n);pfSwitch(id)}
+  else ST.p[ST.cur].name=n;
+  save();PFO=false;PFM="";PFE="";pfBar();go(view)}}
+document.addEventListener("click",e=>{if(PFO&&!e.target.closest(".pfw")){PFO=false;PFM="";PFE="";pfBar()}});
 stt();renderTurn();AZ=DB.cam.az!==false;setView(DB.cam.z||1,DB.cam.zc||[.5,.5],true);pfBar();try{ringInit()}catch(e){}try{duoInit()}catch(e){}
 go(0);
 </script></body></html>
