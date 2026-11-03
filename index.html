@@ -95,6 +95,46 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .vl .vtab td,.vl .vtab th{border-bottom:1px solid rgba(127,127,127,.25);padding:8px 6px}
 .vl .vtab input{min-width:120px;min-height:36px;font:inherit;border:1px solid rgba(127,127,127,.35);border-radius:8px;padding:0 8px;background:transparent;color:inherit}
 .vl .vg{color:#1f9a5f}.vl .vb{color:#d64545}
+.wp .wphero{background:var(--dk);color:#fff;border-radius:18px;padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:2px 0 12px}
+@media(max-width:720px){.wp .wphero{grid-template-columns:1fr}}
+.wp .wphero .k{color:var(--gold);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.wp .wphero h1{margin:2px 0 6px;font-size:40px;line-height:1.05;font-weight:700;text-transform:uppercase}
+.wp .wphero p{margin:0 0 12px;font-size:17px;opacity:.8;max-width:640px}
+.wp .wpchips span{display:inline-block;background:var(--dk2);border-radius:999px;padding:5px 12px;margin:0 6px 6px 0;font-size:15px}
+.wp .wpchips.l span{background:rgba(127,127,127,.17);font-size:14px;padding:4px 10px}
+.wp .wpact{display:flex;flex-direction:column;align-items:stretch;gap:10px;min-width:250px}
+.wp .wplast{background:var(--dk2);border-radius:12px;padding:8px 12px;text-align:center}
+.wp .wplast small{display:block;font-size:14px;opacity:.65;text-transform:uppercase}
+.wp .wplast b{font-size:34px;font-weight:400;line-height:1.15}.wp .wplast b i{font-style:normal;font-size:17px;opacity:.7}
+.wp .wpgo{min-height:64px;border:0;border-radius:14px;background:var(--gold);color:#222;font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:0 24px}
+.wp .wpsub{font-size:14px;opacity:.7;text-align:center}
+.wp .wph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+.wp .wpcnt{font-size:17px;font-weight:700;text-transform:uppercase;opacity:.75}
+.wp .wpbar{height:10px;border-radius:5px;background:rgba(127,127,127,.2);overflow:hidden;margin-bottom:12px}.wp .wpbar i{display:block;height:100%;background:var(--gold);border-radius:5px}
+.wp .wpdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.wp .wpdays>div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:12px}
+.wp .wpdays b{font-size:17px;text-transform:uppercase}
+.wp .wpdays span{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(127,127,127,.2);font-size:18px;font-weight:700}
+.wp .wpdays .ok span{background:#1f9a5f;color:#fff}
+.wp .wpdays .td{background:rgba(242,196,109,.28)}.wp .wpdays .td span{box-shadow:0 0 0 3px var(--gold);color:#b5862a}.wp .wpdays .td.ok span{color:#fff}
+.wp .wpdays small{font-size:13px;opacity:.7;line-height:1.15}
+@media(max-width:600px){.wp .wpdays small{display:none}.wp .wphero h1{font-size:32px}}
+.wp .wpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.wp .wpcard{background:var(--lc);color:var(--lt);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;border:2px solid transparent}
+.wp .wpcard.today{border-color:var(--gold)}
+.wp .wptop{display:flex;align-items:center;gap:8px}
+.wp .wpday{background:var(--dk);color:#fff;border-radius:999px;padding:4px 12px;font-weight:700;font-size:15px;text-transform:uppercase}
+.wp .today .wpday{background:var(--gold);color:#222}
+.wp .wpdn{font-size:15px;opacity:.65;text-transform:uppercase}
+.wp .wpok{margin-left:auto;color:#1f9a5f;font-weight:700;font-size:15px}
+.wp .wpcard h3{margin:0;font-size:23px;font-weight:700;text-transform:uppercase;line-height:1.1}
+.wp .wpcard p{margin:0;font-size:15px;opacity:.75;flex:1}
+.wp .wpft{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid rgba(127,127,127,.25);padding-top:10px}
+.wp .wpl small{display:block;font-size:13px;opacity:.65;text-transform:uppercase}
+.wp .wpl b{font-size:24px;font-weight:400}.wp .wpl b i{font-style:normal;font-size:14px;opacity:.7}
+.wp .wpl .va{font-size:18px}
+.wp .wpft button{min-height:46px;border:0;border-radius:12px;background:var(--dk);color:#fff;font-size:17px;font-weight:700;text-transform:uppercase;padding:0 20px}
+.wp .wpft button.on{background:var(--gold);color:#222}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
@@ -119,7 +159,7 @@ let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
 if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
 const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.cur);
-const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST))}catch(e){}};
+let SAVEERR=0;const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(e){SAVEERR=1}};
 const B=(t,n,g,r)=>({t,n,g,r,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 const P={
@@ -188,10 +228,30 @@ function render(){const m=$("#m");if(view==3)return;if(view==0)m.innerHTML=plan(
  if(q("fin"))q("fin").onclick=fin;if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
- if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
- if(view==2)vBind(m)}
+ if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam,z:Date.now()};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
+ if(view==2)vBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1)}
 
-function plan(){return DAYS.map((k,i)=>`<div class="card ${i==today?"today":""}"><div class="row"><div><h2>${DN[i]}${i==today?" (heute)":""} · ${P[k].n}</h2><div class="mu">${P[k].x}</div></div><button class="${i==today?"pri":""}" data-start="${i}">Training starten</button></div></div>`).join("")}
+// ===== Wochenplan (v23): gleicher Stil wie der Verlauf =====
+const WPL={mo:["T20-Treffer",r=>vHit(r,"T20",0),{u:100}],di:["Trefferquote",r=>vQ(r,()=>1),{p:1}],mi:["Doppel-Runde",r=>vRd(r,"d"),{u:"Pfeile",d:1,lb:1}],
+ do:["Average",r=>r.avg,{d:1}],fr:["Doppelquote",r=>vQ(r,()=>1),{p:1}],sa:["Average",r=>r.avg,{d:1}],so:["Average",r=>r.avg,{d:1}]};
+// Kurzüberblick der Übungen aus dem Plan (z. B. "T20 ×100")
+function wpChips(k){const p=P[k];if(p.m=="501")return[p.legs+" Legs 501",p.dout?"mit Double-Out":"ohne Double-Out"];if(p.m=="free")return["Frei werfen","15–20 Minuten"];
+ const L=p.b();if(L.some(b=>b.n=="h")){const c={};L.forEach(b=>{const g=b.g;(c[g]=c[g]||new Set()).add(b.r||1)});const o=[];if(c.s)o.push(c.s.size+(c.s.size>1?" Runden":" Runde")+" Singles 1–20");if(c.d)o.push(c.d.size+(c.d.size>1?" Runden":" Runde")+" Doppel 1–20 + Bull");return o}
+ const o=[];L.forEach(b=>{const l=b.t=="B"?"Bull":b.t,x=o[o.length-1];if(x&&x.l==l)x.n+=b.n;else o.push({l,n:b.n})});return o.map(x=>x.l+" ×"+x.n).concat([L.reduce((a,b)=>a+b.n,0)+" Pfeile"])}
+const isoD=()=>new Date().toISOString().slice(0,10);
+function wpLast(k){const S=vSes(k),f=WPL[k];if(!S.length)return{h:"–",d:"noch nie",a:""};const r=S[0],v=f[1](r),pv=S[1]?f[1](S[1]):null;return{h:vFmt(v,f[2]),d:vDate(r.date),a:vArrow(v,pv,f[2]),l:f[0]}}
+function plan(){const tk=DAYS[today],m0=+mon(isoD()),S=DB.sessions,done=new Set(S.filter(r=>+mon(r.date)==m0).map(r=>r.k)),first=S.length?+mon(S[S.length-1].date):m0,wk=Math.floor(Math.round((m0-first)/864e5)/7)+1,run=s&&!s.done&&s.darts>0;
+ const L=wpLast(tk),td=done.has(tk);
+ let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Heute · ${DN[today]}${td?' · <span style="color:#45d38f">✓ erledigt</span>':""}</div><h1>${P[tk].n}</h1><p>${P[tk].x}</p><div class="wpchips">${wpChips(tk).map(c=>`<span>${c}</span>`).join("")}</div></div>
+ <div class="wpact"><div class="wplast"><small>Zuletzt${L.l?" · "+L.l:""}</small><b>${L.h}</b>${L.a}<small>${L.d}</small></div>${run?`<button class="wpgo" id="wpgo">Training fortsetzen</button><div class="wpsub">läuft: ${esc(s.name)}</div>`:`<button class="wpgo" data-start="${today}">${td?"Nochmal starten":"Training starten"}</button>`}</div></div>`;
+ const n=DAYS.filter(k=>done.has(k)).length,zs=zw(Math.min(12,Math.max(1,wk)));
+ t+=`<div class="vcard wpweek"><div class="wph"><div class="vh3" style="margin:0">Woche ${wk>12?wk:wk+" von 12"}</div><div class="wpcnt">${n} von 7 erledigt</div></div><div class="wpbar"><i style="width:${n/7*100}%"></i></div>
+ <div class="wpdays">${DAYS.map((k,i)=>`<div class="${done.has(k)?"ok":""} ${i==today?"td":""}"><b>${VD[i+1]}</b><span>${done.has(k)?"✓":i==today?"●":""}</span><small>${P[k].n.replace(/ \(.*\)/,"")}</small></div>`).join("")}</div>
+ <div class="vnote l">Ziel am Samstag: <b>${zs.toFixed(1).replace(".",",")} Average</b> (Plan: 35 → 47,5 in 12 Wochen)</div></div>`;
+ t+=`<div class="wpgrid">${DAYS.map((k,i)=>{const l=wpLast(k),d=done.has(k);return`<div class="wpcard ${i==today?"today":""}"><div class="wptop"><span class="wpday">${VD[i+1]}</span><span class="wpdn">${DN[i]}</span>${d?'<span class="wpok">✓ erledigt</span>':""}</div>
+  <h3>${P[k].n}</h3><p>${P[k].x}</p><div class="wpchips l">${wpChips(k).map(c=>`<span>${c}</span>`).join("")}</div>
+  <div class="wpft"><div class="wpl"><small>${l.l||"Zuletzt"}${l.d&&l.l?" · "+l.d:""}</small><b>${l.h}</b>${l.a}</div><button class="${i==today?"on":""}" data-start="${i}">Starten</button></div></div>`}).join("")}</div></div>`;
+ return t}
 
 function train(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><div class="mu">Starte im Wochenplan eine Einheit.</div></div>';
  if(s.done){let t=`<div class="card"><h2>Fertig: ${s.name}</h2><div class="st"><div><b>${s.darts}</b>Pfeile</div><div><b>${s.pts}</b>Punkte</div><div><b>${avg(s.pts,s.darts)}</b>Average</div><div><b>${s.legs?s.ldone.length:"–"}</b>Legs</div></div></div>`;
@@ -344,19 +404,19 @@ function vOver(){const R=rows(),S=DB.sessions,sa=S.filter(x=>x.k=="sa"),last=sa.
   else if(r.bl){const d=r.bl.reduce((a,b)=>a+b.d,0),h=r.bl.reduce((a,b)=>a+b.h,0);e=`Treffer ${h}/${d} (${Math.round(h/d*100)}%)`}
   else if(r.legs)e=`${r.legs.length} Legs`;
   return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table></div>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
- t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" style="margin-bottom:8px">Deine Daten liegen nur in diesem Browser. Im Inkognito-Fenster werden sie beim Schließen gelöscht! Lade ab und zu eine Sicherung herunter.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
+ t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" id="bks" style="margin-bottom:8px;font-size:15px"></div><div class="mu" style="margin-bottom:8px">Deine Daten liegen in diesem Browser und – sobald die Ring-Kameras verbunden sind – zusätzlich auf dem Raspberry Pi. Fehlt dem Tablet etwas, holt es sich die Daten beim nächsten Verbinden automatisch zurück. Für ganz sicher: ab und zu eine Sicherung herunterladen.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
  return t}
-function hist(){return`<div class="vl"><div class="vtabs">${VD.map((d,i)=>`<button data-vt="${i}" class="${VT==i?"on":""}">${d}</button>`).join("")}</div>${VT?vDay(DAYS[VT-1]):vOver()}</div>`}
+function hist(){return`<div class="vl">${SAVEERR?'<div class="vcard" style="background:#d64545;color:#fff"><b>Der Speicher im Browser ist voll – die letzten Änderungen wurden nicht gespeichert.</b> Bitte unter Übersicht eine Sicherung herunterladen und Bescheid geben.</div>':""}<div class="vtabs">${VD.map((d,i)=>`<button data-vt="${i}" class="${VT==i?"on":""}">${d}</button>`).join("")}</div>${VT?vDay(DAYS[VT-1]):vOver()}</div>`}
 function vBind(m){const q=s=>m.querySelector(s);
  m.querySelectorAll("[data-vt]").forEach(b=>b.onclick=()=>{VT=+b.dataset.vt;VF="Alle";lss("dart_vt",String(VT));render()});
  m.querySelectorAll("[data-vp]").forEach(b=>b.onclick=()=>{VP=+b.dataset.vp;lss("dart_vp",String(VP));render()});
  m.querySelectorAll("[data-vm]").forEach(b=>b.onclick=()=>{VM=b.dataset.vm;render()});
  m.querySelectorAll("[data-vf]").forEach(b=>b.onclick=()=>{VF=b.dataset.vf;render()});
- const hc=q("#vhc");if(hc)vHeat(hc,hc.dataset.k);
+ const hc=q("#vhc");if(hc)vHeat(hc,hc.dataset.k);bkUI();
  if(q("#bk1"))q("#bk1").onclick=()=>{try{const P=ST.p[ST.cur],blob=new Blob([JSON.stringify({app:"dart",v:23,name:P.name,db:{sessions:P.db.sessions,notes:P.db.notes||{}}})],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="dart-sicherung-"+P.name.replace(/\W+/g,"_")+"-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);q("#bkm").textContent="Sicherung erstellt (Ordner „Downloads“)."}catch(e){q("#bkm").textContent="Sicherung ging nicht: "+e}};
  if(q("#bk2"))q("#bk2").onclick=()=>q("#bkf").click();
  if(q("#bkf"))q("#bkf").onchange=function(){const f=this.files&&this.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||o.app!="dart"||!o.db||!Array.isArray(o.db.sessions))throw"keine Dart-Sicherung";
-  const have=new Set(DB.sessions.map(r=>r.id));let n=0;o.db.sessions.forEach(r=>{if(r&&r.id&&!have.has(r.id)){DB.sessions.push(r);n++}});DB.sessions.sort((a,b)=>b.id-a.id);DB.notes=Object.assign({},o.db.notes||{},DB.notes||{});save();render();
+  const sg=r=>r.date+"|"+r.k+"|"+r.darts+"|"+r.pts,have=new Set(DB.sessions.map(r=>r.id)),hs=new Set(DB.sessions.map(sg)),z=DB.z||0;let n=0,j=0;o.db.sessions.slice().sort((a,b)=>a.id-b.id).forEach(r=>{if(!r||!r.id||have.has(r.id)||hs.has(sg(r)))return;if(r.id<=z)r=Object.assign({},r,{id:z+1+(j++)});DB.sessions.push(r);n++});DB.sessions.sort((a,b)=>b.id-a.id);DB.notes=Object.assign({},o.db.notes||{},DB.notes||{});save();render();
   const e=$("#bkm");if(e)e.textContent=n+" Einheit(en) aus der Sicherung übernommen."}catch(e){const x=$("#bkm");if(x)x.textContent="Das ist keine gültige Sicherung ("+e+")."}};rd.readAsText(f)}}
 let vRz=0;window.addEventListener("resize",()=>{clearTimeout(vRz);vRz=setTimeout(()=>{if(view==2){const hc=document.querySelector("#vhc");if(hc)vHeat(hc,hc.dataset.k)}},200)});
 
@@ -913,7 +973,7 @@ function duoLocal(V){// ein Pfeil wurde auf diesem Gerät bestätigt
  if(!DUO.on||!duoLive()){DUO.cnt.main++;commitDart(V.p[0],V.p[1],{src:"Tablet",weak:V.weak,R:[{id:"T",V}]});return}
  addRep("T",V)}
 function duoPullReset(why){TURN=[];DVEC=[];DUO.groups=[];det=null;DPX=null;LOG.push(hm()+" gezogen ("+why+")");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");duoSend({t:"turn"})}
-function duoRecv(m,conn){if(!m||typeof m!="object")return;const now=Date.now();DUO.lastHb=now;
+function duoRecv(m,conn){if(!m||typeof m!="object")return;if(typeof m.t=="string"&&m.t.slice(0,2)=="bk"){bkRecv(m,conn);return}const now=Date.now();DUO.lastHb=now;
  if(ROLE=="main"){const id=typeof m.id=="string"&&/^(H|K\d)$/.test(m.id)?m.id:(conn&&conn.__id)||"H";if(conn)conn.__id=id;
   const s=DUO.src[id]||(DUO.src[id]={hb:0,cal:false,st:"",conn:null});s.hb=now;s.conn=conn||s.conn;
   if(m.t=="hb"||m.t=="hello"){s.cal=!!m.cal;s.st=m.st||"";s.zahl=m.zahl||0;DUO.pst=m;duoUI();return}
@@ -936,7 +996,7 @@ function loadPJ(cb){if(window.Peer)return cb();const U=["https://cdn.jsdelivr.ne
 function hello(){return{t:"hello",id:MYID,role:ROLE,cal:!!HB,st:MST,zahl:typeof ringZahl=="function"?ringZahl():0}}
 function setConn(c){if(ROLE=="main"){if(!CONNS.includes(c))CONNS.push(c);CONNS=CONNS.filter(x=>x===c||x.open||!x.__closed);if(CONNS.length>6)CONNS.splice(0,CONNS.length-6)}
  else{if(CONN&&CONN!==c){try{CONN.close()}catch(e){}}CONN=c}
- c.on("open",()=>{DUO.msg="";try{c.send(hello())}catch(e){}duoUI()});c.on("data",m=>duoRecv(m,c));c.on("close",()=>{c.__closed=1;if(ROLE=="main")CONNS=CONNS.filter(x=>x!==c);duoUI()});c.on("error",()=>duoUI())}
+ c.on("open",()=>{DUO.msg="";try{c.send(hello())}catch(e){}duoUI();if(ROLE!="main"&&KNR)setTimeout(()=>bkSend(c,{p:bkMine().p}),500)});c.on("data",m=>duoRecv(m,c));c.on("close",()=>{c.__closed=1;if(ROLE=="main")CONNS=CONNS.filter(x=>x!==c);duoUI()});c.on("error",()=>duoUI())}
 function duoStart(){DUO.on=true;lss("dart_duo","1");if(PEER){duoUI();return}
  if(ROLE=="main"){let code=lsg("dart_code","");if(!/^\d{4}$/.test(code)){code=String(1000+Math.floor(Math.random()*9000));lss("dart_code",code)}let tries=0;DUO.msg="Verbinde …";duoUI();
   loadPJ(()=>{const mk=()=>{PEER=new Peer("ldart-"+code,{debug:0});PEER.on("open",()=>{DUO.msg="";duoUI()});PEER.on("connection",c=>setConn(c));
@@ -946,7 +1006,44 @@ function duoStart(){DUO.on=true;lss("dart_duo","1");if(PEER){duoUI();return}
   loadPJ(()=>{PEER=new Peer({debug:0});const dial=()=>{if(!PEER||PEER.destroyed||(CONN&&CONN.open))return;try{setConn(PEER.connect("ldart-"+code,{reliable:true,serialization:"json"}))}catch(e){}};
    PEER.on("open",dial);PEER.on("error",e=>{DUO.msg=e.type=="peer-unavailable"?"Tablet nicht gefunden. Ist dort die Kopplung gestartet? Ich versuche es weiter …":"Verbindungsproblem ("+e.type+"), versuche es weiter …";duoUI()});
    PEER.on("disconnected",()=>{try{PEER.reconnect()}catch(e){}});setInterval(dial,5000)})}
- if(!DUOT)DUOT=setInterval(()=>{const h=hello();h.t="hb";duoSend(h);duoTick();duoUI()},1000)}
+ if(!DUOT)DUOT=setInterval(()=>{const h=hello();h.t="hb";duoSend(h);duoTick();duoUI();bkTick()},1000)}
+// ===== Sicherung auf dem Raspberry Pi (über die Kamera-Verbindung) =====
+// Jedes Ring-Kamera-Fenster (?kamera=N) hält eine Kopie aller Trainingsdaten. Abgleich in beide Richtungen:
+// fehlt dem Tablet etwas (neues Tablet, Inkognito, gelöschte Browserdaten), kommt es vom Pi zurück.
+// "Alle Daten löschen" merkt sich den Zeitpunkt (z); ältere Einheiten kommen dann nicht zurück.
+// Große Daten werden in Stücken geschickt (eine Nachricht darf nicht zu groß sein).
+const BKC=60000;let BKIN={},BKSIG="",BKT=0;
+function bkMine(){if(ROLE=="main"){const p={};for(const k in ST.p){const d=ST.p[k].db||{};p[k]={name:ST.p[k].name,s:d.sessions||[],n:d.notes||{},z:d.z||0}}return{p}}
+ try{const o=JSON.parse(lsg("dart_bk","")||"null");if(o&&o.p)return o}catch(e){}return{p:{}}}
+function bkCount(B){let n=0;for(const k in B.p)n+=(B.p[k].s||[]).length;return n}
+function bkMerge(dst,src,srcWins){let ch=false;for(const k in src.p||{}){const a=src.p[k];if(!a||!Array.isArray(a.s))continue;let b=dst.p[k];if(!b){b=dst.p[k]={name:a.name||k,s:[],n:{},z:0};ch=true}
+ const za=a.z||0,zb=b.z||0;
+ if(za>zb){b.z=za;b.n=Object.assign({},a.n||{});ch=true}
+ else if(za==zb){const nn=srcWins?Object.assign({},b.n||{},a.n||{}):Object.assign({},a.n||{},b.n||{});if(JSON.stringify(nn)!=JSON.stringify(b.n||{})){b.n=nn;ch=true}}
+ if(srcWins&&a.name&&a.name!=b.name){b.name=a.name;ch=true}
+ const M=new Map((b.s||[]).map(r=>[r.id,r]));
+ a.s.forEach(r=>{if(!r||!r.id)return;const o=M.get(r.id);if(!o){M.set(r.id,r);ch=true}else if(srcWins&&(o.note||"")!=(r.note||"")){M.set(r.id,r);ch=true}else if(!srcWins&&!o.note&&r.note){M.set(r.id,Object.assign({},o,{note:r.note}));ch=true}});
+ const z=b.z||0,L=[...M.values()].filter(r=>r.id>z).sort((x,y)=>y.id-x.id);if(L.length!=(b.s||[]).length)ch=true;b.s=L}
+ return ch}
+function bkApplyMain(B){for(const k in B.p){const a=B.p[k];if(!ST.p[k])ST.p[k]={name:a.name,db:{sessions:[]}};const d=ST.p[k].db;ST.p[k].name=a.name||ST.p[k].name;d.sessions=a.s;d.notes=a.n;d.z=a.z||0}
+ DB=ST.p[ST.cur].db;DB.cam=ST.cam;save()}
+function bkSend(c,o){try{if(!c||!c.open)return;const s=JSON.stringify(o),k=Date.now().toString(36)+Math.random().toString(36).slice(2,6),n=Math.max(1,Math.ceil(s.length/BKC));
+ for(let i=0;i<n;i++)c.send({t:"bkC",id:MYID,k,i,n,d:s.slice(i*BKC,(i+1)*BKC)})}catch(e){}}
+function bkSig(){let s="";for(const k in ST.p){const d=ST.p[k].db||{},S=d.sessions||[];s+=k+":"+ST.p[k].name+":"+(d.z||0)+":"+S.length+":"+(S[0]?S[0].id:0)+":"+S.map(r=>r.note||"").join("¦")+":"+JSON.stringify(d.notes||{})+"|"}return s}
+function bkTick(){if(ROLE!="main"||++BKT%3)return;const L=CONNS.filter(c=>c.open&&c.__bk);if(!L.length)return;const g=bkSig();if(g==BKSIG)return;BKSIG=g;const o={p:bkMine().p};L.forEach(c=>bkSend(c,o))}
+function bkRecv(m,conn){
+ if(m.t=="bkA"){if(ROLE=="main"){lss("dart_bkat",JSON.stringify({at:Date.now(),n:m.n|0,id:String(m.id||""),ok:m.ok!==0}));bkUI()}return}
+ if(m.t!="bkC"||typeof m.d!="string"||!(m.n>0)||m.n>2000||!(m.i>=0&&m.i<m.n))return;
+ const now=Date.now();for(const x in BKIN)if(now-BKIN[x].at>120000)delete BKIN[x];
+ const key=String(m.id||"")+"|"+m.k,b=BKIN[key]||(BKIN[key]={n:m.n,p:[],c:0,at:now});if(b.p[m.i]==null){b.p[m.i]=m.d;b.c++}
+ if(b.c<b.n)return;delete BKIN[key];let o;try{o=JSON.parse(b.p.join(""))}catch(e){return}if(!o||!o.p)return;
+ if(ROLE=="main"){const me=bkMine();if(bkMerge(me,o,false)){bkApplyMain(me);if(view!=3)render();try{pfBar()}catch(e){}LOG.push(hm()+" Daten vom Raspberry Pi übernommen")}
+  if(conn){conn.__bk=1;BKSIG=bkSig();bkSend(conn,{p:bkMine().p})}}
+ else{const me=bkMine();bkMerge(me,o,true);let ok=1;try{localStorage.setItem("dart_bk",JSON.stringify(me))}catch(e){ok=0}duoSend({t:"bkA",id:MYID,n:bkCount(me),ok})}}
+function bkUI(){const e=document.querySelector("#bks");if(!e)return;let o=null;try{o=JSON.parse(lsg("dart_bkat","")||"null")}catch(_){}
+ if(!o){e.innerHTML="<b>Raspberry Pi:</b> noch nicht abgeglichen. Das passiert automatisch, sobald die Ring-Kameras mit dem Tablet verbunden sind.";return}
+ const d=new Date(o.at),p=v=>String(v).padStart(2,"0"),t=p(d.getDate())+"."+p(d.getMonth()+1)+". um "+p(d.getHours())+":"+p(d.getMinutes());
+ e.innerHTML=o.ok?`<b style="color:#1f9a5f">✓ Auf dem Raspberry Pi gesichert</b> – zuletzt am ${t}, ${o.n} Einheiten (${o.id.replace("K","Kamera ")}).`:`<b style="color:#d64545">Der Raspberry Pi konnte zuletzt nicht speichern</b> (${t}). Bitte eine Sicherung herunterladen.`}
 function duoStop(){DUO.on=false;lss("dart_duo","0");try{CONN&&CONN.close()}catch(e){}for(const c of CONNS){try{c.close()}catch(e){}}CONNS=[];try{PEER&&PEER.destroy()}catch(e){}PEER=null;CONN=null;DUO.src={};duoUI()}
 function srcState(s){if(!s.conn||!s.conn.open)return"getrennt";if(Date.now()-s.hb>8000)return"keine Antwort";return s.cal?"ok":"Scheibe noch nicht erkannt"}
 function duoState(){if(!DUO.on)return"aus";if(ROLE=="main"){const ids=Object.keys(DUO.src);if(!ids.length)return"getrennt";return ids.some(k=>srcState(DUO.src[k])=="ok")?"ok":srcState(DUO.src[ids[0]])}
