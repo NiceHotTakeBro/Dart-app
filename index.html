@@ -29,21 +29,92 @@ svg.b path,svg.b circle{cursor:pointer}
 table{width:100%;border-collapse:collapse;font-size:14px}
 td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
+.vl{--gold:#f2c46d;--dk:#2f3033;--dk2:#46474b;--lc:#e7e8ea;--lt:#2a2b2e;font-family:"Roboto Condensed","sans-serif-condensed","Arial Narrow",Arial,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .vl{--lc:#1f232a;--lt:#eef0f4;--dk:#353a44;--dk2:#474d59}:root:not([data-theme="light"]) .vl .vseg button.on{background:var(--gold);color:#222}}
+:root[data-theme="dark"] .vl{--lc:#1f232a;--lt:#eef0f4;--dk:#353a44;--dk2:#474d59}:root[data-theme="dark"] .vl .vseg button.on{background:var(--gold);color:#222}
+.vl button{font-family:inherit}
+.vl .vtabs{display:flex;gap:2px;background:var(--gold);border-radius:999px;padding:4px;margin:2px 0 12px;overflow-x:auto;scrollbar-width:none}
+.vl .vtabs button{flex:1 0 auto;min-height:46px;border:0;border-radius:999px;background:transparent;color:#2a2a2a;font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;padding:0 14px}
+.vl .vtabs button.on{background:var(--dk);color:#fff}
+.vl .vgrid{display:grid;grid-template-columns:1fr 1.08fr;gap:14px;align-items:start}
+@media(max-width:860px){.vl .vgrid{grid-template-columns:1fr}}
+.vl .vcard{background:var(--lc);color:var(--lt);border-radius:16px;padding:14px;margin-bottom:12px}
+.vl .vh3{font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;margin-bottom:10px}
+.vl .vkpi{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;row-gap:4px;padding:12px 8px 16px}
+.vl .vkpi.v4k{grid-template-columns:repeat(4,1fr)}
+@media(max-width:600px){.vl .vkpi.v4k{grid-template-columns:repeat(2,1fr)}}
+.vl .vkpi .vttl{grid-column:1/-1;text-align:left;font-size:15px;text-transform:uppercase;opacity:.6;padding:0 6px 4px;letter-spacing:.03em}
+.vl .vkpi small{display:block;font-size:15px;text-transform:uppercase;opacity:.75;letter-spacing:.02em}
+.vl .vkpi b{display:block;font-size:42px;font-weight:400;line-height:1.1}
+.vl .vbar2{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.vl .vseg{display:inline-flex;background:var(--lc);border-radius:12px;padding:4px;gap:2px}
+.vl .vseg button{min-height:42px;border:0;border-radius:9px;background:transparent;color:var(--lt);font-size:17px;font-weight:700;text-transform:uppercase;padding:0 16px}
+.vl .vseg button.on{background:var(--dk);color:#fff}
+.vl .vper{display:flex;margin-bottom:12px}.vl .vper button{flex:1;white-space:nowrap;padding:0 8px}
+@media(max-width:500px){.vl .vper button{font-size:15px;padding:0 4px}.vl .vrow .vl1{font-size:17px}.vl .vrow b{font-size:24px}.vl .vtabs button{font-size:17px;padding:0 11px}}
+.vl .vchips{display:flex;gap:6px;flex-wrap:wrap}
+.vl .vchips button{min-height:40px;border:0;border-radius:999px;background:var(--lc);color:var(--lt);font-size:16px;padding:0 14px}
+.vl .vchips button.on{background:var(--gold);color:#222}
+.vl .vheat{position:relative;padding:10px}
+.vl .vheat canvas{display:block;width:100%;max-width:640px;margin:auto;aspect-ratio:1;color:var(--lt)}
+.vl .vhl{font-size:14px;line-height:1.3;opacity:.65;text-transform:uppercase;margin:0 0 4px 4px}
+.vl .vempty{text-align:center;opacity:.7;padding:10px 12px;font-size:16px}
+.vl .vheat .vempty{position:absolute;left:12%;right:12%;top:44%;background:#000a;color:#fff;border-radius:10px;opacity:1}
+.vl .vempty.d{color:#ddd}
+.vl .vtr{width:100%;display:block;color:var(--lt)}
+.vl .vcap{text-align:center;font-size:15px;text-transform:uppercase;opacity:.65;margin-top:2px}
+.vl .vpanel{background:var(--dk);color:#fff;border-radius:16px;padding:10px 12px 12px;margin-bottom:12px}
+.vl .vrow{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:4px;margin-top:5px}
+.vl .vrow.v4{grid-template-columns:.8fr 1fr 1.05fr 1.3fr}
+.vl .vrow>div{background:var(--dk2);padding:8px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:52px}
+.vl .vrow>div:first-child{border-radius:9px 0 0 9px}.vl .vrow>div:last-child{border-radius:0 9px 9px 0}
+.vl .vrow .vl1{text-align:right;align-items:flex-end;font-size:21px;font-weight:700;text-transform:uppercase;line-height:1.05}
+.vl .vrow small{display:block;font-size:13px;opacity:.6;font-weight:400;margin-top:2px}
+.vl .vrow b{font-size:28px;font-weight:400;line-height:1.1}
+.vl .vrow b i{font-style:normal;font-size:16px;opacity:.7}
+.vl .vrow.vhd>div{background:none;min-height:0;padding:4px 10px 0;font-size:16px;opacity:.6;text-transform:uppercase}
+.vl .vrow.vhd>div:first-child{text-align:right;align-items:flex-end;font-size:14px}
+.vl .vrow.vhd{margin-top:8px}
+.vl .va{font-size:22px;margin-left:6px;font-weight:700}.vl .va.g{color:#45d38f}.vl .va.b{color:#ff6262}
+.vl .vrow>div:not(:first-child){flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:baseline;align-content:center}
+.vl .vrow>div:not(:first-child) small{flex-basis:100%;text-align:center}
+.vl .vtd{font-size:17px;line-height:1.2}
+.vl .vpill{font-size:13px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;text-transform:uppercase;align-self:center}
+.vl .vpill.g{background:#1f8a57}.vl .vpill.o{background:#b68a22}.vl .vpill.b{background:#b53a3a}
+.vl .vnote{font-size:14px;opacity:.65;margin-top:10px;line-height:1.35}
+.vl .vnote.l{opacity:.75}
+.vl .vbars{display:grid;gap:6px}
+.vl .vbr{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center;font-size:17px}
+.vl .vbr>div{height:16px;background:rgba(127,127,127,.18);border-radius:8px;overflow:hidden}
+.vl .vbr i{display:block;height:100%;background:#4f8fe8;border-radius:8px}.vl .vbr i.g{background:#2ea66b}.vl .vbr i.b{background:#d64545}
+.vl .vbr b{text-align:right;font-weight:700}
+.vl .vleg{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;opacity:.8;margin-top:6px}
+.vl .vleg i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:-2px}
+.vl .vleg i.dash{border-radius:0;height:0;border-top:3px dashed #1a7f4b;width:22px;vertical-align:4px}
+.vl .vtab{font-size:16px}.vl .vtab th{font-size:14px;text-transform:uppercase;opacity:.7;font-weight:700;white-space:nowrap}
+.vl .vtab td,.vl .vtab th{border-bottom:1px solid rgba(127,127,127,.25);padding:8px 6px}
+.vl .vtab input{min-width:120px;min-height:36px;font:inherit;border:1px solid rgba(127,127,127,.35);border-radius:8px;padding:0 8px;background:transparent;color:inherit}
+.vl .vg{color:#1f9a5f}.vl .vb{color:#d64545}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><h2>Kamera (Test) · Version 21.1</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><h2>Kamera (Test) · Version 23</h2><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
 <div class="row" id="hzr" style="display:none;margin-top:6px;align-items:center"><span>Objektiv-Zoom der Kamera:</span><button id="hzm">−</button><b id="hzl">1.0×</b><button id="hzp">+</button></div>
 <div class="card" id="turn" style="margin-top:10px"></div>
-<div class="card" id="duo"><b>Zweite Kamera (Handy)</b><div class="row" style="margin-top:6px"><button id="d1">Dieses Gerät ist das Hauptgerät (Tablet)</button><button id="d2">Dieses Gerät ist die zweite Kamera (Handy)</button></div><div id="dbox"></div></div>
+<div class="card" id="duo"><b>Weitere Kameras (Handy / Ring-Kameras)</b><div class="row" style="margin-top:6px"><button id="d1">Dieses Gerät ist das Hauptgerät (Tablet)</button><button id="d2">Dieses Gerät ist eine weitere Kamera (Handy / Ring)</button></div><div id="dbox"></div><div id="rbox" style="margin-top:8px"></div></div>
 <div class="mu" id="cst" style="margin-top:8px"></div></section>
 <script>
 const $=s=>document.querySelector(s), K="dart_v1";
+// ===== Ring-Kameras (Raspberry Pi): eigene Instanz je Kamera, Aufruf mit ?kamera=1&zahl=11&code=1234 =====
+// Jede Instanz hat ihren eigenen Speicher (Kalibrierung, Kamera), damit sich drei Fenster nicht gegenseitig überschreiben.
+const QP=(()=>{try{return new URLSearchParams(location.search)}catch(e){return{get:()=>null}}})(),KNR=(()=>{const k=parseInt(QP.get("kamera")||"",10);return k>=1&&k<=9?k:0})();
+if(KNR){try{const P="cam"+KNR+":",S=Storage.prototype,g=S.getItem,s=S.setItem,r=S.removeItem;S.getItem=function(k){return g.call(this,P+k)};S.setItem=function(k,v){return s.call(this,P+k,v)};S.removeItem=function(k){return r.call(this,P+k)}}catch(e){}
+ try{localStorage.setItem("dart_role","side");localStorage.setItem("dart_duo","1");const c=QP.get("code");if(c&&/^\d{4}$/.test(c))localStorage.setItem("dart_code",c);const z=QP.get("zahl");if(z&&+z>=1&&+z<=20&&localStorage.getItem("dart_zahl_url")!=z){localStorage.setItem("dart_zahl",String(+z));localStorage.setItem("dart_zahl_url",z)}}catch(e){}}
 let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
 if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
@@ -64,8 +135,9 @@ const match=(t,c)=>t=="B"?(c=="SB"||c=="DB"):t[0]=="N"?(c.slice(1)==t.slice(1)):
 let s=null,H=[],view=0;
 const today=(new Date().getDay()+6)%7;
 const avg=(p,d)=>d?(p/d*3).toFixed(1):"–";
-function start(i){const k=DAYS[i],p=P[k];H=[];
- s={k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false};
+let DL=[];
+function start(i){const k=DAYS[i],p=P[k];H=[];DL=[];
+ s={k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};
  if(s.m=="blocks")s.bl=p.b();
  if(s.m=="501")Object.assign(s,{legs:p.legs,leg:1,rem:501,ld:0,ldone:[],dout:!!p.dout,t:0,ts:501});
  go(1)}
@@ -74,17 +146,25 @@ function d501(c,v){const nr=s.rem-v,bust=nr<0||nr==1||(nr==0&&c[0]!="D");
  s.darts++;s.ld++;s.pts+=v;s.rem=nr;s.log.push(c);s.t++;
  if(nr==0){s.ldone.push(s.ld);s.leg++;s.rem=501;s.ld=0;s.t=0;s.ts=501;if(s.leg>s.legs)fin();return}
  if(s.t==3){s.t=0;s.ts=s.rem}}
-function dart(c,v){if(!s||s.done)return;H.push(JSON.stringify(s));if(s.m=="501"&&s.dout){d501(c,v);render();return}
+function dart(c,v,x,y){if(!s||s.done)return;H.push(JSON.stringify(s));
+ const e={c};if(x!=null&&isFinite(x)&&isFinite(y)){e.x=Math.round(x);e.y=Math.round(y)}
+ if(s.m=="501"){const sc=s.dout?v:Math.min(v,s.rem),nr=s.rem-sc,bust=s.dout&&(nr<0||nr==1||(nr==0&&c[0]!="D")),done=!bust&&nr<=0,t=s.dout?s.t:(s.t||0);
+  Object.assign(e,{v:bust?0:sc,l:s.leg,n:s.vn||0,r:s.rem});if(bust)e.b=1;if(done)e.f=1;DL.push(e);s.dn=DL.length;
+  if(done)s.vn=0;else if(bust||t>=2)s.vn=(s.vn||0)+1;if(!s.dout)s.t=done?0:(t+1)%3}
+ else if(s.m=="blocks"){const b=s.bl[s.bi];Object.assign(e,{v,t:b.t,i:s.bi,n:Math.floor(b.d/3)});DL.push(e);s.dn=DL.length}
+ else{Object.assign(e,{v,n:Math.floor(s.darts/3)});DL.push(e);s.dn=DL.length}
+ if(s.m=="501"&&s.dout){d501(c,v);render();return}
  const sc=s.m=="501"?Math.min(v,s.rem):v;s.darts++;s.pts+=sc;s.log.push(c=="0"?"0":c);
  if(s.m=="blocks"){const b=s.bl[s.bi];b.d++;if(match(b.t,c))b.h++;
   if(b.n=="h"?b.h>=1:b.d>=b.n){s.bi++;if(s.bi>=s.bl.length)fin()}}
  if(s.m=="501"){s.rem-=sc;s.ld++;if(s.rem<=0){s.ldone.push(s.ld);s.leg++;s.rem=501;s.ld=0;if(s.leg>s.legs)fin()}}
  render()}
-function undo(){if(H.length){s=JSON.parse(H.pop());render()}}
+function undo(){if(H.length){s=JSON.parse(H.pop());DL.length=s.dn||0;render()}}
 function skip(){if(s&&s.m=="blocks"){H.push(JSON.stringify(s));s.bi++;if(s.bi>=s.bl.length)fin();render()}}
 function fin(){if(!s||s.done)return;s.done=true;
  if(s.darts>0){const r={id:Date.now(),date:new Date().toISOString().slice(0,10),k:s.k,name:s.name,darts:s.darts,pts:s.pts,avg:+avg(s.pts,s.darts)};
-  if(s.bl){r.bl=s.bl.filter(b=>b.d).map(b=>({t:b.t,d:b.d,h:b.h,g:b.g}))}
+  if(s.bl){r.bl=s.bl.map((b,i)=>({t:b.t,d:b.d,h:b.h,g:b.g,i})).filter(b=>b.d)}
+  r.dl=DL.slice(0,s.dn||DL.length);r.dur=Math.max(1,Math.round((Date.now()-(s.t0||Date.now()))/60000));
   if(s.m=="501")r.legs=s.ldone;
   DB.sessions.unshift(r);s.saved=true;save()}
  render()}
@@ -101,14 +181,15 @@ function board(){let o='<svg class="b" viewBox="-200 -200 400 400"><circle r="19
  o+='<circle r="15.9" fill="#2e8b57" stroke="#777" stroke-width=".6" data-c="SB" data-v="25"/><circle r="6.35" fill="#c8372d" stroke="#777" stroke-width=".6" data-c="DB" data-v="50"/></svg>';return o}
 
 function render(){const m=$("#m");if(view==3)return;if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else m.innerHTML=hist();
- const sv=m.querySelector("svg.b");if(sv)sv.onclick=e=>{const t=e.target.closest("[data-c]");if(t)dart(t.dataset.c,+t.dataset.v)};
+ const sv=m.querySelector("svg.b");if(sv)sv.onclick=e=>{const t=e.target.closest("[data-c]");if(!t)return;let x=null,y=null;try{const p=sv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(sv.getScreenCTM().inverse());x=q.x;y=q.y}catch(_){}dart(t.dataset.c,+t.dataset.v,x,y)};
  m.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>start(+b.dataset.start));
  const q=id=>m.querySelector("#"+id);
  if(q("miss"))q("miss").onclick=()=>dart("0",0);if(q("undo"))q("undo").onclick=undo;if(q("skip"))q("skip").onclick=skip;
  if(q("fin"))q("fin").onclick=fin;if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
- if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}}}
+ if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
+ if(view==2)vBind(m)}
 
 function plan(){return DAYS.map((k,i)=>`<div class="card ${i==today?"today":""}"><div class="row"><div><h2>${DN[i]}${i==today?" (heute)":""} · ${P[k].n}</h2><div class="mu">${P[k].x}</div></div><button class="${i==today?"pri":""}" data-start="${i}">Training starten</button></div></div>`).join("")}
 
@@ -131,23 +212,149 @@ function rows(){const S=DB.sessions.slice().reverse(),W=[...Array(12)].map(()=>(
  return W.map((o,i)=>{const w=i+1,a=o.sa?o.sa.avg:null,t=o.mo&&o.mo.bl?o.mo.bl.find(b=>b.t=="T20"):null,g=x=>o.mi&&o.mi.bl?o.mi.bl.filter(b=>b.g==x).reduce((n,b)=>n+b.d,0):"–";
   return[w,o.sa?o.sa.date.split("-").reverse().join("."):"–",a==null?"–":a.toFixed(1),zw(w).toFixed(1),a==null?"–":((a-zw(w)>=0?"+":"")+(a-zw(w)).toFixed(1)),t?t.h:"–",g("s"),g("d"),o.do?o.do.avg.toFixed(1):"–",(DB.notes||{})[w]||""]})}
 function csv(){return["Woche;Datum;Average;Zielwert;Differenz;T20-Treffer (Mo);Singles Pfeile;Doppel Pfeile;Scoring-Average (Do);Notiz"].concat(rows().map(r=>r.join(";"))).join("\n")}
-function wk(){const R=rows(),sa=DB.sessions.filter(x=>x.k=="sa"),last=sa.length?sa[0].avg:null,best=sa.length?Math.max(...sa.map(x=>x.avg)):null,f=v=>v==null?"–":v.toFixed(1);
- const X=w=>30+(w-1)*28,Y=v=>120-(v-30)/25*100,pt=R.filter(r=>r[2]!="–");
- let t=`<div class="card"><h2>Übersicht</h2><div class="st"><div><b>${f(last)}</b>Letzter Sa-Average</div><div><b>${f(best)}</b>Bester Sa-Average</div><div><b>${last==null?"–":(last-35>=0?"+":"")+(last-35).toFixed(1)}</b>zum Start (35)</div><div><b>${f((DB.sessions.find(x=>x.k=="do")||{}).avg)}</b>Letzter Do-Scoring-Ø</div></div></div>`;
- t+=`<div class="card"><h2>Average pro Woche</h2><svg viewBox="0 0 340 140" style="width:100%"><line x1="${X(1)}" y1="${Y(zw(1))}" x2="${X(12)}" y2="${Y(zw(12))}" stroke="var(--ok)" stroke-dasharray="4"/>${pt.length>1?`<polyline points="${pt.map(r=>X(r[0])+","+Y(+r[2])).join(" ")}" fill="none" stroke="var(--ac)" stroke-width="3"/>`:""}${pt.map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[2])}" r="4" fill="var(--ac)"/><text x="${X(r[0])}" y="${Y(+r[2])-8}" font-size="10" text-anchor="middle" fill="var(--tx)">${r[2]}</text>`).join("")}${R.filter(r=>r[8]!="–").map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[8])}" r="3.5" fill="#e08a1e"/>`).join("")}${R.map(r=>`<text x="${X(r[0])}" y="136" font-size="9" text-anchor="middle" fill="var(--mu)">${r[0]}</text>`).join("")}</svg><div class="mu">Gestrichelt: Zielwert von 35 auf 47,5 in 12 Wochen. Blau: Samstag (mit Double-Out). Orange: Donnerstag (Scoring ohne Double-Out). Woche 1 ist die Woche deiner ersten gespeicherten Einheit.</div></div>`;
- t+=`<div class="card"><h2>Wochentabelle</h2><div style="overflow-x:auto"><table><tr><th>Woche</th><th>Datum</th><th>Average</th><th>Zielwert</th><th>Differenz</th><th>T20-Treffer (Mo)</th><th>Singles (Pfeile)</th><th>Doppel (Pfeile)</th><th>Scoring-Ø (Do)</th><th>Notiz</th></tr>${R.map(r=>`<tr>${r.slice(0,9).map(c=>`<td>${c}</td>`).join("")}<td><input data-wn="${r[0]}" value="${esc(r[9])}" style="min-width:140px;min-height:36px;font:inherit"></td></tr>`).join("")}</table></div><div class="row" style="margin-top:8px"><button id="exp">Export als Text (für Excel)</button></div><textarea id="ex" hidden style="width:100%;height:160px;margin-top:8px"></textarea><div class="mu">Export: Text markieren, kopieren und in Excel einfügen.</div></div>`;return t}
-function hist(){const S=DB.sessions;let t=wk();
- const sa=S.filter(x=>x.k=="sa").reverse();
- if(0&&sa.length){const W=320,Hh=140,n=Math.max(sa.length,2),x=i=>30+i*(W-40)/(n-1),y=v=>Hh-20-(v-30)/(55-30)*(Hh-30);
-  const pts=sa.map((r,i)=>x(i)+","+y(r.avg)).join(" "),goal=[0,11].map(i=>x(i*(n-1)/11)+","+y(35+12.5*(i+1)/12)).join(" ");
-  t+=`<div class="card"><h2>Wochentest-Average (Samstag)</h2><svg viewBox="0 0 ${W} ${Hh}" style="width:100%"><polyline points="${pts}" fill="none" stroke="var(--ac)" stroke-width="3"/>${sa.map((r,i)=>`<circle cx="${x(i)}" cy="${y(r.avg)}" r="4" fill="var(--ac)"/><text x="${x(i)}" y="${y(r.avg)-8}" font-size="10" text-anchor="middle" fill="var(--tx)">${r.avg}</text>`).join("")}<line x1="30" y1="${y(35)}" x2="${W-10}" y2="${y(47.5)}" stroke="var(--ok)" stroke-dasharray="4"/></svg><div class="mu">Gestrichelt: Zielweg von 35 auf 47,5 in 12 Wochen. Start: 35.</div></div>`}
- const mi=S.filter(x=>x.k=="mi"&&x.bl);
- t+=`<div class="card"><h2>Einheiten (${S.length})</h2>${S.length?`<table><tr><th>Datum</th><th>Einheit</th><th>Pfeile</th><th>Average</th><th>Extra</th></tr>${S.slice(0,40).map(r=>{let e="";
+// ===== Verlauf (v23): Übersicht + ein Tab je Trainingstag (Statistik, Heatmap, Trend) =====
+// Jede Einheit speichert ab v23 alle Pfeile in r.dl: {c Feld, x/y Lage in mm (20 oben = y negativ), v Punkte, n Aufnahme-Nr.,
+//  Blöcke: t Ziel, i Block-Nr. | 501: l Leg, r Rest vor dem Pfeil, b Bust, f Leg beendet}
+let VT=+lsg("dart_vt","0")||0,VP=+lsg("dart_vp","5"),VM="heat",VF="Alle";if(![0,1,5,10].includes(VP))VP=5;
+const VD=["Übersicht","Mo","Di","Mi","Do","Fr","Sa","So"];
+const vSes=k=>DB.sessions.filter(r=>r.k==k);
+const vMean=a=>{a=a.filter(v=>v!=null&&isFinite(v));return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
+const vSum=a=>a.filter(v=>v!=null&&isFinite(v)).reduce((x,y)=>x+y,0);
+const segN=c=>c=="SB"||c=="DB"?"B":c=="0"||!c?null:c.slice(1);
+function tCen(t){if(t=="B"||t=="SB"||t=="DB")return[0,0];const n=+t.replace(/^[A-Z]+/,""),i=ORD.indexOf(n),r={T:103,D:166}[t[0]]||134,a=i*18*Math.PI/180;return[r*Math.sin(a),-r*Math.cos(a)]}
+// Block eines Ziels finden (i = Block-Nr. im Plan; ältere Einheiten ohne i: k-tes Vorkommen)
+function vBl(r,t,i,k){if(!r.bl)return null;let b=r.bl.find(b=>b.i===i&&b.t==t);if(!b&&r.bl.every(b=>b.i==null))b=r.bl.filter(b=>b.t==t)[k||0];return b||null}
+const vDl=(r,f)=>(r.dl||[]).filter(f||(()=>1));
+// Aufnahmen (bis zu 3 Pfeile) einer Einheit
+function vVis(r,f){if(!r.dl)return null;const M=new Map();vDl(r,f).forEach(d=>{const k=(d.l!=null?"l"+d.l:"i"+(d.i||0))+"_"+d.n;let V=M.get(k);if(!V){V={sc:0,b:0,r0:d.r,ds:[],f:0,l:d.l};M.set(k,V)}V.sc+=d.v||0;if(d.b)V.b=1;if(d.f)V.f=1;V.ds.push(d)});
+ const L=[...M.values()];L.forEach(V=>{if(V.b)V.sc=0});return L}
+const vBand=(r,lo,hi,f)=>{const V=vVis(r,f);return V?V.filter(v=>v.sc>=lo&&v.sc<hi).length:null};
+const vPPV=(r,f)=>{const D=vDl(r,f);return r.dl&&D.length?vSum(D.map(d=>d.v||0))/D.length*3:null};
+function vF9(r){const V=vVis(r);if(!V)return null;const a=V.filter(v=>v.ds[0].n<3);return a.length?vMean(a.map(v=>v.sc)):null}
+const vOut=d=>d.r!=null&&((d.r<=40&&d.r%2==0&&d.r>0)||d.r==50);
+function vCO(r){if(!r.dl)return null;const a=r.dl.filter(vOut).length;return a?r.legs.length/a*100:null}
+function vCOP(r){const V=vVis(r);if(!V)return null;const f=V.filter(v=>v.f);return f.length?vMean(f.map(v=>v.r0)):null}
+const vHC=(r,t)=>{const b=r.bl&&r.bl.find(b=>b.t==t&&b.g=="c");return b?b.h:null};
+const vHit=(r,t,i,k)=>{const b=vBl(r,t,i,k);return b?b.h:null};
+const vQ=(r,g)=>{if(!r.bl)return null;const B=r.bl.filter(g),d=vSum(B.map(b=>b.d));return d?vSum(B.map(b=>b.h))/d*100:null};
+// Gruppierung: Ø Abstand der Pfeile einer Aufnahme zu ihrer Mitte (mm) und Ø Abweichung vom Ziel
+function vGrp(D,t){const P=D.filter(d=>d.x!=null);if(!P.length)return null;const M=new Map();P.forEach(d=>{const k=(d.i||0)+"_"+d.n;(M.get(k)||M.set(k,[]).get(k)).push(d)});
+ const sp=[];M.forEach(a=>{if(a.length<2)return;const mx=vMean(a.map(d=>d.x)),my=vMean(a.map(d=>d.y));sp.push(vMean(a.map(d=>Math.hypot(d.x-mx,d.y-my))))});
+ const c=tCen(t),dx=vMean(P.map(d=>d.x))-c[0],dy=vMean(P.map(d=>d.y))-c[1],nt=t=="B"?"B":t.slice(1),seg=P.filter(d=>segN(d.c)==nt).length/P.length*100;
+ return{sp:vMean(sp),dx,dy,seg,n:P.length,c}}
+const vTend=g=>{if(!g)return"–";const a=[];if(Math.abs(g.dx)>=3)a.push(Math.round(Math.abs(g.dx))+" mm "+(g.dx>0?"rechts":"links"));if(Math.abs(g.dy)>=3)a.push(Math.round(Math.abs(g.dy))+" mm "+(g.dy>0?"zu tief":"zu hoch"));return a.length?a.join(" · "):"mittig"};
+const vVerd=sp=>sp==null?["–",""]:sp<15?["eng","g"]:sp<25?["ok","o"]:["streut","b"];
+const DBL=["D20","D16","D8","D10","D12","D6","D5","D4","D2"];
+// Kennzahlen je Tag. lb = kleiner ist besser, u = "von …", p = Prozent, mm = Millimeter
+const VS={
+mo:{kpi:["T20-Treffer",S=>vSum(S.map(r=>(vHit(r,"T20",0)||0)+(vHit(r,"T20",2,1)||0)))],chips:["Alle","T20","T19","Bull"],tr:["T20-Treffer (von 100)",r=>vHit(r,"T20",0)],
+ rows:[["T20 · Treffer",r=>vHit(r,"T20",0),{u:100}],["Punkte je Aufnahme (T20)",r=>vPPV(r,d=>d.i===0),{d:1}],["T19 · Treffer",r=>vHit(r,"T19",1),{u:30}],["T20 Druck · Treffer",r=>vHit(r,"T20",2,1),{u:45}],["Bull · Treffer",r=>vHit(r,"B",3),{u:30}],["Im 20er-Segment",r=>{const D=vDl(r,d=>d.t=="T20");return D.length?D.filter(d=>segN(d.c)=="20").length/D.length*100:null},{p:1}]],
+ cnt:{lab:"PRO EINHEIT",f:d=>d.t=="T20"}},
+di:{kpi:["Treffer gesamt",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))],chips:["Alle","T20","T19","T18","T17","Bull"],tr:["Trefferquote gesamt",r=>vQ(r,()=>1),{p:1}],grp:["T20","T19","T18","T17","B"],
+ rows:[["T20 · Treffer",r=>vHit(r,"T20",0),{u:60}],["T19 · Treffer",r=>vHit(r,"T19",1),{u:60}],["T18 · Treffer",r=>vHit(r,"T18",2),{u:60}],["T17 · Treffer",r=>vHit(r,"T17",3),{u:60}],["Bull · Treffer",r=>vHit(r,"B",4),{u:40}],
+  ["Streuung je Aufnahme",r=>{const a=["T20","T19","T18","T17","B"].map(t=>vGrp(vDl(r,d=>d.t==t),t));return vMean(a.map(g=>g&&g.sp))},{mm:1,lb:1}],["Im Zielsegment",r=>{const D=vDl(r,d=>d.t&&d.x!=null);return D.length?D.filter(d=>segN(d.c)==(d.t=="B"?"B":d.t.slice(1))).length/D.length*100:null},{p:1}]]},
+mi:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.filter(b=>b.g=="c").map(b=>b.h)):null))],chips:["Alle"],tr:["Pfeile für alle Doppel",r=>r.bl?vSum(r.bl.filter(b=>b.g=="d").map(b=>b.d))||null:null,{lb:1}],dbars:1,
+ rows:[["Singles 1–20 · Pfeile",r=>r.bl?vSum(r.bl.filter(b=>b.g=="s").map(b=>b.d))||null:null,{lb:1}],["Doppel D1–Bull · Pfeile",r=>r.bl?vSum(r.bl.filter(b=>b.g=="d").map(b=>b.d))||null:null,{lb:1}],["Doppelquote (Runde)",r=>vQ(r,b=>b.g=="d"),{p:1}],
+  ["D20 · Treffer",r=>vHC(r,"D20"),{u:15}],["D16 · Treffer",r=>vHC(r,"D16"),{u:15}],["D8 · Treffer",r=>vHC(r,"D8"),{u:15}]]},
+do:{kpi:["Legs",S=>vSum(S.map(r=>(r.legs||[]).length))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO LEG",leg:1},
+ rows:[["Average",r=>r.avg,{d:2}],["First 9",vF9,{d:2}],["Pfeile pro Leg",r=>r.legs&&r.legs.length?vMean(r.legs):null,{d:1,lb:1}],["Bestes Leg",r=>r.legs&&r.legs.length?Math.min(...r.legs):null,{lb:1,best:1,u:"Pfeile"}]]},
+fr:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))],chips:["Alle"].concat(DBL),tr:["Doppelquote",r=>vQ(r,()=>1),{p:1}],fbars:1,
+ rows:[["Doppelquote",r=>vQ(r,()=>1),{p:1}],["Treffer",r=>r.bl?vSum(r.bl.map(b=>b.h)):null,{u:180}],["Bestes Doppel",r=>r.bl?Math.max(...r.bl.map(b=>b.h/b.d*100)):null,{p:1}],["Schwächstes Doppel",r=>r.bl?Math.min(...r.bl.map(b=>b.h/b.d*100)):null,{p:1}]]},
+sa:{kpi:["Legs",S=>vSum(S.map(r=>(r.legs||[]).length))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO LEG",leg:1},
+ rows:[["Average",r=>r.avg,{d:2}],["First 9",vF9,{d:2}],["Checkout-Quote",vCO,{p:1}],["Checkout-Punkte",vCOP,{d:0}],["Pfeile pro Leg",r=>r.legs&&r.legs.length?vMean(r.legs):null,{d:1,lb:1}],["Bestes Leg",r=>r.legs&&r.legs.length?Math.min(...r.legs):null,{lb:1,best:1,u:"Pfeile"}]]},
+so:{kpi:["Minuten",S=>vSum(S.map(r=>r.dur))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO EINHEIT"},
+ rows:[["Average",r=>r.avg,{d:2}],["Pfeile",r=>r.darts,{d:0}],["Dauer",r=>r.dur,{d:0,u:"min"}]]}};
+function vFmt(v,o){if(v==null||!isFinite(v))return"–";o=o||{};if(o.p)return v.toFixed(1)+"<i>%</i>";if(o.mm)return v.toFixed(0)+"<i> mm</i>";
+ const d=o.d!=null?o.d:(Math.abs(v-Math.round(v))<1e-9?0:1),s=v.toFixed(d);return o.u?s+"<i> "+(typeof o.u=="number"?"/ "+o.u:o.u)+"</i>":s}
+const vDate=d=>d?d.split("-").reverse().slice(0,2).join(".")+".":"";
+function vArrow(a,p,o){if(a==null||p==null)return"";const e=Math.max(1e-6,Math.abs(p)*.005);if(Math.abs(a-p)<e)return'<span class="va">=</span>';const up=a>p,good=o&&o.lb?!up:up;return`<span class="va ${good?"g":"b"}">${up?"↑":"↓"}</span>`}
+function vRows(rows,C,Pv){return rows.map(([lab,f,o])=>{o=o||{};const a=C.map(f).filter(v=>v!=null&&isFinite(v)),av=o.best?(a.length?(o.lb?Math.min(...a):Math.max(...a)):null):vMean(a),pv=vMean(Pv.map(f)),bs=a.length?(o.lb?Math.min(...a):Math.max(...a)):null;
+ return`<div class="vrow"><div class="vl1">${lab}${pv!=null?'<small>vorher →</small>':""}</div><div><b>${vFmt(av,o)}</b>${vArrow(av,pv,o)}${pv!=null?`<small>${vFmt(pv,Object.assign({},o,{u:0}))}</small>`:""}</div><div><b>${vFmt(bs,o)}</b></div></div>`}).join("")}
+function vCnt(cfg,C){const legs=vSum(C.map(r=>(r.legs||[]).length)),per=cfg.leg?legs:C.filter(r=>r.dl).length,B=[[60,100,"60+"],[100,140,"100+"],[140,180,"140+"],[180,999,"180"]];
+ return`<div class="vrow vhd"><div>${C.filter(r=>r.dl).length?"":"(ab v23)"}</div><div>GESAMT</div><div>${cfg.lab}</div></div>`+B.map(([lo,hi,l])=>{const t=C.some(r=>r.dl)?vSum(C.map(r=>vBand(r,lo,hi,cfg.f))):null;
+  return`<div class="vrow"><div class="vl1">${l}</div><div><b>${t==null?"–":t}</b></div><div><b>${t==null||!per?"–":(t/per).toFixed(1)}</b></div></div>`}).join("")}
+function vBars(L,o){const mx=Math.max(1,...L.map(x=>x[1]||0));return'<div class="vbars">'+L.map(([l,v,c])=>`<div class="vbr"><span>${l}</span><div><i style="width:${v==null?0:Math.max(2,v/mx*100)}%" class="${c||""}"></i></div><b>${v==null?"–":o&&o.p?v.toFixed(0)+"%":v.toFixed(1)}</b></div>`).join("")+"</div>"}
+function vTrend(S,tr){const o=tr[2]||{},P=S.slice().reverse().map(r=>({d:r.date,v:tr[1](r)})).filter(p=>p.v!=null&&isFinite(p.v));
+ if(P.length<2)return'<div class="vempty">Für den Trend braucht es mindestens 2 Einheiten.</div>';
+ const W=480,Hh=300,l=46,rr=14,t=26,b=40,lo=Math.min(...P.map(p=>p.v)),hi=Math.max(...P.map(p=>p.v)),rg=Math.max(hi-lo,o.p?4:2),e10=Math.pow(10,Math.floor(Math.log10(rg/4))),stp=[1,2,2.5,5,10].map(m=>m*e10).find(m=>rg/m<=5),y0=Math.floor((lo-rg*.1)/stp)*stp,y1=Math.ceil((hi+rg*.1)/stp)*stp,X=i=>l+i*(W-l-rr)/(P.length-1),Y=v=>t+(y1-v)/(y1-y0)*(Hh-t-b),dg=stp<1?(stp<.5?2:1):0;
+ let g="";for(let v=y0;v<=y1+1e-9;v+=stp)g+=`<line x1="${l}" x2="${W-rr}" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".12"/><text x="${l-8}" y="${Y(v)+5}" text-anchor="end" font-size="14" fill="currentColor" opacity=".6">${v.toFixed(dg)}</text>`;
+ const st=Math.ceil(P.length/6);P.forEach((p,i)=>{if(i%st==0||i==P.length-1)g+=`<text x="${X(i)}" y="${Hh-12}" text-anchor="${i==P.length-1?"end":i==0?"start":"middle"}" font-size="14" fill="currentColor" opacity=".6">${vDate(p.d)}</text>`});
+ const pts=P.map((p,i)=>X(i).toFixed(1)+","+Y(p.v).toFixed(1)).join(" "),last=P[P.length-1];
+ return`<svg viewBox="0 0 ${W} ${Hh}" class="vtr">${g}<polyline points="${l},${Hh-b} ${pts} ${W-rr},${Hh-b}" fill="#f2c46d" opacity=".18"/><polyline points="${pts}" fill="none" stroke="#e0a83a" stroke-width="3.5" stroke-linejoin="round"/>${P.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.v)}" r="5" fill="#2c2d2f" stroke="#f2c46d" stroke-width="2.5"/>`).join("")}<text x="${X(P.length-1)}" y="${Y(last.v)-14}" text-anchor="end" font-size="18" font-weight="700" fill="currentColor">${o.p?last.v.toFixed(1)+"%":last.v.toFixed(o.d!=null?o.d:Math.abs(last.v-Math.round(last.v))<1e-9?0:1)}</text></svg><div class="vcap">${tr[0]}${o.lb?" · kleiner ist besser":""}</div>`}
+function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP,2*VP):[],di=DAYS.indexOf(k);
+ if(!cfg.chips.includes(VF))VF="Alle";
+ let t=`<div class="vgrid"><div><div class="vcard vkpi"><div class="vttl">${DN[di]} · ${P[k].n}</div><div><small>Einheiten</small><b>${C.length}</b></div><div><small>Pfeile</small><b>${vSum(C.map(r=>r.darts))}</b></div><div><small>${cfg.kpi[0]}</small><b>${C.length?cfg.kpi[1](C):"–"}</b></div></div>
+ <div class="vbar2"><div class="vseg"><button data-vm="heat" class="${VM=="heat"?"on":""}">Heatmap</button><button data-vm="trend" class="${VM=="trend"?"on":""}">Trend</button></div>${VM=="heat"&&cfg.chips.length>1?`<div class="vchips">${cfg.chips.map(c=>`<button data-vf="${c}" class="${c==VF?"on":""}">${c}</button>`).join("")}</div>`:""}</div>
+ <div class="vcard vheat">${VM=="heat"?vHeatBox(C,k):vTrend(VP&&VP>=5?C:S.slice(0,10),cfg.tr)}</div></div>
+ <div><div class="vseg vper">${[[1,"Letzte 1"],[5,"Letzte 5"],[10,"Letzte 10"],[0,"Alle"]].map(([v,l])=>`<button data-vp="${v}" class="${VP==v?"on":""}">${l}</button>`).join("")}</div>`;
+ if(!S.length)return t+`<div class="vpanel"><div class="vempty d">Noch keine ${P[k].n}-Einheit gespeichert. Starte sie im Wochenplan – danach erscheinen hier deine Werte.</div></div></div></div>`;
+ t+=`<div class="vpanel"><div class="vrow vhd"><div>AUS ${C.length} ${C.length==1?"EINHEIT":"EINHEITEN"}</div><div>${C.length==1?"WERT":"DURCHSCHNITT"}</div><div>BESTWERT</div></div>${vRows(cfg.rows,C,Pv)}${cfg.cnt?vCnt(cfg.cnt,C):""}</div>`;
+ if(cfg.grp){const G=cfg.grp.map(tg=>{const D=[].concat(...C.map(r=>vDl(r,d=>d.t==tg))),g=vGrp(D,tg),hb=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.h:null})),db=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.d:null}));return{tg,g,hb,db}});
+  t+=`<div class="vpanel"><div class="vrow v4 vhd"><div>GRUPPIERUNG</div><div>TREFFER</div><div>STREUUNG</div><div>TENDENZ</div></div>${G.map(({tg,g,hb,db})=>{const[vt,vc]=vVerd(g&&g.sp);return`<div class="vrow v4"><div class="vl1">${tg=="B"?"Bull":tg}</div><div><b>${db?Math.round(hb/db*100)+"<i>%</i>":"–"}</b><small>${db?hb+" von "+db:""}</small></div><div><b>${g&&g.sp!=null?Math.round(g.sp)+"<i> mm</i>":"–"}</b>${vt!="–"?`<span class="vpill ${vc}">${vt}</span>`:""}</div><div class="vtd">${vTend(g)}</div></div>`}).join("")}<div class="vnote">Streuung = wie weit die Pfeile einer Aufnahme im Schnitt von ihrer gemeinsamen Mitte liegen. Unter 15 mm = eng, 15–25 mm = ok. Tendenz = wohin deine Pfeile im Schnitt neben dem Ziel landen.</div></div>`}
+ if(cfg.fbars){const L=DBL.map(d=>{const h=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.h:null})),n=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.d:null}));return[d,n?h/n*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
+  t+=`<div class="vcard"><div class="vh3">Quote je Doppel</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}</div>`}
+ if(cfg.dbars){const L=NUM.map(i=>"D"+i).concat(["DB"]).map(d=>[d=="DB"?"Bull":d,vMean(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d&&b.g=="d");return b?b.d:null}))]),ok=L.filter(x=>x[1]!=null).map(x=>x[1]).sort((a,b)=>b-a),th=ok[Math.min(2,ok.length-1)];
+  t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Doppel (Ø)</div>${vBars(L.map(x=>[x[0],x[1],x[1]!=null&&x[1]>=th&&x[1]>1?"b":""]))}<div class="vnote l">Rot = deine 3 schwierigsten Doppel.</div></div>`}
+ return t+"</div></div>"}
+function vHeatBox(C,k){const fl=d=>VF=="Alle"||d.t==(VF=="Bull"?"B":VF),D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
+ return`<div class="vhl">PFEILE MIT POSITION: ${pos}<br>AUS ${withDl} ${withDl==1?"EINHEIT":"EINHEITEN"}${miss?" · "+miss+" OHNE POSITION":""}</div><canvas id="vhc" data-k="${k}"></canvas>${pos?"":`<div class="vempty">${C.length&&!withDl?"Diese Einheiten sind älter als Version 23 – da wurden die Positionen noch nicht gespeichert. Ab jetzt schon.":"Noch keine Pfeile mit Position."}</div>`}`}
+// Heatmap zeichnen
+function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=d=>VF=="Alle"||d.t==(VF=="Bull"?"B":VF),D=[].concat(...C.map(r=>vDl(r,fl))).filter(d=>d.x!=null);
+ const w=cv.clientWidth;if(!w)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=cv.height=Math.round(w*dpr);const g=cv.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
+ const R=250,Sc=w/(2*R),cx=w/2,cy=w/2,dark=getComputedStyle(cv).color;
+ g.save();g.translate(cx,cy);g.fillStyle="#2a2b2d";g.beginPath();g.arc(0,0,226*Sc,0,7);g.fill();
+ const ring=(r1,r2,a0,a1,c)=>{g.fillStyle=c;g.beginPath();g.arc(0,0,r2*Sc,a0,a1);g.arc(0,0,r1*Sc,a1,a0,true);g.closePath();g.fill()};
+ ORD.forEach((n,i)=>{const a0=(i*18-9-90)*Math.PI/180,a1=(i*18+9-90)*Math.PI/180,e=i%2==0;
+  ring(15.9,99,a0,a1,e?"#3a3b3e":"#55575b");ring(99,107,a0,a1,e?"#6b4242":"#3f6352");ring(107,162,a0,a1,e?"#3a3b3e":"#55575b");ring(162,170,a0,a1,e?"#6b4242":"#3f6352")});
+ g.fillStyle="#3f6352";g.beginPath();g.arc(0,0,15.9*Sc,0,7);g.fill();g.fillStyle="#6b4242";g.beginPath();g.arc(0,0,6.35*Sc,0,7);g.fill();
+ g.strokeStyle="rgba(255,255,255,.10)";g.lineWidth=1;for(let i=0;i<20;i++){const a=(i*18-9-90)*Math.PI/180;g.beginPath();g.moveTo(15.9*Sc*Math.cos(a),15.9*Sc*Math.sin(a));g.lineTo(170*Sc*Math.cos(a),170*Sc*Math.sin(a));g.stroke()}
+ [15.9,99,107,162,170].forEach(r=>{g.beginPath();g.arc(0,0,r*Sc,0,7);g.stroke()});
+ g.fillStyle="#d9dbe0";g.textAlign="center";g.textBaseline="middle";g.font=`${Math.round(30*Sc)}px "Roboto Condensed","sans-serif-condensed","Arial Narrow",Arial,sans-serif`;
+ ORD.forEach((n,i)=>{const a=i*18*Math.PI/180;g.save();g.translate(198*Sc*Math.sin(a),-198*Sc*Math.cos(a));g.rotate(a>Math.PI/2&&a<3*Math.PI/2?a-Math.PI:a);g.fillText(n,0,0);g.restore()});g.restore();
+ if(!D.length)return;
+ // Dichte auf einem Raster (2,5 mm) mit weichen Flecken
+ const N=200,cs=2*R/N,sg=D.length<40?11:D.length<250?8.5:7,rad=Math.ceil(3*sg/cs),G=new Float32Array(N*N),ker=[];for(let j=-rad;j<=rad;j++)for(let i=-rad;i<=rad;i++)ker.push([i,j,Math.exp(-((i*cs)**2+(j*cs)**2)/(2*sg*sg))]);
+ D.forEach(d=>{const gx=Math.round((d.x+R)/cs),gy=Math.round((d.y+R)/cs);ker.forEach(([i,j,v])=>{const x=gx+i,y=gy+j;if(x>=0&&y>=0&&x<N&&y<N)G[y*N+x]+=v})});
+ let mx=0;for(const v of G)if(v>mx)mx=v;const st=[[0,0,60,255,0],[.06,0,90,255,.38],[.25,0,190,255,.62],[.45,20,220,120,.76],[.62,170,230,0,.84],[.8,255,170,0,.9],[1,235,25,25,.95]];
+ const cmap=u=>{let a=st[0],b=st[st.length-1];for(let i=1;i<st.length;i++)if(u<=st[i][0]){a=st[i-1];b=st[i];break}const f=(u-a[0])/((b[0]-a[0])||1);return a.slice(1).map((v,i)=>v+(b[i+1]-v)*f)};
+ const oc=document.createElement("canvas");oc.width=oc.height=N;const og=oc.getContext("2d"),im=og.createImageData(N,N);
+ for(let p=0;p<N*N;p++){const u=Math.pow(G[p]/mx,.62);if(u<.015)continue;const c=cmap(u);im.data[p*4]=c[0];im.data[p*4+1]=c[1];im.data[p*4+2]=c[2];im.data[p*4+3]=Math.round(c[3]*255)}
+ og.putImageData(im,0,0);g.imageSmoothingEnabled=true;g.imageSmoothingQuality="high";g.drawImage(oc,0,0,w,w);
+ if(D.length<=150){g.fillStyle="rgba(255,255,255,.75)";D.forEach(d=>{g.beginPath();g.arc(cx+d.x*Sc,cy+d.y*Sc,Math.max(1.6,2.2*Sc),0,7);g.fill()})}
+ // Ziel + Mitte der Pfeile (Tendenz)
+ if(VF!="Alle"){const tg=VF=="Bull"?"B":VF,gr=vGrp(D,tg);if(gr){const[tx,ty]=gr.c,mx2=cx+(tx+gr.dx)*Sc,my2=cy+(ty+gr.dy)*Sc;
+  g.strokeStyle="#fff";g.lineWidth=2;g.setLineDash([5,4]);g.beginPath();g.arc(cx+tx*Sc,cy+ty*Sc,Math.max(7,9*Sc),0,7);g.stroke();g.setLineDash([]);
+  g.strokeStyle="#111";g.lineWidth=5;g.beginPath();g.moveTo(mx2-8,my2);g.lineTo(mx2+8,my2);g.moveTo(mx2,my2-8);g.lineTo(mx2,my2+8);g.stroke();g.strokeStyle="#fff";g.lineWidth=2.5;g.stroke();
+  g.fillStyle=dark;g.font="600 15px Arial";g.textAlign="left";g.textBaseline="alphabetic";g.fillText("○ Ziel   ✛ Mitte deiner Pfeile: "+vTend(gr),8,w-10)}}}
+// Übersicht (wie bisher, aufgeräumt)
+function vOver(){const R=rows(),S=DB.sessions,sa=S.filter(x=>x.k=="sa"),last=sa.length?sa[0].avg:null,best=sa.length?Math.max(...sa.map(x=>x.avg)):null,f=v=>v==null?"–":v.toFixed(1),dz=last==null?null:last-35,doA=(S.find(x=>x.k=="do")||{}).avg;
+ let t=`<div class="vcard vkpi v4k"><div class="vttl">Übersicht</div><div><small>Letzter Sa-Average</small><b>${f(last)}</b></div><div><small>Bester Sa-Average</small><b>${f(best)}</b></div><div><small>Seit Start (35)</small><b class="${dz==null?"":dz>=0?"vg":"vb"}">${dz==null?"–":(dz>=0?"+":"")+dz.toFixed(1)}</b></div><div><small>Letzter Do-Average</small><b>${f(doA)}</b></div></div>`;
+ const X=w=>95+(w-1)*(880-95)/11,Y=v=>20+(55-Math.max(25,Math.min(55,v)))/30*230,pt=R.filter(r=>r[2]!="–"),pd=R.filter(r=>r[8]!="–");
+ let gl="";for(let v=25;v<=55;v+=5)gl+=`<line x1="60" x2="880" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".1"/><text x="50" y="${Y(v)+5}" font-size="15" text-anchor="end" fill="currentColor" opacity=".55">${v}</text>`;
+ t+=`<div class="vcard"><div class="vh3">Average pro Woche</div><svg viewBox="0 0 900 290" class="vtr">${gl}<line x1="${X(1)}" y1="${Y(zw(1))}" x2="${X(12)}" y2="${Y(zw(12))}" stroke="#1a7f4b" stroke-width="2.5" stroke-dasharray="7 6"/>${pd.length>1?`<polyline points="${pd.map(r=>X(r[0])+","+Y(+r[8])).join(" ")}" fill="none" stroke="#e08a1e" stroke-width="2.5" opacity=".8"/>`:""}${pd.map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[8])}" r="5" fill="#e08a1e"/>`).join("")}${pt.length>1?`<polyline points="${pt.map(r=>X(r[0])+","+Y(+r[2])).join(" ")}" fill="none" stroke="#1f6feb" stroke-width="3.5"/>`:""}${pt.map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[2])}" r="6" fill="#1f6feb"/><text x="${X(r[0])}" y="${Y(+r[2])-12}" font-size="16" font-weight="700" text-anchor="middle" fill="currentColor">${r[2]}</text>`).join("")}${R.map(r=>`<text x="${X(r[0])}" y="282" font-size="15" text-anchor="middle" fill="currentColor" opacity=".55">W${r[0]}</text>`).join("")}</svg>
+ <div class="vleg"><span><i style="background:#1f6feb"></i>Samstag (mit Double-Out)</span><span><i style="background:#e08a1e"></i>Donnerstag (Scoring)</span><span><i class="dash"></i>Ziel: 35 → 47,5 in 12 Wochen</span></div></div>`;
+ t+=`<div class="vcard"><div class="vh3">Wochentabelle</div><div style="overflow-x:auto"><table class="vtab"><tr><th>Woche</th><th>Datum</th><th>Average</th><th>Zielwert</th><th>Differenz</th><th>T20-Treffer (Mo)</th><th>Singles (Pfeile)</th><th>Doppel (Pfeile)</th><th>Scoring-Ø (Do)</th><th>Notiz</th></tr>${R.map(r=>`<tr>${r.slice(0,9).map((c,i)=>`<td class="${i==4&&c!="–"?(c[0]=="+"?"vg":"vb"):""}">${c}</td>`).join("")}<td><input data-wn="${r[0]}" value="${esc(r[9])}" placeholder="Notiz"></td></tr>`).join("")}</table></div><div class="row" style="margin-top:8px;justify-content:flex-start"><button id="exp">Export als Text (für Excel)</button></div><textarea id="ex" hidden style="width:100%;height:160px;margin-top:8px"></textarea></div>`;
+ t+=`<div class="vcard"><div class="vh3">Alle Einheiten (${S.length})</div>${S.length?`<div style="overflow-x:auto"><table class="vtab"><tr><th>Datum</th><th>Einheit</th><th>Pfeile</th><th>Average</th><th>Extra</th></tr>${S.slice(0,40).map(r=>{let e="";
   if(r.bl&&r.k=="mi"){const f=g=>r.bl.filter(b=>b.g==g).reduce((a,b)=>a+b.d,0);e=`Singles ${f("s")} · Doppel ${f("d")}`}
   else if(r.bl){const d=r.bl.reduce((a,b)=>a+b.d,0),h=r.bl.reduce((a,b)=>a+b.h,0);e=`Treffer ${h}/${d} (${Math.round(h/d*100)}%)`}
   else if(r.legs)e=`${r.legs.length} Legs`;
-  return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
- return t+'<button id="reset">Alle Daten dieses Profils löschen</button><div class="mu" style="margin-top:8px">Die Daten bleiben nur in diesem Browser auf diesem Tablet gespeichert.</div>'}
+  return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table></div>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
+ t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" style="margin-bottom:8px">Deine Daten liegen nur in diesem Browser. Im Inkognito-Fenster werden sie beim Schließen gelöscht! Lade ab und zu eine Sicherung herunter.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
+ return t}
+function hist(){return`<div class="vl"><div class="vtabs">${VD.map((d,i)=>`<button data-vt="${i}" class="${VT==i?"on":""}">${d}</button>`).join("")}</div>${VT?vDay(DAYS[VT-1]):vOver()}</div>`}
+function vBind(m){const q=s=>m.querySelector(s);
+ m.querySelectorAll("[data-vt]").forEach(b=>b.onclick=()=>{VT=+b.dataset.vt;VF="Alle";lss("dart_vt",String(VT));render()});
+ m.querySelectorAll("[data-vp]").forEach(b=>b.onclick=()=>{VP=+b.dataset.vp;lss("dart_vp",String(VP));render()});
+ m.querySelectorAll("[data-vm]").forEach(b=>b.onclick=()=>{VM=b.dataset.vm;render()});
+ m.querySelectorAll("[data-vf]").forEach(b=>b.onclick=()=>{VF=b.dataset.vf;render()});
+ const hc=q("#vhc");if(hc)vHeat(hc,hc.dataset.k);
+ if(q("#bk1"))q("#bk1").onclick=()=>{try{const P=ST.p[ST.cur],blob=new Blob([JSON.stringify({app:"dart",v:23,name:P.name,db:{sessions:P.db.sessions,notes:P.db.notes||{}}})],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="dart-sicherung-"+P.name.replace(/\W+/g,"_")+"-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);q("#bkm").textContent="Sicherung erstellt (Ordner „Downloads“)."}catch(e){q("#bkm").textContent="Sicherung ging nicht: "+e}};
+ if(q("#bk2"))q("#bk2").onclick=()=>q("#bkf").click();
+ if(q("#bkf"))q("#bkf").onchange=function(){const f=this.files&&this.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||o.app!="dart"||!o.db||!Array.isArray(o.db.sessions))throw"keine Dart-Sicherung";
+  const have=new Set(DB.sessions.map(r=>r.id));let n=0;o.db.sessions.forEach(r=>{if(r&&r.id&&!have.has(r.id)){DB.sessions.push(r);n++}});DB.sessions.sort((a,b)=>b.id-a.id);DB.notes=Object.assign({},o.db.notes||{},DB.notes||{});save();render();
+  const e=$("#bkm");if(e)e.textContent=n+" Einheit(en) aus der Sicherung übernommen."}catch(e){const x=$("#bkm");if(x)x.textContent="Das ist keine gültige Sicherung ("+e+")."}};rd.readAsText(f)}}
+let vRz=0;window.addEventListener("resize",()=>{clearTimeout(vRz);vRz=setTimeout(()=>{if(view==2){const hc=document.querySelector("#vhc");if(hc)vHeat(hc,hc.dataset.k)}},200)});
+
 // Kamera
 DB.cam=DB.cam||{};
 let Z=1,cal=[],HB=null,Hi=null,ref=null,det=null,ca=false,DPX=null;
@@ -178,8 +385,8 @@ function frame(zz){const full=!!zz;zz=zz||Z;if(!cv.videoWidth)return null;const 
 function stt(){$("#cst").textContent="Erkennung bisher: "+(DB.cam.ok||0)+" richtig, "+(DB.cam.bad||0)+" falsch"}
 function fname(c,v){return c=="0"?"Daneben":c=="SB"?"Bull (25)":c=="DB"?"Doppel-Bull (50)":({S:"Single ",D:"Doppel ",T:"Triple "}[c[0]])+c.slice(1)+" ("+v+" Punkte)"}
 $("#c1").onclick=()=>{const fp=document.permissionsPolicy||document.featurePolicy;if(fp&&fp.allowsFeature&&!fp.allowsFeature("camera"))return cm("Blockiert: Der Rahmen, in dem diese Seite angezeigt wird, verbietet die Kamera. Das liegt nicht an deinen Browser-Einstellungen.");if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return cm("Kamera nicht verfügbar: Dieser Browser oder diese Seite erlaubt keinen Kamerazugriff.");
- const VC={width:{ideal:4096},height:{ideal:3072},aspectRatio:{ideal:4/3}};if(DB.cam.dev)VC.deviceId={exact:DB.cam.dev};else VC.facingMode="environment";
- navigator.mediaDevices.getUserMedia({video:VC,audio:false}).catch(e=>{if(DB.cam.dev){DB.cam.dev=null;save();return navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:4096},height:{ideal:3072}},audio:false})}throw e}).then(st=>{maxRes(st);hwZoomInit(st);camList().catch(()=>{});cv.srcObject=st;keepAwake();cv.onloadedmetadata=()=>{HB=Hi=null;BASE=null;PREV=null;ref=null;EMPTY=null;TURN=[];MASK=null;renderTurn();ov();setSt("search");cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0);startMon()}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
+ const VC=RINGON()?{width:{ideal:1280},height:{ideal:720}}:{width:{ideal:4096},height:{ideal:3072},aspectRatio:{ideal:4/3}};if(DB.cam.dev)VC.deviceId={exact:DB.cam.dev};else VC.facingMode="environment";
+ navigator.mediaDevices.getUserMedia({video:VC,audio:false}).catch(e=>{if(DB.cam.dev){DB.cam.dev=null;save();return navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:4096},height:{ideal:3072}},audio:false})}throw e}).then(st=>{if(!RINGON())maxRes(st);hwZoomInit(st);camList().catch(()=>{});cv.srcObject=st;keepAwake();cv.onloadedmetadata=()=>{HB=Hi=null;BASE=null;PREV=null;ref=null;EMPTY=null;TURN=[];MASK=null;renderTurn();ov();setSt("search");cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0);startMon()}}).catch(e=>cm("Kamera nicht verfügbar: "+(e.name||e)+". Erlaube den Kamerazugriff im Browser."))};
 $("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm("Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
 ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]);
  if(cal.length==4){ca=false;let pc=cal;const fr=frame();if(fr){const PO=polish(cal.map(([u,v])=>[.5+(u-vcx(fr))*fr.z,.5+(v-vcy(fr))*fr.z]),fr);BASE=PO.s;pc=PO.q.map(([u,v])=>[vcx(fr)+(u-.5)/fr.z,vcy(fr)+(v-.5)/fr.z])}setCal(pc);setSt("ok");DB.cam.cal=pc;save();try{autoZoom()}catch(e){}cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
@@ -187,7 +394,7 @@ ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.c
 $("#c3").onclick=()=>{WANT="ref";cm("Die Referenz wird gesetzt, sobald das Bild ruhig ist. Bitte die Scheibe leer lassen.")};
 $("#c4").onclick=()=>{WANT="det";cm("Ich prüfe, sobald das Bild ruhig ist …")};
 $("#c7").onclick=()=>{const todo=TURN.filter(t=>!t.tr);if(!(s&&!s.done))return cm("Es läuft kein Training. Starte zuerst eine Einheit im Wochenplan.");if(!todo.length)return cm("Keine neuen Pfeile zum Übernehmen.");
- todo.forEach(t=>{dart(t.c,t.v);t.tr=true});renderTurn();cm(todo.length+" Pfeil(e) ins Training übernommen.")};
+ todo.forEach(t=>{dart(t.c,t.v,t.x,t.y);t.tr=true});renderTurn();cm(todo.length+" Pfeil(e) ins Training übernommen.")};
 $("#turn").onclick=e=>{const b=e.target&&e.target.closest?e.target.closest("[data-r]"):null;if(!b)return;const t=TURN[+b.dataset.r];if(!t||t.r)return;
  t.r=b.dataset.ok=="1"?"ok":"bad";DB.cam[t.r]=(DB.cam[t.r]||0)+1;save();stt();renderTurn()};
 function renderTurn(){const e=$("#turn");if(!TURN.length){e.innerHTML='<b>Aktuelle Aufnahme</b><div class="mu">Noch kein Pfeil erkannt. Wirf einfach – die App erkennt jeden Pfeil von selbst. Beim Ziehen der Pfeile beginnt eine neue Aufnahme.</div>';return}
@@ -289,7 +496,7 @@ function camDir(Hp,W,Hh,z,bx,by){// Richtung im Bild von der Spitze zum Flight, 
  let m1=col(0),m2=col(1),m3=col(2);const nn=v=>Math.hypot(v[0],v[1],v[2]);let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;
  const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l),r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]];
  const s=-(r3[0]*t[0]+r3[1]*t[1]+r3[2]*t[2])>0?1:-1,pr=(x,y,zz)=>{const X=[0,1,2].map(k=>x*r1[k]+y*r2[k]+zz*r3[k]+t[k]);return[fl*X[0]/X[2]+cx,fl*X[1]/X[2]+cy]};
- const a=pr(bx,by,0),b=pr(bx,by-20,s*100),d=[b[0]-a[0],b[1]-a[1]],n=Math.hypot(d[0],d[1]);return n>1e-6&&isFinite(n)?[d[0]/n,d[1]/n]:[0,-1]}
+ const a=pr(bx,by,0),AX=(FW.cdM==1||arguments[6])?dAx(DMOD.th,DMOD.ph):null,b=AX?pr(bx+100*AX[0],by+100*AX[1],s*100*AX[2]):pr(bx,by-20,s*100),d=[b[0]-a[0],b[1]-a[1]],n=Math.hypot(d[0],d[1]);return n>1e-6&&isFinite(n)?[d[0]/n,d[1]/n]:[0,-1]}
 const MR=290;// Suchbereich in mm um die Mitte (Doppelring 170 mm, Rand der Scheibe 225 mm)
 function boardMask(W,Hh,toBoard){const inB=new Uint8Array(W*Hh),sub=[];let n=0;
  for(let j=0;j<Hh;j++)for(let i=0;i<W;i++){const[x,y]=toBoard(i,j);if(x*x+y*y<MR*MR){const p=j*W+i;inB[p]=1;n++;if(!(i%2)&&!(j%2))sub.push(p)}}
@@ -335,7 +542,7 @@ function softImg(im){// gleichmäßig leicht weichzeichnen (Binomialfilter 1-2-1
  return{...im,data:o}}
 // Pfeilmodell (aus den eigenen Pfeilen gemessen): Neigung nach oben th, zur Seite ph, Länge Spitze bis Flight-Ende L, sichtbare Spitze pt (mm)
 let DMOD={th:.24,ph:-.16,L:127,pt:26};
-let FW={pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
+let FW={cdM:2,cd2:0,pullE:1,pullN:300,pullK:2,pullA:5,pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
 function camModel(Hp,W,Hh,z){const K=CK&&CK.W==W?CK:{fl:.8*W*z,px:W/2,py:Hh/2},fl=K.fl,cx=K.px,cy=K.py,col=k=>[(Hp[k]-cx*Hp[6+k])/fl,(Hp[3+k]-cy*Hp[6+k])/fl,Hp[6+k]];
  const m1=col(0),m2=col(1),m3=col(2),nn=v=>Math.hypot(v[0],v[1],v[2]);let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;
  const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l);let r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]];const n3=nn(r3);r3=r3.map(v=>v/n3);
@@ -517,7 +724,10 @@ function findDart(f,ref,toBoard,Hp,MK,strict,emp){CK=camK(f);MK=MK||boardMask(f.
  let OC=null;if(emp&&emp.width==W&&emp.height==Hh){const e=emp.data,OM=new Int8Array(N).fill(-1),d1=p=>{if(OM[p]<0){let best=1e9;const x=p%W,y=(p-x)/W;
      if(x<1||y<1||x>=W-1||y>=Hh-1)best=0;else for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const q=(p+dy*W+dx)*4,k=p*4,v=Math.abs(bO[k]-e[q])+Math.abs(bO[k+1]-e[q+1])+Math.abs(bO[k+2]-e[q+2]);if(v<best)best=v}OM[p]=best>60?1:0}return OM[p]};
    OC=i=>{const x=i%W,y=(i-x)/W;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<W&&Y<Hh&&d1(Y*W+X))return 1}return 0}}
- const TR=traceShaft(DS,W,Hh,[mx,my],[-d[0],-d[1]],1.6*Rpx,TS2,Math.max(6,.11*Rpx),FW.trGB*Rpx/170,FW.occT?OC:null),ext=TR.end,el=0;let tip=TR.tip,FT=null;if(FW.hidX&&TR.hidAfter>0){const e=Math.min(TR.hidAfter,FW.hidXmax*Rpx)*FW.hidX;tip=[tip[0]+TR.u[0]*e,tip[1]+TR.u[1]*e]}
+ let TR=traceShaft(DS,W,Hh,[mx,my],[-d[0],-d[1]],1.6*Rpx,TS2,Math.max(6,.11*Rpx),FW.trGB*Rpx/170,FW.occT?OC:null);
+ // zweite Richtung aus dem gemessenen Pfeilmodell (Pfeil leicht seitlich geneigt): die Spur mit mehr Treffern gewinnt
+ if(FW.cdM==2){const d2=camDir(Hp,W,Hh,f.z||1,bx,by,1),T2=traceShaft(DS,W,Hh,[mx,my],[-d2[0],-d2[1]],1.6*Rpx,TS2,Math.max(6,.11*Rpx),FW.trGB*Rpx/170,FW.occT?OC:null);if(T2.sc>TR.sc+FW.cd2)TR=T2}
+ const ext=TR.end,el=0;let tip=TR.tip,FT=null;if(FW.hidX&&TR.hidAfter>0){const e=Math.min(TR.hidAfter,FW.hidXmax*Rpx)*FW.hidX;tip=[tip[0]+TR.u[0]*e,tip[1]+TR.u[1]*e]}
  // Querkorrektur: die Spur läuft vom Schwerpunkt aus und kann seitlich neben der Pfeil-Mittellinie liegen. Mittellinie an den letzten Pixeln messen und die Spitze darauf setzen.
  if(FW.latc){const u=TR.u,nv=[-u[1],u[0]],L1=Math.max(8,Math.round(.18*Rpx)),Q=[];
   for(let s=Math.max(0,TR.end-L1);s<=TR.end;s++){let sw=0,so=0;for(let w=-3;w<=3;w++){const X=Math.round(mx+u[0]*s+nv[0]*w),Y=Math.round(my+u[1]*s+nv[1]*w);if(X<0||Y<0||X>=W||Y>=Hh)continue;const v=DS[Y*W+X]-TS2*.5;if(v>0){sw+=v;so+=v*w}}if(sw>0)Q.push([s,so/sw,sw])}
@@ -553,10 +763,10 @@ function findDart(f,ref,toBoard,Hp,MK,strict,emp){CK=camK(f);MK=MK||boardMask(f.
   if(!hidden)vec=[tip[0]-fp[0],tip[1]-fp[1],W]}
  return{tip,hidden,vec,farEnd,fit:FT,comp:C,noise:comps.slice(1).flat(),nC,T,med,how,el,d,second,grown,ext,trace:TR,shaft,Rpx,cover,lineLen,dLen}}
 
-function autoCal(){let f=frame();if(!f)return false;const tr=g=>autoFit(g,false)||autoFit(g,true);let q=tr(f);
+function autoCal(){let f=frame();if(!f)return false;const tr=g=>{if(RINGON()){const r=ringFit(g);return r&&r.s>=GMIN?r.q:null}return autoFit(g,false)||autoFit(g,true)};let q=tr(f);
  if(!q&&Z>1){const f2=frame(1);if(f2){const q2=tr(f2);if(q2){q=q2;f=f2}}}
  if(!q){showDbg();return false}
- const PO=polish(q,f);q=PO.q;
+ const PO=polishIt(q,f);q=PO.q;
  const pts=q.map(([u,v])=>[vcx(f)+(u-.5)/f.z,vcy(f)+(v-.5)/f.z]);if(pts.some(p=>p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3)){showDbg();return false}
  setCal(pts);DB.cam.cal=pts;save();BASE=PO.s;ca=false;det=null;ov();setSt("ok");try{autoZoom()}catch(e){}return true}
 function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpunkte: rot "+(LAST?LAST.nr:0)+", grün "+(LAST?LAST.ng:0);
@@ -566,12 +776,12 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 21.1 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 23 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
- const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&g.measureText(t).width>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
+ const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
  g.drawImage(cv,P[0][0],P[0][1],w,h);g.drawImage(cv,P[1][0],P[1][1],w,h);g.drawImage(ovc,P[1][0],P[1][1],w,h);
- if(ref){const t=document.createElement("canvas");t.width=ref.width;t.height=ref.height;t.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(ref.data),ref.width,ref.height),0,0);const sw=w/ref.z,sh=h/ref.z;g.save();g.beginPath();g.rect(P[2][0],P[2][1],w,h);g.clip();g.fillStyle="#000";g.fillRect(P[2][0],P[2][1],w,h);g.drawImage(t,P[2][0]+w*(vcx(ref)-.5/ref.z),P[2][1]+h*(vcy(ref)-.5/ref.z),sw,sh);g.restore()}
+ if(ref){const t=document.createElement("canvas");t.width=ref.width;t.height=ref.height;t.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(ref.data),ref.width,ref.height),0,0);const sw=w/ref.z,sh=h/ref.z;const cl=typeof g.save=="function"&&typeof g.clip=="function";if(cl){g.save();g.beginPath();g.rect(P[2][0],P[2][1],w,h);g.clip()}g.fillStyle="#000";g.fillRect(P[2][0],P[2][1],w,h);g.drawImage(t,P[2][0]+w*(vcx(ref)-.5/ref.z),P[2][1]+h*(vcy(ref)-.5/ref.z),sw,sh);if(cl)g.restore()}
  g.font="16px Arial";["1 Rohbild","2 mit Gitter und Erkennung","3 Referenzbild"].slice(0,pn).forEach((t,i)=>{g.font="16px Arial";g.fillStyle="#000b";g.fillRect(P[i][0],P[i][1],Math.min(260,w),24);g.fillStyle="#fff";g.fillText(t,P[i][0]+6,P[i][1]+17)});
  g.font="16px Arial";g.fillStyle="#000";wl.forEach((l,i)=>g.fillText(l,8,ih+26+i*24));
  c.toBlob(bl=>{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="scheibe.jpg";a.click()},"image/jpeg",.88)};
@@ -594,8 +804,10 @@ function motion(f){// Bewegung in Feldern statt Einzelpixeln; Flackern (ganzes B
  // Grenze passt sich dem normalen Rauschen der Kamera an (Median der letzten Werte)
  MH.push(MV);if(MH.length>12)MH.shift();const md=MH.slice().sort((a,b)=>a-b)[MH.length>>1];MT=Math.min(.25,Math.max(.03,2.5*md));
  return MV>MT?99:0}
-function fullFit(f){const q=autoFit(f,false)||autoFit(f,true);return q?polish(q,f):null}
-let EMPTY=null,TURN=[],PDART=null,WANT=null,MASK=null,BIGN=0,CALM=0;
+// Verfeinern, bis sich nichts mehr verbessert (ein Schritt reicht bei schräger Sicht nicht immer)
+function polishIt(q,f){let r=polish(q,f);for(let k=0;k<3;k++){const r2=polish(r.q,f);if(r2.s>r.s*1.005)r=r2;else break}return r}
+function fullFit(f){if(RINGON())return ringFit(f);const q=autoFit(f,false)||autoFit(f,true);return q?polishIt(q,f):null}
+let PULLC=0,PULLA=0,EMPTY=null,TURN=[],PDART=null,WANT=null,MASK=null,BIGN=0,CALM=0;
 function mul3(A,B){const C=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++)C.push(A[r*3]*B[c]+A[r*3+1]*B[3+c]+A[r*3+2]*B[6+c]);return C}
 function warpImg(old,oldHi,f){if(FW.bic)return warpImgC(old,oldHi,f);// altes Bild auf die neue Kameralage bzw. den neuen Zoom umrechnen (die Scheibe ist eine Ebene)
  const W=f.width,Hh=f.height,ow=old.width,oh=old.height,Ain=[1/(W*f.z),0,vcx(f)-.5/f.z,0,1/(Hh*f.z),vcy(f)-.5/f.z,0,0,1],Aout=[ow*old.z,0,ow*(.5-old.z*vcx(old)),0,oh*old.z,oh*(.5-old.z*vcy(old)),0,0,1],
@@ -605,7 +817,9 @@ function warpImg(old,oldHi,f){if(FW.bic)return warpImgC(old,oldHi,f);// altes Bi
    for(let ch=0;ch<3;ch++)o[k+ch]=(a[p+ch]*(1-fx)+a[p+4+ch]*fx)*(1-fy)+(a[q+ch]*(1-fx)+a[q+4+ch]*fx)*fy}
   else{o[k]=c[k];o[k+1]=c[k+1];o[k+2]=c[k+2]}o[k+3]=255}
  return{width:W,height:Hh,data:o,z:f.z,cx:vcx(f),cy:vcy(f)}}
-function moveRefs(oldHi,f){MASK=null;PDART=null;if(!oldHi)return;if(ref){ref=warpImg(ref,oldHi,f);ref.warped=1}if(EMPTY){EMPTY=warpImg(EMPTY,oldHi,f);EMPTY.warped=1}}
+function mdiff(a,f){if(!a||a.width!=f.width||a.height!=f.height||Math.abs((a.z||1)-(f.z||1))>1e-6||Math.abs(vcx(a)-vcx(f))>1e-6||Math.abs(vcy(a)-vcy(f))>1e-6)return 1e9;const W=f.width,H=f.height,x=a.data,y=f.data;let s=0,n=0;for(let j=2;j<H;j+=4)for(let i=2;i<W;i+=4){const k=(j*W+i)*4;s+=Math.abs(x[k]+x[k+1]+x[k+2]-y[k]-y[k+1]-y[k+2]);n++}return s/(n||1)}
+// Nur verschieben, wenn sich die Kamera wirklich bewegt hat (das verschobene Bild passt besser). Wurde nur die Scheibenlage korrigiert, bleibt das Bild.
+function moveRefs(oldHi,f){MASK=null;PDART=null;if(!oldHi)return;const mv=x=>{const w=warpImg(x,oldHi,f),dw=mdiff(w,f),dx=mdiff(x,f);if(dx<1e9&&dx<=dw*1.02){x.warped=1;return x}w.warped=1;return w};if(ref)ref=mv(ref);if(EMPTY)EMPTY=mv(EMPTY)}
 function applyCal(c,f,moved){const oldHi=Hi,pts=fromA(c.q,f);setCal(pts);DB.cam.cal=pts;save();BASE=c.s;PEND=null;DPX=null;
  if(moved){moveRefs(oldHi,f);LOG.push(hm()+" Scheibe neu erkannt");flash("✓ Scheibe neu erkannt");cm("Das Tablet hat sich bewegt. Die Scheibe wurde neu erkannt. Die Pfeilerkennung läuft weiter.")}
  else{MASK=null;flash("✓ Scheibe erkannt");cm("Scheibe erkannt. Gleich bereit …")}
@@ -628,62 +842,96 @@ function camGeo(f){const W=f.width,Ht=f.height,z=f.z,h=Hi,ox=vcx(f),oy=vcy(f),a=
 function addOrRemove(C,f,R0,E){// ist der Fleck ein neuer Pfeil (add) oder ein gezogener (rem)?
  const W=f.width,dist=(A,p)=>{let best=1e9;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const q=(p+dy*W+dx)*4,k=p*4,v=Math.abs(A.data[k]-E.data[q])+Math.abs(A.data[k+1]-E.data[q+1])+Math.abs(A.data[k+2]-E.data[q+2]);if(v<best)best=v}return best};
  let dc=0,dr=0;C.forEach(p=>{dc+=dist(f,p);dr+=dist(R0,p)});return dc<dr?"rem":"add"}
-// ===== Zwei Kameras: Tablet (Hauptgerät) + Handy (zweite Kamera) =====
-// Jedes Gerät erkennt Pfeile selbst. Das Handy schickt nur Spitze und Pfeilrichtung (in mm auf der Scheibe) ans Tablet.
-// Das Tablet legt beide Ansichten zusammen: Die Spitze liegt dort, wo sich die beiden Pfeillinien auf der Scheibe kreuzen.
-let ROLE=(()=>{try{return localStorage.getItem("dart_role")||"main"}catch(e){return"main"}})(),PEER=null,CONN=null,DUOT=null;
-const DUO={pend:[],rx:[],pst:null,lastHb:0,on:false,msg:"",last:null,cnt:{both:0,main:0,side:0}};
-const DW={WAITM:1500,WAITP:3200,MAXP:6500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,PAIRT:6500};
+// ===== Mehrere Kameras: Tablet (Zentrale) + Handy und/oder bis zu drei Ring-Kameras (Raspberry Pi) =====
+// Jedes Gerät erkennt Pfeile selbst und schickt nur Spitze und Pfeilrichtung (mm auf der Scheibe). Das Tablet sammelt die Meldungen
+// eines Wurfs (zeitnah und räumlich passend), legt sie zusammen und zählt. Die eigene Kamera des Tablets ist optional.
+let ROLE=(()=>{try{return localStorage.getItem("dart_role")||"main"}catch(e){return"main"}})(),PEER=null,CONN=null,CONNS=[],DUOT=null;
+const MYID=KNR?"K"+KNR:"H";
+const DUO={groups:[],src:{},pulls:{},imgs:{},bad:{},pst:null,lastHb:0,on:false,msg:"",last:null,cnt:{both:0,main:0,side:0}};
+const DW={WAITM:1500,WAITP:3200,MAXP:6500,WAIT2:1500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,LGAP:12,INC:4,LT:3,RB:30,LGB:12,SAB:4,PAIRT:6500,PULLW:6000};
 function lsg(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}}function lss(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function duoSend(o){try{if(CONN&&CONN.open)CONN.send(o)}catch(e){}}
-function duoLive(){return!!(CONN&&CONN.open&&Date.now()-DUO.lastHb<8000&&DUO.pst&&DUO.pst.cal)}
+function duoSend(o){try{if(ROLE=="main"){for(const c of CONNS)if(c.open)c.send(o)}else if(CONN&&CONN.open)CONN.send(o)}catch(e){}}
+function srcName(id){return id=="T"?"Tablet":id=="H"?"Handy":/^K\d$/.test(id)?"Kamera "+id.slice(1):id}
+function remLive(){const now=Date.now();return Object.keys(DUO.src).filter(id=>{const s=DUO.src[id];return s.conn&&s.conn.open&&now-s.hb<8000&&s.cal})}
+function ownLive(){return!!(HB&&cv&&cv.srcObject&&MST!="lost"&&MST!="off"&&MST!="search")}// kurz "prüfen"/"Bewegung" zählt weiter als aktiv
+function duoLive(){return remLive().length>0}
+function liveN(){return remLive().length+(ownLive()?1:0)}
 function bdist(x,y){const r=Math.hypot(x,y),rr=[6.35,15.9,99,107,162,170];let d=Math.min(...rr.map(q=>Math.abs(r-q)));if(r>15.9){const a=((Math.atan2(x,-y)*180/Math.PI+9)%18+18)%18;d=Math.min(d,Math.min(a,18-a)*Math.PI/180*r)}return d}
-// Zusammenführen: entlang der Pfeillinie ist jede Kamera unsicher, quer dazu genau -> gewichteter Schnittpunkt
-function fuse2(a,b){const M=[0,0,0,0],r=[0,0];for(const v of[a,b]){const sa=v.weak?DW.SA*3:DW.SA,sp=v.weak?DW.SP*2:DW.SP,d=v.d,ia=1/(sa*sa),ip=1/(sp*sp),
+// gewichteter Schnittpunkt: entlang der Pfeillinie ist jede Kamera unsicher, quer dazu genau
+function wlsV(L,SA0){const M=[0,0,0,0],r=[0,0];SA0=SA0||DW.SA;for(const v of L){const sa=v.weak?SA0*3:SA0,sp=v.weak?DW.SP*2:DW.SP,d=v.d,ia=1/(sa*sa),ip=1/(sp*sp),
   m=[ia*d[0]*d[0]+ip*d[1]*d[1],(ia-ip)*d[0]*d[1],(ia-ip)*d[0]*d[1],ia*d[1]*d[1]+ip*d[0]*d[0]];for(let i=0;i<4;i++)M[i]+=m[i];r[0]+=m[0]*v.p[0]+m[1]*v.p[1];r[1]+=m[2]*v.p[0]+m[3]*v.p[1]}
- const det=M[0]*M[3]-M[1]*M[2];let X=Math.abs(det)>1e-9?[(M[3]*r[0]-M[1]*r[1])/det,(M[0]*r[1]-M[2]*r[0])/det]:[(a.p[0]+b.p[0])/2,(a.p[1]+b.p[1])/2],how="Schnittpunkt";
+ const det=M[0]*M[3]-M[1]*M[2];if(Math.abs(det)<1e-9)return[L.reduce((a,v)=>a+v.p[0],0)/L.length,L.reduce((a,v)=>a+v.p[1],0)/L.length];return[(M[3]*r[0]-M[1]*r[1])/det,(M[0]*r[1]-M[2]*r[0])/det]}
+const pdl=(p,v)=>Math.abs((p[0]-v.p[0])*v.d[1]-(p[1]-v.p[1])*v.d[0]);
+function fuse2(a,b){const bull=Math.hypot((a.p[0]+b.p[0])/2,(a.p[1]+b.p[1])/2)<DW.RB;let X=wlsV([a,b],bull?DW.SAB:DW.SA),how="Schnittpunkt";
  const gap=Math.hypot(a.p[0]-b.p[0],a.p[1]-b.p[1]);
- // Liegt der Schnittpunkt weit weg von beiden Einzelergebnissen, war eine Pfeillinie falsch: dann die sicherere Kamera nehmen
- const da=Math.hypot(X[0]-a.p[0],X[1]-a.p[1]),db=Math.hypot(X[0]-b.p[0],X[1]-b.p[1]);
- if(Math.min(da,db)>DW.FMAX){const t=(b.weak&&!a.weak)||(!(a.weak&&!b.weak)&&a.n>=b.n);X=t?a.p:b.p;how=t?"Tablet (sicherer)":"Handy (sicherer)"}
+ // Liegen die beiden Einzelergebnisse weit auseinander, hat sich eine Kamera geirrt. Richtig ist meist der Punkt, der auf der Pfeillinie der anderen Kamera liegt.
+ if(gap>(bull?DW.LGB:DW.LGAP)){const ab=pdl(a.p,b),ba=pdl(b.p,a);let t;
+  if(a.weak!=b.weak)t=!a.weak;else if(ab<DW.LT&&ba>=DW.LT)t=true;else if(ba<DW.LT&&ab>=DW.LT)t=false;else if(ab<ba*.5)t=true;else if(ba<ab*.5)t=false;else t=(a.cov||0)>=(b.cov||0);
+  X=t?a.p:b.p;how=t?"A":"B"}
  if(!isFinite(X[0])||!isFinite(X[1]))X=a.p;return{X,gap,how}}
+// beliebig viele Kameras: engstes Paar zusammenlegen, weitere Kameras dazunehmen, wenn sie passen; sonst die Kamera, die am besten zu den Linien der anderen passt
+function fuseN(R){if(R.length==1)return{X:R[0].V.p.slice(),gap:0,how:srcName(R[0].id)};
+ if(R.length==2){const F=fuse2(R[0].V,R[1].V);F.how=F.how=="A"?srcName(R[0].id)+" (sicherer)":F.how=="B"?srcName(R[1].id)+" (sicherer)":"Schnittpunkt";return F}
+ let bi=0,bj=1,bg=1e9;for(let i=0;i<R.length;i++)for(let j=i+1;j<R.length;j++){const g=Math.hypot(R[i].V.p[0]-R[j].V.p[0],R[i].V.p[1]-R[j].V.p[1]);if(g<bg){bg=g;bi=i;bj=j}}
+ if(bg<=DW.LGAP){let X=wlsV([R[bi].V,R[bj].V]);const inc=[bi,bj];R.forEach((r,k)=>{if(k!=bi&&k!=bj&&Math.hypot(X[0]-r.V.p[0],X[1]-r.V.p[1])<=DW.INC)inc.push(k)});
+  // passen alle zusammen: Median der Spitzen (robust gegen eine leicht danebenliegende Kamera)
+  if(R.length>2){DUO.bad=DUO.bad||{};R.forEach((r,k)=>{const off=Math.hypot(X[0]-r.V.p[0],X[1]-r.V.p[1]);DUO.bad[r.id]=inc.includes(k)||off<20?Math.max(0,(DUO.bad[r.id]||0)-1):(DUO.bad[r.id]||0)+1})}
+  if(inc.length>2){const md=a=>{a=a.slice().sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};X=inc.length==R.length?[md(R.map(r=>r.V.p[0])),md(R.map(r=>r.V.p[1]))]:wlsV(inc.map(k=>R[k].V))}return{X,gap:bg,how:inc.length==R.length?"Schnittpunkt ("+R.length+" Kameras)":"Schnittpunkt ("+inc.map(k=>srcName(R[k].id)).join(" + ")+")"}}
+ let best=0,bs=1e9;R.forEach((a,i)=>{let s=(a.V.weak?5:0);R.forEach((b,j)=>{if(i!=j)s+=pdl(a.V.p,b.V)});if(s<bs){bs=s;best=i}});
+ return{X:R[best].V.p.slice(),gap:bg,how:srcName(R[best].id)+" (sicherer)"}}
 function nearV(a,b){const d=Math.hypot(a.p[0]-b.p[0],a.p[1]-b.p[1]);if(d<DW.NEAR)return true;
  const perp=v=>Math.abs((a.p[0]-v.p[0])*v.d[1]-(a.p[1]-v.p[1])*v.d[0]);return d<120&&(perp(b)<DW.PERP||Math.abs((b.p[0]-a.p[0])*a.d[1]-(b.p[1]-a.p[1])*a.d[0])<DW.PERP)}
-function commitDart(x,y,o){const[c,v]=field(x,y);det={c,v,x,y};const T={c,v,x,y,r:null,tr:false,src:o.src,at:o.P&&o.src=='Handy'?o.P.at:o.V&&o.src=='Tablet'&&o.at?o.at:Date.now(),V:o.V||null,P:o.P||null,how:o.how||o.src};TURN.push(T);
- const BD=bdist(x,y),UNS=BD<FW.unsure||!!o.weak||o.src=="Handy";if(UNS)T.u=1;
- LOG.push(hm()+" Pfeil "+TURN.length+": "+c+" ("+o.src+(o.gap!=null?", Abstand "+o.gap.toFixed(0)+" mm":"")+")"+(BD<FW.unsure?" knapp":""));DUO.last=o.how||o.src;renderTurn();ov();
+function srcLabel(R){return R.length>1?R.map(r=>srcName(r.id)).join("+"):srcName(R[0].id)}
+function commitDart(x,y,o){const[c,v]=field(x,y);det={c,v,x,y};const T={c,v,x,y,r:null,tr:false,src:o.src,at:o.at||Date.now(),R:o.R||null,how:o.how||o.src};TURN.push(T);
+ const BD=bdist(x,y),UNS=BD<FW.unsure||!!o.weak||!!o.single;if(UNS)T.u=1;
+ LOG.push(hm()+" Pfeil "+TURN.length+": "+c+" ("+o.src+(o.gap?", Abstand "+o.gap.toFixed(0)+" mm":"")+")"+(BD<FW.unsure?" knapp":""));DUO.last=o.how||o.src;renderTurn();ov();
  flash("🎯 Pfeil "+TURN.length+": "+fname(c,v)+(UNS?" (knapp – bitte prüfen)":""));
- cm("Pfeil "+TURN.length+" erkannt: "+fname(c,v)+(o.src=="Tablet+Handy"?" (beide Kameras)":ROLE=="side"?"":DUO.on?" (nur "+o.src+")":"")+(UNS?". Der Pfeil sitzt sehr knapp an einer Grenze oder war nur für eine Kamera sichtbar – bitte kurz prüfen.":". Stimmt das?")+(ROLE=="side"?" Gezählt wird am Tablet.":" Tippe unten auf ✓ oder ✗."))}
-function updateDart(T,V,P){if(T.r!=null)return;const F=fuse2(V,P),[c,v]=field(F.X[0],F.X[1]),old=T.c;T.c=c;T.v=v;T.x=F.X[0];T.y=F.X[1];T.V=V;T.P=P;T.src="Tablet+Handy";T.how=F.how;
- const BD=bdist(T.x,T.y);T.u=BD<FW.unsure||(V.weak&&P.weak)?1:0;DUO.cnt.both++;DUO.last=F.how;LOG.push(hm()+" Pfeil "+(TURN.indexOf(T)+1)+" mit 2. Kamera: "+old+" -> "+c+" ("+F.how+", Abstand "+F.gap.toFixed(0)+" mm)");renderTurn();ov();
- if(old!=c)flash("🎯 Pfeil "+(TURN.indexOf(T)+1)+" angepasst: "+fname(c,v));cm("Pfeil "+(TURN.indexOf(T)+1)+" mit beiden Kameras: "+fname(c,v)+(T.u?". Knapp an einer Grenze – bitte kurz prüfen.":".")+" Tippe unten auf ✓ oder ✗.")}
-// Zuordnung: Jede Erkennung ist ein Ereignis mit Zeitpunkt. Tablet- und Handy-Ereignis gehören zusammen, wenn sie zeitnah sind
-// (bevorzugt das räumlich nächste). Ein Pfeil, den nur ein Gerät sieht, wird nach kurzer Wartezeit allein gezählt und später noch verbessert.
-function pick(list,V,get,now){let best=null,bs=1e9;for(const e of list){const W2=get(e);if(!W2||now-e.at>DW.PAIRT)continue;const s=(nearV(V,W2)?0:1000)+Math.hypot(V.p[0]-W2.p[0],V.p[1]-W2.p[1]);if(s<bs){bs=s;best=e}}
- if(best&&bs>=1000){let n=0;for(const e of list)if(get(e)&&now-e.at<=DW.PAIRT)n++;if(n>1)return null}return best}
+ cm("Pfeil "+TURN.length+" erkannt: "+fname(c,v)+(ROLE=="side"||!DUO.on?"":" ("+o.src+")")+(UNS?". Der Pfeil sitzt sehr knapp an einer Grenze oder war nur für eine Kamera sichtbar – bitte kurz prüfen.":". Stimmt das?")+(ROLE=="side"?" Gezählt wird am Tablet.":" Tippe unten auf ✓ oder ✗."))}
+function refit(T){if(T.r!=null)return;const F=fuseN(T.R),[c,v]=field(F.X[0],F.X[1]),old=T.c;T.c=c;T.v=v;T.x=F.X[0];T.y=F.X[1];T.src=srcLabel(T.R);T.how=F.how;
+ const BD=bdist(T.x,T.y);T.u=BD<FW.unsure||T.R.every(r=>r.V.weak)?1:0;DUO.last=F.how;LOG.push(hm()+" Pfeil "+(TURN.indexOf(T)+1)+" ergänzt ("+T.src+"): "+old+" -> "+c+" ("+F.how+")");renderTurn();ov();
+ if(old!=c)flash("🎯 Pfeil "+(TURN.indexOf(T)+1)+" angepasst: "+fname(c,v));cm("Pfeil "+(TURN.indexOf(T)+1)+" mit "+T.src+": "+fname(c,v)+(T.u?". Knapp an einer Grenze – bitte kurz prüfen.":".")+" Tippe unten auf ✓ oder ✗.")}
+// Zuordnung: zeitnah (PAIRT) und bevorzugt räumlich passend; ohne passenden Kandidaten nur, wenn es genau einen gibt
+function pickIn(list,id,V,now,getR,getAt){let best=null,bs=1e9,n=0;for(const e of list){const R=getR(e);if(!R||R.some(r=>r.id==id)||now-getAt(e)>DW.PAIRT)continue;n++;
+  let s=1e9;for(const r of R){const sc=(nearV(V,r.V)?0:1000)+Math.hypot(V.p[0]-r.V.p[0],V.p[1]-r.V.p[1]);if(sc<s)s=sc}if(s<bs){bs=s;best=e}}
+ if(best&&bs>=1000&&n>1)return null;return best}
+function addRep(id,V){const now=Date.now();V.at=now;
+ // zuerst ein wartender Wurf (gerade erst gesehen), dann ein schon gezählter Pfeil, dem diese Kamera noch fehlt
+ const G=pickIn(DUO.groups,id,V,now,g=>g.R,g=>g.at);if(G){G.R.push({id,V});if(G.R.length>=liveN())commitG(G);return}
+ const T=pickIn(TURN.filter(t=>t.r==null&&t.R),id,V,now,t=>t.R,t=>t.at);if(T){T.R.push({id,V});DUO.cnt.both++;refit(T);return}
+ const G2={R:[{id,V}],at:now};DUO.groups.push(G2);if(liveN()<=1)commitG(G2)}
+function commitG(G){const i=DUO.groups.indexOf(G);if(i>=0)DUO.groups.splice(i,1);
+ if(TURN.length>=3&&!(G.R.length==1&&G.R[0].id=="T"))return;// mehr als drei Pfeile gibt es nicht: Rest ist eine Fehlmeldung
+ const F=fuseN(G.R),single=G.R.length==1&&G.R[0].id!="T"&&liveN()>1;if(G.R.length>1)DUO.cnt.both++;else if(G.R[0].id=="T")DUO.cnt.main++;else DUO.cnt.side++;
+ commitDart(F.X[0],F.X[1],{src:srcLabel(G.R),gap:F.gap,how:F.how,weak:G.R.every(r=>r.V.weak),single,R:G.R,at:G.at})}
 function duoLocal(V){// ein Pfeil wurde auf diesem Gerät bestätigt
- if(ROLE=="side"){duoSend({t:"dart",p:V.p,d:V.d,weak:V.weak,n:V.n,th:V.th,cov:V.cov});commitDart(V.p[0],V.p[1],{src:"Handy",weak:V.weak});return}
- const now=Date.now();
- const T=pick(TURN.filter(t=>t.src=="Handy"&&t.r==null),V,t=>t.P,now);if(T){DUO.cnt.side--;updateDart(T,V,T.P);return}
- const P=pick(DUO.rx,V,e=>e,now);if(P){DUO.rx.splice(DUO.rx.indexOf(P),1);const F=fuse2(V,P);DUO.cnt.both++;commitDart(F.X[0],F.X[1],{src:"Tablet+Handy",gap:F.gap,how:F.how,weak:V.weak&&P.weak,V,P});return}
- if(!duoLive()){DUO.cnt.main++;commitDart(V.p[0],V.p[1],{src:"Tablet",weak:V.weak,V});return}
- DUO.pend.push({V,at:now})}
-function duoRecv(m){if(!m||typeof m!="object")return;DUO.lastHb=Date.now();
+ if(ROLE=="side"){duoSend({t:"dart",id:MYID,p:V.p,d:V.d,weak:V.weak,n:V.n,th:V.th,cov:V.cov});commitDart(V.p[0],V.p[1],{src:srcName(MYID),weak:V.weak});return}
+ if(!DUO.on||!duoLive()){DUO.cnt.main++;commitDart(V.p[0],V.p[1],{src:"Tablet",weak:V.weak,R:[{id:"T",V}]});return}
+ addRep("T",V)}
+function duoPullReset(why){TURN=[];DVEC=[];DUO.groups=[];det=null;DPX=null;LOG.push(hm()+" gezogen ("+why+")");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");duoSend({t:"turn"})}
+function duoRecv(m,conn){if(!m||typeof m!="object")return;const now=Date.now();DUO.lastHb=now;
+ if(ROLE=="main"){const id=typeof m.id=="string"&&/^(H|K\d)$/.test(m.id)?m.id:(conn&&conn.__id)||"H";if(conn)conn.__id=id;
+  const s=DUO.src[id]||(DUO.src[id]={hb:0,cal:false,st:"",conn:null});s.hb=now;s.conn=conn||s.conn;
+  if(m.t=="hb"||m.t=="hello"){s.cal=!!m.cal;s.st=m.st||"";s.zahl=m.zahl||0;DUO.pst=m;duoUI();return}
+  if(m.t=="dart"&&Array.isArray(m.p)&&Array.isArray(m.d)){addRep(id,{p:m.p,d:m.d,weak:!!m.weak,n:m.n||0,th:m.th||0,cov:m.cov||0});return}
+  if(m.t=="img"&&typeof m.data=="string"){DUO.imgs[id]={data:m.data,at:now};duoUI();return}
+  if(m.t=="pull"){DUO.pulls[id]=now;LOG.push(hm()+" "+srcName(id)+": Pfeile gezogen");
+   if(!ownLive()&&TURN.length+DUO.groups.length>0){const L=remLive(),n=L.filter(k=>now-(DUO.pulls[k]||0)<DW.PULLW).length,need=L.length>=3?2:1;if(n>=need){DUO.pulls={};duoPullReset(n+" Kamera(s)")}}return}
+  return}
  if(m.t=="hb"||m.t=="hello"){DUO.pst=m;duoUI();return}
- if(ROLE=="main"&&m.t=="dart"&&Array.isArray(m.p)&&Array.isArray(m.d)){const now=Date.now(),P={p:m.p,d:m.d,weak:!!m.weak,n:m.n||0,th:m.th||0,cov:m.cov||0,at:now};
-  const Q=pick(DUO.pend,P,e=>e.V,now);if(Q){DUO.pend.splice(DUO.pend.indexOf(Q),1);const F=fuse2(Q.V,P);DUO.cnt.both++;commitDart(F.X[0],F.X[1],{src:"Tablet+Handy",gap:F.gap,how:F.how,weak:Q.V.weak&&P.weak,V:Q.V,P});return}
-  const T=pick(TURN.filter(t=>t.src=="Tablet"&&t.r==null&&t.V),P,t=>t.V,now);if(T){DUO.cnt.main--;updateDart(T,T.V,P);return}
-  DUO.rx.push(P);return}
- if(ROLE=="main"&&m.t=="pull"){LOG.push(hm()+" Handy: Pfeile gezogen");return}
- if(ROLE=="side"&&m.t=="turn"){TURN=[];DVEC=[];renderTurn();ov()}}
-function duoTick(){if(ROLE!="main")return;const now=Date.now();
- while(DUO.pend.length&&now-DUO.pend[0].at>DW.WAITM){const Q=DUO.pend.shift();DUO.cnt.main++;commitDart(Q.V.p[0],Q.V.p[1],{src:"Tablet",weak:Q.V.weak,V:Q.V})}
- const busy=PDART&&PDART.kind=="add";
- for(let i=0;i<DUO.rx.length;i++){const P=DUO.rx[i],age=now-P.at;if(age>DW.MAXP||(age>DW.WAITP&&!busy&&MST=="ok")){DUO.rx.splice(i--,1);if(TURN.length>=3)continue;DUO.cnt.side++;commitDart(P.p[0],P.p[1],{src:"Handy",weak:true,P})}}}
-function duoReset(){DUO.pend=[];DUO.rx=[];if(ROLE=="main")duoSend({t:"turn"});else duoSend({t:"pull"})}
+ if(m.t=="turn"){TURN=[];DVEC=[];renderTurn();ov();return}
+ if(m.t=="snap"){const d=ringSnap();if(d)duoSend({t:"img",id:MYID,data:d});return}
+ if(m.t=="set20"&&isFinite(m.u)&&isFinite(m.v)){ringSet20(+m.u,+m.v);const d=ringSnap();if(d)duoSend({t:"img",id:MYID,data:d});return}}
+function duoTick(){if(ROLE!="main")return;const now=Date.now(),L=liveN(),busy=PDART&&PDART.kind=="add";
+ for(const G of DUO.groups.slice()){const age=now-G.at,k=G.R.length;
+  if(k>=Math.max(1,L))commitG(G);else if(k>=2&&age>DW.WAIT2)commitG(G);
+  else if(k==1){const own=G.R[0].id=="T";if(own?age>DW.WAITM:(age>DW.MAXP||(age>DW.WAITP&&(!ownLive()||(!busy&&MST=="ok")))))commitG(G)}}}
+function duoReset(){DUO.groups=[];if(ROLE=="main")duoSend({t:"turn"});else duoSend({t:"pull",id:MYID})}
 function loadPJ(cb){if(window.Peer)return cb();const U=["https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js","https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];let i=0;
  const nx=()=>{if(i>=U.length){DUO.msg="Die Verbindungs-Bibliothek konnte nicht geladen werden. Ist das Internet an?";duoUI();return}const s=document.createElement("script");s.src=U[i++];s.onload=cb;s.onerror=nx;document.head.appendChild(s)};nx()}
-function setConn(c){if(CONN&&CONN!==c){try{CONN.close()}catch(e){}}CONN=c;c.on("open",()=>{DUO.msg="";duoSend({t:"hello",role:ROLE,cal:!!HB,st:MST});duoUI()});c.on("data",duoRecv);c.on("close",()=>duoUI());c.on("error",()=>duoUI())}
+function hello(){return{t:"hello",id:MYID,role:ROLE,cal:!!HB,st:MST,zahl:typeof ringZahl=="function"?ringZahl():0}}
+function setConn(c){if(ROLE=="main"){if(!CONNS.includes(c))CONNS.push(c);CONNS=CONNS.filter(x=>x===c||x.open||!x.__closed);if(CONNS.length>6)CONNS.splice(0,CONNS.length-6)}
+ else{if(CONN&&CONN!==c){try{CONN.close()}catch(e){}}CONN=c}
+ c.on("open",()=>{DUO.msg="";try{c.send(hello())}catch(e){}duoUI()});c.on("data",m=>duoRecv(m,c));c.on("close",()=>{c.__closed=1;if(ROLE=="main")CONNS=CONNS.filter(x=>x!==c);duoUI()});c.on("error",()=>duoUI())}
 function duoStart(){DUO.on=true;lss("dart_duo","1");if(PEER){duoUI();return}
  if(ROLE=="main"){let code=lsg("dart_code","");if(!/^\d{4}$/.test(code)){code=String(1000+Math.floor(Math.random()*9000));lss("dart_code",code)}let tries=0;DUO.msg="Verbinde …";duoUI();
   loadPJ(()=>{const mk=()=>{PEER=new Peer("ldart-"+code,{debug:0});PEER.on("open",()=>{DUO.msg="";duoUI()});PEER.on("connection",c=>setConn(c));
@@ -693,19 +941,70 @@ function duoStart(){DUO.on=true;lss("dart_duo","1");if(PEER){duoUI();return}
   loadPJ(()=>{PEER=new Peer({debug:0});const dial=()=>{if(!PEER||PEER.destroyed||(CONN&&CONN.open))return;try{setConn(PEER.connect("ldart-"+code,{reliable:true,serialization:"json"}))}catch(e){}};
    PEER.on("open",dial);PEER.on("error",e=>{DUO.msg=e.type=="peer-unavailable"?"Tablet nicht gefunden. Ist dort die Kopplung gestartet? Ich versuche es weiter …":"Verbindungsproblem ("+e.type+"), versuche es weiter …";duoUI()});
    PEER.on("disconnected",()=>{try{PEER.reconnect()}catch(e){}});setInterval(dial,5000)})}
- if(!DUOT)DUOT=setInterval(()=>{duoSend({t:"hb",role:ROLE,cal:!!HB,st:MST});duoTick();duoUI()},1000)}
-function duoStop(){DUO.on=false;lss("dart_duo","0");try{CONN&&CONN.close()}catch(e){}try{PEER&&PEER.destroy()}catch(e){}PEER=null;CONN=null;duoUI()}
-function duoState(){if(!DUO.on)return"aus";if(CONN&&CONN.open){if(Date.now()-DUO.lastHb>8000)return"keine Antwort";return DUO.pst&&DUO.pst.cal?"ok":"verbunden, Scheibe noch nicht erkannt"}return"getrennt"}
-function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),other=ROLE=="main"?"Handy":"Tablet",col=st=="ok"?"#1a7f4b":st=="aus"?"#555":"#b7791f";
- $("#d1").className=ROLE=="main"?"pri":"";$("#d2").className=ROLE=="side"?"pri":"";const c7=$("#c7");if(c7)c7.style.display=ROLE=="side"?"none":"";
- let h='<div style="margin:6px 0"><span style="display:inline-block;background:'+col+';color:#fff;padding:4px 10px;border-radius:8px;font-weight:700">● '+(st=="ok"?other+" verbunden":st=="aus"?"Zweite Kamera aus":other+": "+st)+"</span></div>";
- if(ROLE=="main"){const code=lsg("dart_code","");h+=DUO.on?'<div>Code fürs Handy: <b style="font-size:30px;letter-spacing:4px">'+(code||"…")+'</b></div><div class="mu">Am Handy „zweite Kamera" wählen und diesen Code eingeben. Das Tablet zählt die Pfeile; ohne Handy arbeitet es allein weiter.</div><button id="d4" style="margin-top:6px">Zweite Kamera ausschalten</button>':'<button id="d3" class="pri">Zweite Kamera koppeln</button>';
-  if(DUO.on&&DUO.last)h+='<div class="mu" style="margin-top:4px">Letzter Abgleich: '+DUO.last+" · beide Kameras "+DUO.cnt.both+" · nur Tablet "+DUO.cnt.main+" · nur Handy "+DUO.cnt.side+"</div>"}
- else{h+='<div class="row" style="align-items:center"><input id="dcode" inputmode="numeric" maxlength="4" placeholder="Code" value="'+lsg("dart_code","")+'" style="width:110px;font-size:24px;letter-spacing:4px;text-align:center"><button id="d3" class="pri">'+(DUO.on?"Neu verbinden":"Mit Tablet verbinden")+'</button>'+(DUO.on?'<button id="d4">Trennen</button>':"")+"</div>"+'<div class="mu">Dieses Gerät ist die zweite Kamera: Es erkennt die Pfeile mit und schickt sie ans Tablet. Gezählt wird am Tablet. Bildschirm bitte anlassen.</div>'}
+ if(!DUOT)DUOT=setInterval(()=>{const h=hello();h.t="hb";duoSend(h);duoTick();duoUI()},1000)}
+function duoStop(){DUO.on=false;lss("dart_duo","0");try{CONN&&CONN.close()}catch(e){}for(const c of CONNS){try{c.close()}catch(e){}}CONNS=[];try{PEER&&PEER.destroy()}catch(e){}PEER=null;CONN=null;DUO.src={};duoUI()}
+function srcState(s){if(!s.conn||!s.conn.open)return"getrennt";if(Date.now()-s.hb>8000)return"keine Antwort";return s.cal?"ok":"Scheibe noch nicht erkannt"}
+function duoState(){if(!DUO.on)return"aus";if(ROLE=="main"){const ids=Object.keys(DUO.src);if(!ids.length)return"getrennt";return ids.some(k=>srcState(DUO.src[k])=="ok")?"ok":srcState(DUO.src[ids[0]])}
+ if(CONN&&CONN.open){if(Date.now()-DUO.lastHb>8000)return"keine Antwort";return"ok"}return"getrennt"}
+function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="ok"?"#1a7f4b":s=="aus"?"#555":"#b7791f",badge=(t,s)=>'<span style="display:inline-block;background:'+col(s)+';color:#fff;padding:4px 10px;border-radius:8px;font-weight:700;margin:2px 4px 2px 0">● '+t+"</span>";
+ $("#d1").className=ROLE=="main"?"pri":"";$("#d2").className=ROLE=="side"?"pri":"";const c7=$("#c7");if(c7)c7.style.display=ROLE=="side"?"none":"";let h="";
+ if(ROLE=="main"){const ids=Object.keys(DUO.src).sort();h+='<div style="margin:6px 0">'+(!DUO.on?badge("Weitere Kameras aus","aus"):ids.length?ids.map(k=>{const s=srcState(DUO.src[k]);return badge(srcName(k)+(DUO.src[k].zahl?" (Zahl "+DUO.src[k].zahl+")":"")+(s=="ok"?" verbunden":": "+s),s)}).join(""):badge("noch keine Kamera verbunden","getrennt"))+"</div>";
+  const code=lsg("dart_code","");h+=DUO.on?'<div>Code für Handy / Ring-Kameras: <b style="font-size:30px;letter-spacing:4px">'+(code||"…")+'</b></div><div class="mu">Am Handy „Dieses Gerät ist eine weitere Kamera“ wählen und den Code eingeben. Die Ring-Kameras am Raspberry Pi verbinden sich mit diesem Code von selbst. Das Tablet zählt die Pfeile; die eigene Tablet-Kamera ist dabei optional.</div><div class="row" style="margin-top:6px"><button id="d5">Kamerabilder ansehen</button><button id="d4">Weitere Kameras ausschalten</button></div>':'<button id="d3" class="pri">Weitere Kameras koppeln</button>';
+  if(DUO.on&&DUO.last)h+='<div class="mu" style="margin-top:4px">Letzter Abgleich: '+DUO.last+" · mehrere Kameras "+DUO.cnt.both+" · nur Tablet "+DUO.cnt.main+" · nur eine andere Kamera "+DUO.cnt.side+"</div>";
+  const im=Object.keys(DUO.imgs).sort();if(im.length)h+='<div class="row" style="margin-top:6px;flex-wrap:wrap">'+im.map(k=>'<div style="text-align:center"><img data-src="'+k+'" src="'+DUO.imgs[k].data+'" style="width:220px;border-radius:6px;display:block;cursor:crosshair"><span class="mu">'+srcName(k)+"</span></div>").join("")+'</div><div class="mu">Die gelbe 20 muss auf der echten 20 sitzen. Wenn nicht: im Bild auf die echte 20 tippen.</div>'}
+  const bad=Object.keys(DUO.bad||{}).filter(k=>DUO.bad[k]>=4);if(bad.length)h+='<div class="mu" style="margin-top:4px;color:#c8372d">⚠ '+bad.map(srcName).join(", ")+' passt oft nicht zu den anderen Kameras. Bitte „Kamerabilder ansehen“ und prüfen, ob die gelbe 20 richtig sitzt.</div>';
+ else{h+='<div style="margin:6px 0">'+badge(st=="ok"?"Tablet verbunden":st=="aus"?"Verbindung aus":"Tablet: "+st,st)+(KNR?'<span class="mu">Ring-Kamera '+KNR+"</span>":"")+"</div>";
+  h+='<div class="row" style="align-items:center"><input id="dcode" inputmode="numeric" maxlength="4" placeholder="Code" value="'+lsg("dart_code","")+'" style="width:110px;font-size:24px;letter-spacing:4px;text-align:center"><button id="d3" class="pri">'+(DUO.on?"Neu verbinden":"Mit Tablet verbinden")+'</button>'+(DUO.on?'<button id="d4">Trennen</button>':"")+"</div>"+'<div class="mu">Dieses Gerät ist eine weitere Kamera: Es erkennt die Pfeile mit und schickt sie ans Tablet. Gezählt wird am Tablet. Bildschirm bitte anlassen.</div>'}
  if(DUO.msg)h+='<div class="mu" style="margin-top:4px;color:#b7791f">'+DUO.msg+"</div>";
- if(b.innerHTML!=h){b.innerHTML=h;const d3=$("#d3"),d4=$("#d4");if(d3)d3.onclick=()=>{if(ROLE=="side"){const v=($("#dcode").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Bitte den 4-stelligen Code vom Tablet eingeben.";duoUI();return}lss("dart_code",v);if(PEER){try{PEER.destroy()}catch(e){}PEER=null;CONN=null}}duoStart()};if(d4)d4.onclick=duoStop}}
-function duoInit(){$("#d1").onclick=()=>{if(ROLE!="main"){duoStop();ROLE="main";lss("dart_role","main");lss("dart_code","")}duoUI()};$("#d2").onclick=()=>{if(ROLE!="side"){duoStop();ROLE="side";lss("dart_role","side")}duoUI()};
+ if(DUO.lastH!=h){DUO.lastH=h;b.innerHTML=h;const d3=$("#d3"),d4=$("#d4"),d5=$("#d5");if(d3)d3.onclick=()=>{if(ROLE=="side"){const v=($("#dcode").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Bitte den 4-stelligen Code vom Tablet eingeben.";duoUI();return}lss("dart_code",v);if(PEER){try{PEER.destroy()}catch(e){}PEER=null;CONN=null}}duoStart()};if(d4)d4.onclick=duoStop;if(d5)d5.onclick=()=>{DUO.imgs={};duoSend({t:"snap"});cm("Kamerabilder angefordert …")};
+}}
+function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
+ if(s&&s.conn&&s.conn.open){try{s.conn.send({t:"set20",u:(e.clientX-r.left)/r.width,v:(e.clientY-r.top)/r.height})}catch(_){}cm(srcName(id)+": 20 wird neu gesetzt …")}}
+function duoInit(){const bx=$("#dbox");if(bx&&bx.addEventListener)bx.addEventListener("click",duoImgClick);$("#d1").onclick=()=>{if(ROLE!="main"){duoStop();ROLE="main";lss("dart_role","main");lss("dart_code","")}duoUI()};$("#d2").onclick=()=>{if(ROLE!="side"){duoStop();ROLE="side";lss("dart_role","side")}duoUI()};
  duoUI();if(lsg("dart_duo","0")=="1")setTimeout(duoStart,500)}
+// ===== Ring-Kamera: Scheibe finden über die bekannte Halterung =====
+// Die Kameras sitzen fest am Winmau-Plasma-Ring (Autodarts-Halter), schauen schräg (ca. 35–55°) auf die Scheibe und haben 100°-Linsen.
+// Aus so schräger Sicht findet die normale Suche die Scheibe nicht. Deshalb: mögliche Kameralagen um die angegebene Zahl
+// durchrechnen, jede kurz bewerten, die besten fein einpassen. Die Angabe der Zahl macht die Nummerierung eindeutig
+// (die Scheibe sieht nach 36° Drehung gleich aus).
+const RG={foc:.49,ths:5,thw:40,zs:[150,210,270,330],rs:[320,370],rolls:[0,90,180,270],top:6};
+function ringZahl(){const z=+lsg("dart_zahl","");return z>=1&&z<=20?z:0}
+function RINGON(){return!!ringZahl()}
+function ringCand(th,R,Zc,roll,f){const a=th*Math.PI/180,C=[R*Math.sin(a),-R*Math.cos(a),-Zc],n=Math.hypot(...C),fw=C.map(v=>-v/n);
+ let yw=[0,1,0];if(Math.abs(fw[1])>.95)yw=[1,0,0];const d=yw[0]*fw[0]+yw[1]*fw[1]+yw[2]*fw[2];let yv=yw.map((v,i)=>v-d*fw[i]);const ny=Math.hypot(...yv);yv=yv.map(v=>v/ny);
+ const xv=[yv[1]*fw[2]-yv[2]*fw[1],yv[2]*fw[0]-yv[0]*fw[2],yv[0]*fw[1]-yv[1]*fw[0]],cr=Math.cos(roll*Math.PI/180),sr=Math.sin(roll*Math.PI/180);
+ const X2=xv.map((v,i)=>cr*v+sr*yv[i]),Y2=yv.map((v,i)=>-sr*xv[i]+cr*v),asp=f.width/f.height,z=f.z||1,cx=vcx(f),cy=vcy(f);
+ return BP.map(([bx,by])=>{const P=[bx-C[0],by-C[1],-C[2]],xc=P[0]*X2[0]+P[1]*X2[1]+P[2]*X2[2],yc=P[0]*Y2[0]+P[1]*Y2[1]+P[2]*Y2[2],zc=P[0]*fw[0]+P[1]*fw[1]+P[2]*fw[2];
+  const u=.5+RG.foc*xc/zc,v=.5+RG.foc*asp*yc/zc;return[.5+(u-cx)*z,.5+(v-cy)*z]})}
+function ringFit(f){return ringFit1(f,ringZahl())}
+function ringFit1(f,zahl){if(!zahl||!f)return null;const thu=ORD.indexOf(zahl)*18,L=[];
+ for(let th=thu-RG.thw;th<=thu+RG.thw;th+=RG.ths)for(const Zc of RG.zs)for(const R of RG.rs)for(const roll of RG.rolls){const q=ringCand(th,R,Zc,roll,f);
+  if(q.some(p=>!isFinite(p[0])||p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3))continue;L.push({q,s:polish(q,f,[]).s})}
+ L.sort((a,b)=>b.s-a.s);let best=null;
+ for(const c of L.slice(0,RG.top)){const r=polish(polish(c.q,f,[24,16,8,4,2,1,.5,.25]).q,f);if(!best||r.s>best.s)best=r}
+ if(best){best.zahl=zahl;LOG.push(hm()+" Ring-Suche bei Zahl "+zahl+": Wert "+best.s.toFixed(2))}return best}
+// Kamera Nummer KNR wählen (Reihenfolge wie vom System gemeldet), dann starten
+function ringStartCam(){const go=()=>$("#c1").onclick();if(!KNR||DB.cam.dev)return go();
+ navigator.mediaDevices.getUserMedia({video:true,audio:false}).then(st=>{st.getTracks().forEach(t=>t.stop());return navigator.mediaDevices.enumerateDevices()}).then(ds=>{const v=ds.filter(d=>d.kind=="videoinput");
+  if(v.length>=KNR){DB.cam.dev=v[KNR-1].deviceId;save();CAML="Kamera "+KNR+" von "+v.length+(v[KNR-1].label?" ("+v[KNR-1].label+")":"")}else cm("Nur "+v.length+" Kamera(s) gefunden – erwartet wurde Kamera "+KNR+".");go()}).catch(()=>go())}
+// Standbild (verkleinert, mit Gitter) für die Ansicht auf dem Tablet
+function ringSnap(){try{if(!cv.videoWidth)return null;const w=480,h=Math.round(w*cv.videoHeight/cv.videoWidth),c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");
+ g.drawImage(cv,0,0,w,h);try{g.drawImage(ovc,0,0,w,h)}catch(e){}
+ if(Hi){const p=ap(Hi,0,-197);g.font="bold 22px Arial";g.lineWidth=4;g.strokeStyle="#000";g.fillStyle="#ffd400";g.beginPath();g.arc(p[0]*w,p[1]*h,15,0,7);g.stroke();g.strokeText("20",p[0]*w-12,p[1]*h+8);g.fillText("20",p[0]*w-12,p[1]*h+8)}
+ return c.toDataURL("image/jpeg",.6)}catch(e){return null}}
+// Wo sitzt die Kamera (Zahl am Rand)? Aus der Kalibrierung und der bekannten Linse zurückgerechnet
+function ringCamZahl(){try{const F=FOC||RG.foc,asp=cv.videoWidth/cv.videoHeight||16/9,H=hom(BP,cal),fy=F*asp;
+ const ki=v=>[(v[0]-.5*v[2])/F,(v[1]-.5*v[2])/fy,v[2]],m1=ki([H[0],H[3],H[6]]),m2=ki([H[1],H[4],H[7]]),m3=ki([H[2],H[5],1]),nn=v=>Math.hypot(...v);
+ let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l),r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+ const C=[-dot(r1,t),-dot(r2,t),-dot(r3,t)],th=((Math.atan2(C[0],-C[1])*180/Math.PI)%360+360)%360;return{th,zahl:ORD[Math.round(th/18)%20]}}catch(e){return null}}
+// Auf dem Tablet in das Kamerabild getippt (u,v = Lage im Bild 0..1): dort ist die echte 20 -> Nummerierung um ein Vielfaches von 36° drehen
+function ringSet20(u,v){if(!HB||!cal||cal.length!=4)return;const b=ap(HB,u,v),phi=Math.atan2(b[0],-b[1])*180/Math.PI,k=((Math.round(phi/36)%10)+10)%10;
+ if(!k){cm("Die 20 sitzt schon richtig.");return}const R=k*36*Math.PI/180,co=Math.cos(R),si=Math.sin(R),np=BP.map(([x,y])=>ap(Hi,x*co-y*si,x*si+y*co));
+ setCal(np);DB.cam.cal=np;save();MASK=null;DPX=null;det=null;ov();const cz=ringCamZahl();if(cz){lss("dart_zahl",String(cz.zahl));lss("dart_zahl_url",QP.get("zahl")||"")}
+ LOG.push(hm()+" Nummerierung um "+k*36+"° gedreht"+(cz?", Kamera sitzt bei Zahl "+cz.zahl:""));cm("Nummerierung korrigiert"+(cz?" – diese Kamera sitzt bei Zahl "+cz.zahl:"")+".")}
+function ringInit(){const box=$("#rbox");if(box){const z=ringZahl();box.innerHTML='Ring-Kamera am Plasma: sitzt bei Zahl <input id="rzahl" inputmode="numeric" maxlength="2" style="width:60px;font-size:20px;text-align:center" value="'+(z||"")+'"> <span class="mu">(leer lassen für Tablet/Handy)</span>';
+  $("#rzahl").onchange=()=>{const v=+$("#rzahl").value;lss("dart_zahl",v>=1&&v<=20?String(v):"");HB=Hi=null;BASE=null;cm(RINGON()?"Ring-Kamera bei Zahl "+v+". Ich suche die Scheibe neu …":"Normale Kamera (Tablet/Handy).");duoUI()}}
+ if(KNR)setTimeout(ringStartCam,800)}
 // Bildschirm anlassen, solange die Kamera läuft (wichtig fürs Handy)
 let WL=null;function keepAwake(){try{if("wakeLock"in navigator&&!WL)navigator.wakeLock.request("screen").then(l=>{WL=l;l.addEventListener("release",()=>{WL=null})}).catch(()=>{})}catch(e){}}
 try{document.addEventListener("visibilitychange",()=>{if(document.visibilityState=="visible"&&cv&&cv.srcObject)keepAwake()})}catch(e){}
@@ -751,8 +1050,12 @@ function dartCheck(f,force){
  const big=!R.err?R.comp.length>MASK.n*.06:R.err!="Kein Pfeil erkannt.";
  if(big){PDART=null;if(++BIGN>=3){ref=f;if(EMPTY&&!TURN.length)EMPTY=f;BIGN=0;LOG.push(hm()+" Referenz neu (Licht)");cm("Das Bild hat sich dauerhaft verändert (zum Beispiel Licht). Die Referenz wurde neu gesetzt.")}
   else if(force)cm("Etwas Großes ist im Bild (Hand oder Person?) oder das Licht hat sich geändert. Bitte kurz warten.");return}
- BIGN=0;
+ BIGN=0;if(!R.err){PULLC=0;PULLA=0}
  if(R.err){const was=PDART;PDART=null;if(force)cm("Kein neuer Pfeil gefunden.");
+  // Große Änderung verworfen (dunkle Flights auf dunklen Feldern sehen wie Lichtänderung aus): Referenz kurz festhalten und prüfen, ob die Scheibe wieder leer ist – dann wurden die Pfeile gezogen
+  if(FW.pullE&&TURN.length&&EMPTY&&!ref.warped&&sv(EMPTY,f)&&EMPTY.width==f.width&&EMPTY.height==f.height){if(R.nC>FW.pullN*(f.width/640)**2)PULLA=FW.pullA;
+   if(PULLA>0){PULLA--;const e=findDart(f,EMPTY,G.toB,G.Hp,MASK,true);if(e.err=="Kein Pfeil erkannt."){if(++PULLC>=FW.pullK){PULLC=0;PULLA=0;ref=f;EMPTY=f;TURN=[];DVEC=[];det=null;DPX=null;duoReset();LOG.push(hm()+" gezogen");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");return}}else PULLC=0;return}}
+  PULLC=0;
   // nichts los: Referenz als gleitender Mittelwert vieler ruhiger Bilder (Rauschen und Nachschärfen mitteln sich heraus)
   if(ref.warped)ref=f;else if(!was&&ref.width==f.width&&ref.height==f.height&&sv(ref,f)){const a=ref.data,b=f.data,o=new Uint8ClampedArray(a.length);for(let i=0;i<a.length;i++)o[i]=a[i]+(b[i]-a[i])*EMA;ref={...ref,data:o}}
   if(++CALM>=6){CALM=0;if(EMPTY&&!TURN.length){const e=findDart(f,EMPTY,G.toB,G.Hp,MASK,true);if(e.err=="Kein Pfeil erkannt.")EMPTY=ref}}
@@ -794,6 +1097,6 @@ $("#zm").onclick=()=>setZ(Z-.25);$("#zp").onclick=()=>setZ(Z+.25);$("#zl").oncli
 function pfBar(){const o=$("#pf");o.innerHTML=Object.keys(ST.p).map(id=>`<button class="${id==ST.cur?"on":""}" data-p="${id}">${esc(ST.p[id].name)}</button>`).join("")+'<button id="pren">Name ändern</button>';
  o.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(id==ST.cur)return;if(s&&!s.done&&s.darts>0&&!confirm("Das laufende Training wird verworfen. Profil wechseln?"))return;s=null;H=[];useP(id);stt();pfBar();go(view)});
  $("#pren").onclick=()=>{const n=prompt("Neuer Name für dieses Profil:",ST.p[ST.cur].name);if(n&&n.trim()){ST.p[ST.cur].name=n.trim().slice(0,20);save();pfBar()}}}
-stt();renderTurn();AZ=DB.cam.az!==false;setView(DB.cam.z||1,DB.cam.zc||[.5,.5],true);pfBar();try{duoInit()}catch(e){}
+stt();renderTurn();AZ=DB.cam.az!==false;setView(DB.cam.z||1,DB.cam.zc||[.5,.5],true);pfBar();try{ringInit()}catch(e){}try{duoInit()}catch(e){}
 go(0);
 </script></body></html>
