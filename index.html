@@ -120,12 +120,12 @@ if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
 const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.cur);
 const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST))}catch(e){}};
-const B=(t,n,g)=>({t,n,g,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
+const B=(t,n,g,r)=>({t,n,g,r,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 const P={
 mo:{n:"Triple 20",x:"100 Pfeile T20 (Treffer und Punkte zählen), 30 auf T19, 45 auf T20 als Druck-Aufnahmen, 30 auf Bull.",b:()=>[B("T20",100),B("T19",30),B("T20",45),B("B",30)]},
 di:{n:"Gruppierung",x:"Je 60 Pfeile auf T20, T19, T18, T17, dann 40 auf Bull. Pfeile eng zusammen halten.",b:()=>["T20","T19","T18","T17"].map(t=>B(t,60)).concat([B("B",40)])},
-mi:{n:"Around the Clock",x:"Singles 1 bis 20, Doppel D1 bis D20 und D-Bull (jeweils bis zum Treffer, Pfeile zählen), dann je 15 Pfeile auf D20, D16, D8.",b:()=>NUM.map(i=>B("N"+i,"h","s")).concat(NUM.map(i=>B("D"+i,"h","d")),[B("DB","h","d")],["D20","D16","D8"].map(t=>B(t,15,"c")))},
+mi:{n:"Around the Clock",x:"2 Runden Singles 1 bis 20, dann 2 Runden Doppel D1 bis D20 und D-Bull. Jedes Feld bis zum Treffer, Pfeile zählen.",b:()=>[1,2].map(r=>NUM.map(i=>B("N"+i,"h","s",r))).concat([1,2].map(r=>NUM.map(i=>B("D"+i,"h","d",r)).concat([B("DB","h","d",r)]))).flat()},
 do:{n:"Scoring",x:"5 Legs 501. Pfeile zählen, Average ausrechnen. (Vereinfacht: ohne Double-Out.)",m:"501",legs:5},
 fr:{n:"Doppel",x:"Je 20 Pfeile auf D20, D16, D8, D10, D12, D6, D5, D4, D2.",b:()=>["D20","D16","D8","D10","D12","D6","D5","D4","D2"].map(t=>B(t,20))},
 sa:{n:"Spieltag (Wochentest)",x:"10 Legs 501 mit Double-Out. Dein Average hier zählt für den Verlauf.",m:"501",legs:10,dout:true},
@@ -163,7 +163,7 @@ function undo(){if(H.length){s=JSON.parse(H.pop());DL.length=s.dn||0;render()}}
 function skip(){if(s&&s.m=="blocks"){H.push(JSON.stringify(s));s.bi++;if(s.bi>=s.bl.length)fin();render()}}
 function fin(){if(!s||s.done)return;s.done=true;
  if(s.darts>0){const r={id:Date.now(),date:new Date().toISOString().slice(0,10),k:s.k,name:s.name,darts:s.darts,pts:s.pts,avg:+avg(s.pts,s.darts)};
-  if(s.bl){r.bl=s.bl.map((b,i)=>({t:b.t,d:b.d,h:b.h,g:b.g,i})).filter(b=>b.d)}
+  if(s.bl){r.bl=s.bl.map((b,i)=>Object.assign({t:b.t,d:b.d,h:b.h,g:b.g,i},b.r?{r:b.r}:{})).filter(b=>b.d)}
   r.dl=DL.slice(0,s.dn||DL.length);r.dur=Math.max(1,Math.round((Date.now()-(s.t0||Date.now()))/60000));
   if(s.m=="501")r.legs=s.ldone;
   DB.sessions.unshift(r);s.saved=true;save()}
@@ -198,7 +198,7 @@ function train(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><div
   if(s.bl)t+=`<div class="card"><table><tr><th>Ziel</th><th>Pfeile</th><th>Treffer</th><th>Quote</th></tr>${s.bl.filter(b=>b.d).map(b=>`<tr><td>${lab(b.t)}</td><td>${b.d}</td><td>${b.h}</td><td>${Math.round(b.h/b.d*100)}%</td></tr>`).join("")}</table></div>`;
   return t+'<div class="card"><input id="note" placeholder="Notiz zu dieser Einheit" style="width:100%;min-height:44px;font:inherit;box-sizing:border-box"></div><button class="pri" id="new">Zurück zum Wochenplan</button>'}
  let info="";
- if(s.m=="blocks"){const b=s.bl[s.bi];info=`<div class="mu">Block ${s.bi+1} von ${s.bl.length}</div><div class="big">Ziel: ${lab(b.t)}</div><div>Pfeile ${b.d}${b.n=="h"?" (bis zum Treffer)":" / "+b.n} · Treffer ${b.h}</div><div class="bar"><i style="width:${b.n=="h"?0:Math.min(100,b.d/b.n*100)}%"></i></div>`}
+ if(s.m=="blocks"){const b=s.bl[s.bi];info=`<div class="mu">${b.r?(b.g=="s"?"Singles":"Doppel")+" · Runde "+b.r+" von 2 · ":""}Block ${s.bi+1} von ${s.bl.length}</div><div class="big">Ziel: ${lab(b.t)}</div><div>Pfeile ${b.d}${b.n=="h"?" (bis zum Treffer)":" / "+b.n} · Treffer ${b.h}</div><div class="bar"><i style="width:${b.n=="h"?0:Math.min(100,b.d/b.n*100)}%"></i></div>`}
  else if(s.m=="501")info=`<div class="mu">Leg ${s.leg} von ${s.legs}</div><div class="big">Rest: ${s.rem}</div><div>Pfeile im Leg: ${s.ld}${s.dout?" · Double-Out · Pfeil "+(s.t+1)+" von 3":""}</div>${s.log[s.log.length-1]=="Bust"?"<div style='color:#c8372d;font-weight:700'>Bust: Rest zurückgesetzt</div>":""}`;
  else info='<div class="big">Freies Werfen</div><div class="mu">Tippe die Treffer auf der Scheibe.</div>';
  return`<div class="grid"><div class="card">${board()}</div><div><div class="card">${info}</div>
@@ -209,9 +209,9 @@ const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g
 const mon=d=>{const x=new Date(d+"T12:00:00");x.setDate(x.getDate()-(x.getDay()+6)%7);return x},zw=w=>35+12.5*w/12;
 function rows(){const S=DB.sessions.slice().reverse(),W=[...Array(12)].map(()=>({}));
  if(S.length){const f0=mon(S[0].date);S.forEach(r=>{const w=Math.floor(Math.round((mon(r.date)-f0)/864e5)/7);if(w>=0&&w<12)W[w][r.k]=r})}
- return W.map((o,i)=>{const w=i+1,a=o.sa?o.sa.avg:null,t=o.mo&&o.mo.bl?o.mo.bl.find(b=>b.t=="T20"):null,g=x=>o.mi&&o.mi.bl?o.mi.bl.filter(b=>b.g==x).reduce((n,b)=>n+b.d,0):"–";
+ return W.map((o,i)=>{const w=i+1,a=o.sa?o.sa.avg:null,t=o.mo&&o.mo.bl?o.mo.bl.find(b=>b.t=="T20"):null,g=x=>{if(!(o.mi&&o.mi.bl))return"–";const L=o.mi.bl.filter(b=>b.g==x);if(!L.length)return"–";const n=new Set(L.map(b=>b.r||1)).size,v=L.reduce((n,b)=>n+b.d,0)/n;return Number.isInteger(v)?v:v.toFixed(1)};
   return[w,o.sa?o.sa.date.split("-").reverse().join("."):"–",a==null?"–":a.toFixed(1),zw(w).toFixed(1),a==null?"–":((a-zw(w)>=0?"+":"")+(a-zw(w)).toFixed(1)),t?t.h:"–",g("s"),g("d"),o.do?o.do.avg.toFixed(1):"–",(DB.notes||{})[w]||""]})}
-function csv(){return["Woche;Datum;Average;Zielwert;Differenz;T20-Treffer (Mo);Singles Pfeile;Doppel Pfeile;Scoring-Average (Do);Notiz"].concat(rows().map(r=>r.join(";"))).join("\n")}
+function csv(){return["Woche;Datum;Average;Zielwert;Differenz;T20-Treffer (Mo);Singles Pfeile je Runde;Doppel Pfeile je Runde;Scoring-Average (Do);Notiz"].concat(rows().map(r=>r.join(";"))).join("\n")}
 // ===== Verlauf (v23): Übersicht + ein Tab je Trainingstag (Statistik, Heatmap, Trend) =====
 // Jede Einheit speichert ab v23 alle Pfeile in r.dl: {c Feld, x/y Lage in mm (20 oben = y negativ), v Punkte, n Aufnahme-Nr.,
 //  Blöcke: t Ziel, i Block-Nr. | 501: l Leg, r Rest vor dem Pfeil, b Bust, f Leg beendet}
@@ -234,7 +234,11 @@ function vF9(r){const V=vVis(r);if(!V)return null;const a=V.filter(v=>v.ds[0].n<
 const vOut=d=>d.r!=null&&((d.r<=40&&d.r%2==0&&d.r>0)||d.r==50);
 function vCO(r){if(!r.dl)return null;const a=r.dl.filter(vOut).length;return a?r.legs.length/a*100:null}
 function vCOP(r){const V=vVis(r);if(!V)return null;const f=V.filter(v=>v.f);return f.length?vMean(f.map(v=>v.r0)):null}
-const vHC=(r,t)=>{const b=r.bl&&r.bl.find(b=>b.t==t&&b.g=="c");return b?b.h:null};
+// Mittwoch: Pfeile einer kompletten Runde (Singles 1–20 bzw. Doppel D1–D20 + Bull); ohne k = Ø pro Runde
+function vRd(r,g,k){if(!r.bl)return null;if(!k)return vMean([1,2].map(j=>vRd(r,g,j)));const B=r.bl.filter(b=>b.g==g&&(b.r||1)==k),n=g=="s"?20:21;return B.length==n&&B.every(b=>b.h>=1)?vSum(B.map(b=>b.d)):null}
+// Ø Pfeile bis zum Treffer je Feld über alle Runden
+const vAvgD=(C,t,g)=>vMean([].concat(...C.map(r=>(r.bl||[]).filter(b=>b.t==t&&b.g==g&&b.h>=1).map(b=>b.d))));
+const vFl=d=>VF=="Alle"||(VF=="Singles"?!!d.t&&d.t[0]=="N":VF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(VF=="Bull"?"B":VF));
 const vHit=(r,t,i,k)=>{const b=vBl(r,t,i,k);return b?b.h:null};
 const vQ=(r,g)=>{if(!r.bl)return null;const B=r.bl.filter(g),d=vSum(B.map(b=>b.d));return d?vSum(B.map(b=>b.h))/d*100:null};
 // Gruppierung: Ø Abstand der Pfeile einer Aufnahme zu ihrer Mitte (mm) und Ø Abweichung vom Ziel
@@ -253,9 +257,9 @@ mo:{kpi:["T20-Treffer",S=>vSum(S.map(r=>(vHit(r,"T20",0)||0)+(vHit(r,"T20",2,1)|
 di:{kpi:["Treffer gesamt",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))],chips:["Alle","T20","T19","T18","T17","Bull"],tr:["Trefferquote gesamt",r=>vQ(r,()=>1),{p:1}],grp:["T20","T19","T18","T17","B"],
  rows:[["T20 · Treffer",r=>vHit(r,"T20",0),{u:60}],["T19 · Treffer",r=>vHit(r,"T19",1),{u:60}],["T18 · Treffer",r=>vHit(r,"T18",2),{u:60}],["T17 · Treffer",r=>vHit(r,"T17",3),{u:60}],["Bull · Treffer",r=>vHit(r,"B",4),{u:40}],
   ["Streuung je Aufnahme",r=>{const a=["T20","T19","T18","T17","B"].map(t=>vGrp(vDl(r,d=>d.t==t),t));return vMean(a.map(g=>g&&g.sp))},{mm:1,lb:1}],["Im Zielsegment",r=>{const D=vDl(r,d=>d.t&&d.x!=null);return D.length?D.filter(d=>segN(d.c)==(d.t=="B"?"B":d.t.slice(1))).length/D.length*100:null},{p:1}]]},
-mi:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.filter(b=>b.g=="c").map(b=>b.h)):null))],chips:["Alle"],tr:["Pfeile für alle Doppel",r=>r.bl?vSum(r.bl.filter(b=>b.g=="d").map(b=>b.d))||null:null,{lb:1}],dbars:1,
- rows:[["Singles 1–20 · Pfeile",r=>r.bl?vSum(r.bl.filter(b=>b.g=="s").map(b=>b.d))||null:null,{lb:1}],["Doppel D1–Bull · Pfeile",r=>r.bl?vSum(r.bl.filter(b=>b.g=="d").map(b=>b.d))||null:null,{lb:1}],["Doppelquote (Runde)",r=>vQ(r,b=>b.g=="d"),{p:1}],
-  ["D20 · Treffer",r=>vHC(r,"D20"),{u:15}],["D16 · Treffer",r=>vHC(r,"D16"),{u:15}],["D8 · Treffer",r=>vHC(r,"D8"),{u:15}]]},
+mi:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.filter(b=>b.g=="d").map(b=>b.h)):null))],chips:["Alle","Singles","Doppel"],tr:["Pfeile pro Doppel-Runde",r=>vRd(r,"d"),{lb:1,d:1}],sbars:1,dbars:1,
+ rows:[["Singles · Runde&nbsp;1",r=>vRd(r,"s",1),{lb:1,u:"Pfeile"}],["Singles · Runde&nbsp;2",r=>vRd(r,"s",2),{lb:1,u:"Pfeile"}],["Doppel · Runde&nbsp;1",r=>vRd(r,"d",1),{lb:1,u:"Pfeile"}],["Doppel · Runde&nbsp;2",r=>vRd(r,"d",2),{lb:1,u:"Pfeile"}],
+  ["Singlequote",r=>vQ(r,b=>b.g=="s"),{p:1}],["Doppelquote",r=>vQ(r,b=>b.g=="d"),{p:1}]]},
 do:{kpi:["Legs",S=>vSum(S.map(r=>(r.legs||[]).length))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO LEG",leg:1},
  rows:[["Average",r=>r.avg,{d:2}],["First 9",vF9,{d:2}],["Pfeile pro Leg",r=>r.legs&&r.legs.length?vMean(r.legs):null,{d:1,lb:1}],["Bestes Leg",r=>r.legs&&r.legs.length?Math.min(...r.legs):null,{lb:1,best:1,u:"Pfeile"}]]},
 fr:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))],chips:["Alle"].concat(DBL),tr:["Doppelquote",r=>vQ(r,()=>1),{p:1}],fbars:1,
@@ -293,13 +297,14 @@ function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP
   t+=`<div class="vpanel"><div class="vrow v4 vhd"><div>GRUPPIERUNG</div><div>TREFFER</div><div>STREUUNG</div><div>TENDENZ</div></div>${G.map(({tg,g,hb,db})=>{const[vt,vc]=vVerd(g&&g.sp);return`<div class="vrow v4"><div class="vl1">${tg=="B"?"Bull":tg}</div><div><b>${db?Math.round(hb/db*100)+"<i>%</i>":"–"}</b><small>${db?hb+" von "+db:""}</small></div><div><b>${g&&g.sp!=null?Math.round(g.sp)+"<i> mm</i>":"–"}</b>${vt!="–"?`<span class="vpill ${vc}">${vt}</span>`:""}</div><div class="vtd">${vTend(g)}</div></div>`}).join("")}<div class="vnote">Streuung = wie weit die Pfeile einer Aufnahme im Schnitt von ihrer gemeinsamen Mitte liegen. Unter 15 mm = eng, 15–25 mm = ok. Tendenz = wohin deine Pfeile im Schnitt neben dem Ziel landen.</div></div>`}
  if(cfg.fbars){const L=DBL.map(d=>{const h=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.h:null})),n=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.d:null}));return[d,n?h/n*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
   t+=`<div class="vcard"><div class="vh3">Quote je Doppel</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}</div>`}
- if(cfg.dbars){const L=NUM.map(i=>"D"+i).concat(["DB"]).map(d=>[d=="DB"?"Bull":d,vMean(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d&&b.g=="d");return b?b.d:null}))]),ok=L.filter(x=>x[1]!=null).map(x=>x[1]).sort((a,b)=>b-a),th=ok[Math.min(2,ok.length-1)];
-  t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Doppel (Ø)</div>${vBars(L.map(x=>[x[0],x[1],x[1]!=null&&x[1]>=th&&x[1]>1?"b":""]))}<div class="vnote l">Rot = deine 3 schwierigsten Doppel.</div></div>`}
+ const hard=(L,h)=>{const ok=L.filter(x=>x[1]!=null).map(x=>x[1]).sort((a,b)=>b-a),th=ok[Math.min(2,ok.length-1)];return L.map(x=>[x[0],x[1],x[1]!=null&&x[1]>=th&&x[1]>1?"b":""])};
+ if(cfg.sbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Single (Ø)</div>${vBars(hard(NUM.map(i=>[String(i),vAvgD(C,"N"+i,"s")])))}<div class="vnote l">Rot = deine 3 schwierigsten Felder.</div></div>`;
+ if(cfg.dbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Doppel (Ø)</div>${vBars(hard(NUM.map(i=>"D"+i).concat(["DB"]).map(d=>[d=="DB"?"Bull":d,vAvgD(C,d,"d")])))}<div class="vnote l">Rot = deine 3 schwierigsten Doppel.</div></div>`;
  return t+"</div></div>"}
-function vHeatBox(C,k){const fl=d=>VF=="Alle"||d.t==(VF=="Bull"?"B":VF),D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
+function vHeatBox(C,k){const fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
  return`<div class="vhl">PFEILE MIT POSITION: ${pos}<br>AUS ${withDl} ${withDl==1?"EINHEIT":"EINHEITEN"}${miss?" · "+miss+" OHNE POSITION":""}</div><canvas id="vhc" data-k="${k}"></canvas>${pos?"":`<div class="vempty">${C.length&&!withDl?"Diese Einheiten sind älter als Version 23 – da wurden die Positionen noch nicht gespeichert. Ab jetzt schon.":"Noch keine Pfeile mit Position."}</div>`}`}
 // Heatmap zeichnen
-function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=d=>VF=="Alle"||d.t==(VF=="Bull"?"B":VF),D=[].concat(...C.map(r=>vDl(r,fl))).filter(d=>d.x!=null);
+function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))).filter(d=>d.x!=null);
  const w=cv.clientWidth;if(!w)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=cv.height=Math.round(w*dpr);const g=cv.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
  const R=250,Sc=w/(2*R),cx=w/2,cy=w/2,dark=getComputedStyle(cv).color;
  g.save();g.translate(cx,cy);g.fillStyle="#2a2b2d";g.beginPath();g.arc(0,0,226*Sc,0,7);g.fill();
@@ -322,7 +327,7 @@ function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=d=>VF=="Alle"||d.t=
  og.putImageData(im,0,0);g.imageSmoothingEnabled=true;g.imageSmoothingQuality="high";g.drawImage(oc,0,0,w,w);
  if(D.length<=150){g.fillStyle="rgba(255,255,255,.75)";D.forEach(d=>{g.beginPath();g.arc(cx+d.x*Sc,cy+d.y*Sc,Math.max(1.6,2.2*Sc),0,7);g.fill()})}
  // Ziel + Mitte der Pfeile (Tendenz)
- if(VF!="Alle"){const tg=VF=="Bull"?"B":VF,gr=vGrp(D,tg);if(gr){const[tx,ty]=gr.c,mx2=cx+(tx+gr.dx)*Sc,my2=cy+(ty+gr.dy)*Sc;
+ if(!["Alle","Singles","Doppel"].includes(VF)){const tg=VF=="Bull"?"B":VF,gr=vGrp(D,tg);if(gr){const[tx,ty]=gr.c,mx2=cx+(tx+gr.dx)*Sc,my2=cy+(ty+gr.dy)*Sc;
   g.strokeStyle="#fff";g.lineWidth=2;g.setLineDash([5,4]);g.beginPath();g.arc(cx+tx*Sc,cy+ty*Sc,Math.max(7,9*Sc),0,7);g.stroke();g.setLineDash([]);
   g.strokeStyle="#111";g.lineWidth=5;g.beginPath();g.moveTo(mx2-8,my2);g.lineTo(mx2+8,my2);g.moveTo(mx2,my2-8);g.lineTo(mx2,my2+8);g.stroke();g.strokeStyle="#fff";g.lineWidth=2.5;g.stroke();
   g.fillStyle=dark;g.font="600 15px Arial";g.textAlign="left";g.textBaseline="alphabetic";g.fillText("○ Ziel   ✛ Mitte deiner Pfeile: "+vTend(gr),8,w-10)}}}
@@ -333,7 +338,7 @@ function vOver(){const R=rows(),S=DB.sessions,sa=S.filter(x=>x.k=="sa"),last=sa.
  let gl="";for(let v=25;v<=55;v+=5)gl+=`<line x1="60" x2="880" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".1"/><text x="50" y="${Y(v)+5}" font-size="15" text-anchor="end" fill="currentColor" opacity=".55">${v}</text>`;
  t+=`<div class="vcard"><div class="vh3">Average pro Woche</div><svg viewBox="0 0 900 290" class="vtr">${gl}<line x1="${X(1)}" y1="${Y(zw(1))}" x2="${X(12)}" y2="${Y(zw(12))}" stroke="#1a7f4b" stroke-width="2.5" stroke-dasharray="7 6"/>${pd.length>1?`<polyline points="${pd.map(r=>X(r[0])+","+Y(+r[8])).join(" ")}" fill="none" stroke="#e08a1e" stroke-width="2.5" opacity=".8"/>`:""}${pd.map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[8])}" r="5" fill="#e08a1e"/>`).join("")}${pt.length>1?`<polyline points="${pt.map(r=>X(r[0])+","+Y(+r[2])).join(" ")}" fill="none" stroke="#1f6feb" stroke-width="3.5"/>`:""}${pt.map(r=>`<circle cx="${X(r[0])}" cy="${Y(+r[2])}" r="6" fill="#1f6feb"/><text x="${X(r[0])}" y="${Y(+r[2])-12}" font-size="16" font-weight="700" text-anchor="middle" fill="currentColor">${r[2]}</text>`).join("")}${R.map(r=>`<text x="${X(r[0])}" y="282" font-size="15" text-anchor="middle" fill="currentColor" opacity=".55">W${r[0]}</text>`).join("")}</svg>
  <div class="vleg"><span><i style="background:#1f6feb"></i>Samstag (mit Double-Out)</span><span><i style="background:#e08a1e"></i>Donnerstag (Scoring)</span><span><i class="dash"></i>Ziel: 35 → 47,5 in 12 Wochen</span></div></div>`;
- t+=`<div class="vcard"><div class="vh3">Wochentabelle</div><div style="overflow-x:auto"><table class="vtab"><tr><th>Woche</th><th>Datum</th><th>Average</th><th>Zielwert</th><th>Differenz</th><th>T20-Treffer (Mo)</th><th>Singles (Pfeile)</th><th>Doppel (Pfeile)</th><th>Scoring-Ø (Do)</th><th>Notiz</th></tr>${R.map(r=>`<tr>${r.slice(0,9).map((c,i)=>`<td class="${i==4&&c!="–"?(c[0]=="+"?"vg":"vb"):""}">${c}</td>`).join("")}<td><input data-wn="${r[0]}" value="${esc(r[9])}" placeholder="Notiz"></td></tr>`).join("")}</table></div><div class="row" style="margin-top:8px;justify-content:flex-start"><button id="exp">Export als Text (für Excel)</button></div><textarea id="ex" hidden style="width:100%;height:160px;margin-top:8px"></textarea></div>`;
+ t+=`<div class="vcard"><div class="vh3">Wochentabelle</div><div style="overflow-x:auto"><table class="vtab"><tr><th>Woche</th><th>Datum</th><th>Average</th><th>Zielwert</th><th>Differenz</th><th>T20-Treffer (Mo)</th><th>Singles (Pfeile/Runde)</th><th>Doppel (Pfeile/Runde)</th><th>Scoring-Ø (Do)</th><th>Notiz</th></tr>${R.map(r=>`<tr>${r.slice(0,9).map((c,i)=>`<td class="${i==4&&c!="–"?(c[0]=="+"?"vg":"vb"):""}">${c}</td>`).join("")}<td><input data-wn="${r[0]}" value="${esc(r[9])}" placeholder="Notiz"></td></tr>`).join("")}</table></div><div class="row" style="margin-top:8px;justify-content:flex-start"><button id="exp">Export als Text (für Excel)</button></div><textarea id="ex" hidden style="width:100%;height:160px;margin-top:8px"></textarea></div>`;
  t+=`<div class="vcard"><div class="vh3">Alle Einheiten (${S.length})</div>${S.length?`<div style="overflow-x:auto"><table class="vtab"><tr><th>Datum</th><th>Einheit</th><th>Pfeile</th><th>Average</th><th>Extra</th></tr>${S.slice(0,40).map(r=>{let e="";
   if(r.bl&&r.k=="mi"){const f=g=>r.bl.filter(b=>b.g==g).reduce((a,b)=>a+b.d,0);e=`Singles ${f("s")} · Doppel ${f("d")}`}
   else if(r.bl){const d=r.bl.reduce((a,b)=>a+b.d,0),h=r.bl.reduce((a,b)=>a+b.h,0);e=`Treffer ${h}/${d} (${Math.round(h/d*100)}%)`}
