@@ -135,6 +135,43 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .wp .wpl .va{font-size:18px}
 .wp .wpft button{min-height:46px;border:0;border-radius:12px;background:var(--dk);color:#fff;font-size:17px;font-weight:700;text-transform:uppercase;padding:0 20px}
 .wp .wpft button.on{background:var(--gold);color:#222}
+.tr .trcams{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:2px 0 10px}
+.tr .trl{font-size:15px;font-weight:700;text-transform:uppercase;opacity:.6;margin-right:2px}
+.tr .trc{display:inline-flex;align-items:center;gap:7px;background:var(--lc);color:var(--lt);border-radius:999px;padding:6px 14px;font-size:16px;font-weight:700}
+.tr .trc i{width:12px;height:12px;border-radius:50%;background:#999}.tr .trc.g i{background:#1fbf6a;box-shadow:0 0 0 3px rgba(31,191,106,.25)}.tr .trc.o i{background:#e0a83a}.tr .trc.r i{background:#d64545}
+.tr .trc.n{font-weight:400;opacity:.85}
+.tr .trcb{min-height:38px;border:0;border-radius:999px;background:var(--dk);color:#fff;font-size:15px;padding:0 14px}
+.tr .trgrid{display:grid;grid-template-columns:minmax(300px,1fr) minmax(320px,1fr);gap:14px;align-items:start}
+@media(max-width:820px){.tr .trgrid{grid-template-columns:1fr}}
+.tr .trb{padding:8px}.tr .trb svg.b{max-height:74vh;display:block;margin:auto}
+.tr .trinfo{background:var(--dk);color:#fff;border-radius:18px;padding:14px 18px 16px;margin-bottom:12px}
+.tr .trinfo .k{color:var(--gold);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.tr .trbig{font-size:96px;line-height:1;font-weight:700;margin:4px 0 2px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:14px}
+.tr .trbig small{font-size:20px;font-weight:700;opacity:.55;text-transform:uppercase;letter-spacing:.05em}
+.tr .trsub{font-size:20px;opacity:.85}
+.tr .trbar{height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden;margin-top:10px}.tr .trbar i{display:block;height:100%;background:var(--gold)}
+.tr .trmsg{margin-top:10px;background:#2c5d8f;border-radius:10px;padding:8px 12px;font-size:16px}.tr .trmsg.b{background:#b53a3a;font-weight:700;font-size:19px}
+.tr .trvis{background:var(--lc);color:var(--lt);border-radius:16px;padding:10px 12px 12px;margin-bottom:12px}
+.tr .trvh{font-size:15px;font-weight:700;text-transform:uppercase;opacity:.65;margin:0 0 8px 2px}
+.tr .trboxes{display:grid;grid-template-columns:repeat(3,1fr) 1.05fr;gap:8px}
+.tr .trboxes>div{background:rgba(127,127,127,.14);border-radius:12px;padding:6px 4px 8px;text-align:center;display:flex;flex-direction:column;min-height:96px;justify-content:center}
+.tr .trboxes small{font-size:13px;opacity:.6;text-transform:uppercase}
+.tr .trboxes b{font-size:40px;line-height:1.1;font-weight:700}
+.tr .trboxes span{font-size:14px;opacity:.7;min-height:17px}
+.tr .trboxes .on{background:var(--dk);color:#fff}
+.tr .trboxes .nw{animation:trpop 1.2s ease-out}
+@keyframes trpop{0%{background:var(--gold);color:#222;transform:scale(1.08)}100%{transform:scale(1)}}
+.tr .trboxes .sum{background:var(--gold);color:#222}.tr .trboxes .sum small{opacity:.75}
+.tr .trvis.old .trboxes .on{opacity:.55}
+.tr .trst{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;background:var(--lc);color:var(--lt);border-radius:16px;padding:10px 4px;margin-bottom:12px}
+.tr .trst small{display:block;font-size:14px;text-transform:uppercase;opacity:.65}.tr .trst b{font-size:30px;font-weight:400}
+.tr .trbtn{display:flex;gap:8px;margin-bottom:12px}
+.tr .trbtn button{flex:1;min-height:64px;border:0;border-radius:14px;background:var(--dk);color:#fff;font-size:20px;font-weight:700;text-transform:uppercase}
+.tr .trbtn #undo{background:var(--dk2)}
+.tr .trcamc{padding:8px;margin-bottom:12px;max-width:420px}
+.tr .trfin{width:100%;min-height:48px;border:1px dashed rgba(127,127,127,.5);background:transparent;color:var(--lt);border-radius:12px;font-size:16px;font-weight:700;text-transform:uppercase;opacity:.75}
+.tr .trfin.warn{background:#b53a3a;color:#fff;border-style:solid;opacity:1}
+@media(max-width:500px){.tr .trbig{font-size:72px}.tr .trboxes b{font-size:30px}.tr .trbtn button{font-size:16px;min-height:56px}}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3">Kamera</button></nav>
@@ -176,7 +213,7 @@ let s=null,H=[],view=0;
 const today=(new Date().getDay()+6)%7;
 const avg=(p,d)=>d?(p/d*3).toFixed(1):"–";
 let DL=[];
-function start(i){const k=DAYS[i],p=P[k];H=[];DL=[];
+function start(i){const k=DAYS[i],p=P[k];H=[];DL=[];try{TURN.forEach(t=>t.tr=true);AUTOT=TURN}catch(e){}
  s={k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};
  if(s.m=="blocks")s.bl=p.b();
  if(s.m=="501")Object.assign(s,{legs:p.legs,leg:1,rem:501,ld:0,ldone:[],dout:!!p.dout,t:0,ts:501});
@@ -208,7 +245,10 @@ function fin(){if(!s||s.done)return;s.done=true;
   if(s.m=="501")r.legs=s.ldone;
   DB.sessions.unshift(r);s.saved=true;save()}
  render()}
-function go(v){view=v;const c=$("#cv");if(v!=3&&c&&c.srcObject){c.srcObject.getTracks().forEach(t=>t.stop());c.srcObject=null}$("#m").hidden=v==3;$("#cam").hidden=v!=3;["n0","n1","n2","n3"].forEach((id,i)=>$("#"+id).className=i==v?"on":"");render()}
+let CAMBOX=null,CAMHOME=null;
+function trCamHome(){try{if(!CAMBOX){CAMBOX=$("#cv").parentElement;CAMHOME=CAMBOX.parentElement}if(CAMBOX.parentElement!==CAMHOME){CAMHOME.appendChild(CAMBOX);const v=$("#cv");if(v.srcObject)v.play().catch(()=>{})}}catch(e){}}
+function trCamMount(m){try{const h=m.querySelector("#trcam"),v=$("#cv");if(h&&v&&v.srcObject){h.appendChild(CAMBOX);h.className="vcard trcamc";v.play().catch(()=>{})}}catch(e){}}
+function go(v){view=v;trCamHome();$("#m").hidden=v==3;$("#cam").hidden=v!=3;["n0","n1","n2","n3"].forEach((id,i)=>$("#"+id).className=i==v?"on":"");render()}
 ["n0","n1","n2","n3"].forEach((id,i)=>$("#"+id).onclick=()=>go(i));
 
 // Scheibe
@@ -220,16 +260,16 @@ function board(){let o='<svg class="b" viewBox="-200 -200 400 400"><circle r="19
   const am=i*18*Math.PI/180;o+=`<text x="${(185*Math.sin(am)).toFixed(1)}" y="${(-185*Math.cos(am)+5).toFixed(1)}" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Arial">${n}</text>`});
  o+='<circle r="15.9" fill="#2e8b57" stroke="#777" stroke-width=".6" data-c="SB" data-v="25"/><circle r="6.35" fill="#c8372d" stroke="#777" stroke-width=".6" data-c="DB" data-v="50"/></svg>';return o}
 
-function render(){const m=$("#m");if(view==3)return;if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else m.innerHTML=hist();
+function render(){const m=$("#m");if(view==3)return;trCamHome();if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else m.innerHTML=hist();
  const sv=m.querySelector("svg.b");if(sv)sv.onclick=e=>{const t=e.target.closest("[data-c]");if(!t)return;let x=null,y=null;try{const p=sv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(sv.getScreenCTM().inverse());x=q.x;y=q.y}catch(_){}dart(t.dataset.c,+t.dataset.v,x,y)};
  m.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>start(+b.dataset.start));
  const q=id=>m.querySelector("#"+id);
  if(q("miss"))q("miss").onclick=()=>dart("0",0);if(q("undo"))q("undo").onclick=undo;if(q("skip"))q("skip").onclick=skip;
- if(q("fin"))q("fin").onclick=fin;if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
+ if(q("fin"))q("fin").onclick=function(){if(!s||s.done||this.dataset.a||this.id!="fin"||!this.classList.contains("trfin"))return fin();this.dataset.a=1;this.textContent="Wirklich beenden? Nochmal tippen";this.classList.add("warn");setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent="Beenden und speichern";this.classList.remove("warn")}},4000)};if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
  if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam,z:Date.now()};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
- if(view==2)vBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1)}
+ if(view==1)trCamMount(m);if(view==2)vBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1)}
 
 // ===== Wochenplan (v23): gleicher Stil wie der Verlauf =====
 const WPL={mo:["T20-Treffer",r=>vHit(r,"T20",0),{u:100}],di:["Trefferquote",r=>vQ(r,()=>1),{p:1}],mi:["Doppel-Runde",r=>vRd(r,"d"),{u:"Pfeile",d:1,lb:1}],
@@ -253,7 +293,7 @@ function plan(){const tk=DAYS[today],m0=+mon(isoD()),S=DB.sessions,done=new Set(
   <div class="wpft"><div class="wpl"><small>${l.l||"Zuletzt"}${l.d&&l.l?" · "+l.d:""}</small><b>${l.h}</b>${l.a}</div><button class="${i==today?"on":""}" data-start="${i}">Starten</button></div></div>`}).join("")}</div></div>`;
  return t}
 
-function train(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><div class="mu">Starte im Wochenplan eine Einheit.</div></div>';
+function trainOld(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><div class="mu">Starte im Wochenplan eine Einheit.</div></div>';
  if(s.done){let t=`<div class="card"><h2>Fertig: ${s.name}</h2><div class="st"><div><b>${s.darts}</b>Pfeile</div><div><b>${s.pts}</b>Punkte</div><div><b>${avg(s.pts,s.darts)}</b>Average</div><div><b>${s.legs?s.ldone.length:"–"}</b>Legs</div></div></div>`;
   if(s.bl)t+=`<div class="card"><table><tr><th>Ziel</th><th>Pfeile</th><th>Treffer</th><th>Quote</th></tr>${s.bl.filter(b=>b.d).map(b=>`<tr><td>${lab(b.t)}</td><td>${b.d}</td><td>${b.h}</td><td>${Math.round(b.h/b.d*100)}%</td></tr>`).join("")}</table></div>`;
   return t+'<div class="card"><input id="note" placeholder="Notiz zu dieser Einheit" style="width:100%;min-height:44px;font:inherit;box-sizing:border-box"></div><button class="pri" id="new">Zurück zum Wochenplan</button>'}
@@ -265,6 +305,38 @@ function train(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><div
  <div class="card"><div class="st"><div><b>${s.darts}</b>Pfeile</div><div><b>${s.pts}</b>Punkte</div><div><b>${avg(s.pts,s.darts)}</b>Average</div><div><b>${s.log.slice(-3).join(" ")||"–"}</b>Letzte</div></div></div>
  <div class="row"><button id="miss">Daneben</button><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">Block überspringen</button>':""}<button class="pri" id="fin">Beenden und speichern</button></div></div></div>`}
 
+// ===== Training-Anzeige (v23): groß lesbar, 3 Pfeil-Kästchen, Kamera-Status, Pfeile kommen automatisch =====
+let TRMSG={t:"",at:0};const trMsg=t=>{TRMSG={t,at:Date.now()}};
+const cval=c=>c=="0"?0:c=="DB"?50:c=="SB"?25:(+c.slice(1))*({S:1,D:2,T:3}[c[0]]||1);
+const cshort=c=>c=="0"?"Daneben":c=="SB"?"25":c=="DB"?"Bull":c;
+// Pfeile der aktuellen Aufnahme: mit Kamera die Pfeile, die gerade in der Scheibe stecken; sonst nach Zählung
+function trVis(){const n=s.dn||DL.length,TV=(typeof TURN!="undefined"?TURN:[]).filter(t=>t.tr&&t.sid===s.t0).map(t=>t.dl||(t.dn===DL.length-1?DL[t.dn]:null)).filter(d=>{const i=d?DL.indexOf(d):-1;return i>=0&&i<n});if(TV.length)return{D:TV,cam:1,last:0};
+ const D=DL.slice(0,s.dn||DL.length);if(!D.length)return{D:[],last:0};
+ if(s.m=="501"){const cur=D.filter(d=>d.l==s.leg&&d.n==(s.vn||0));if(cur.length)return{D:cur,last:0};const e=D[D.length-1];return{D:D.filter(d=>d.l==e.l&&d.n==e.n),last:1}}
+ const k=D.length%3;return k?{D:D.slice(-k),last:0}:{D:D.slice(-3),last:1}}
+function trCams(){const L=[],now=Date.now();
+ if(typeof cv!="undefined"&&cv&&cv.srcObject)L.push(["Tablet",MST=="ok"?"g":MST=="lost"||MST=="off"?"r":"o"]);
+ if(ROLE=="main"&&DUO.on)Object.keys(DUO.src).sort().forEach(id=>{const x=DUO.src[id];if(!x)return;const live=x.conn&&x.conn.open&&now-x.hb<8000;L.push([srcName(id),live?(x.cal?"g":"o"):"r"])});
+ if(!L.length)return'<span class="trc n">Keine Kamera aktiv – Treffer auf der Scheibe antippen</span><button class="trcb" onclick="go(3)">Kamera einrichten</button>';
+ return'<span class="trl">Kameras</span>'+L.map(([n,c])=>`<span class="trc ${c}" title="${c=="g"?"läuft":c=="o"?"sucht die Scheibe":"keine Verbindung"}"><i></i>${n}</span>`).join("")}
+function train(){if(!s||s.done)return trainOld();
+ const V=trVis(),bx=[0,1,2].map(i=>V.D[i]||null),sum=V.D.some(d=>d.b)?"Bust":V.D.reduce((a,d)=>a+(d.v||0),0),fresh=Date.now()-TRMSG.at<6000;
+ let top="",big="",sub="",bar=null,hit="";
+ if(s.m=="blocks"){const b=s.bl[s.bi];top=(b.r?(b.g=="s"?"Singles":"Doppel")+" · Runde "+b.r+" von 2 · ":"")+"Block "+(s.bi+1)+" von "+s.bl.length;big=b.t[0]=="N"?b.t.slice(1):b.t=="B"?"Bull":b.t=="DB"?"D-Bull":b.t;
+  sub=b.n=="h"?`Bis zum Treffer · ${b.d} ${b.d==1?"Pfeil":"Pfeile"}`:`Pfeil ${Math.min(b.d+1,b.n)} von ${b.n} · Treffer ${b.h}${b.d?" ("+Math.round(b.h/b.d*100)+"%)":""}`;bar=b.n=="h"?null:b.d/b.n;
+  const H=s.bl.reduce((a,x)=>a+x.h,0),D=s.bl.reduce((a,x)=>a+x.d,0);hit=D?Math.round(H/D*100)+"%":"–"}
+ else if(s.m=="501"){top="Leg "+s.leg+" von "+s.legs+(s.dout?" · Double-Out":" · ohne Double-Out");big=String(s.rem);sub=(s.dout?"Pfeil "+(s.t+1)+" von 3 · ":"")+"Pfeile im Leg: "+s.ld;bar=(501-s.rem)/501;hit=s.ldone.length+" / "+s.legs}
+ else{top="Locker";big=String(s.darts);sub="Pfeile geworfen – einfach frei werfen";hit="–"}
+ const bust=s.m=="501"&&s.log[s.log.length-1]=="Bust";
+ const mk=V.D.filter(d=>d.x!=null).map((d,i)=>`<g pointer-events="none"><circle cx="${d.x}" cy="${d.y}" r="9" fill="#f2c46d" stroke="#111" stroke-width="2.5"/><text x="${d.x}" y="${d.y+4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="#111" font-family="Arial">${V.D.indexOf(d)+1}</text></g>`).join("");
+ return`<div class="vl tr"><div class="trcams" id="trcams">${trCams()}</div><div class="trgrid"><div class="vcard trb">${board().replace("</svg>",mk+"</svg>")}</div><div>
+ <div class="trinfo"><div class="k">${top}</div><div class="trbig${s.m=="blocks"?" z":""}">${s.m=="blocks"?"<small>Ziel</small>":s.m=="501"?"<small>Rest</small>":"<small>Pfeile</small>"}${big}</div><div class="trsub">${sub}</div>${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
+ ${bust?'<div class="trmsg b">Bust – Rest zurückgesetzt</div>':fresh&&TRMSG.t?`<div class="trmsg">${TRMSG.t}</div>`:""}</div>
+ <div class="trvis${V.last?" old":""}"><div class="trvh">${V.last?"Letzte Aufnahme":"Aktuelle Aufnahme"}${V.cam?" · erkannt":""}</div><div class="trboxes">${bx.map((d,i)=>`<div class="${d?"on":""}${d&&i==V.D.length-1&&!V.last?" nw":""}"><small>Pfeil ${i+1}</small><b>${d?cshort(d.c):"–"}</b><span>${d?(d.b?"Bust":(d.v||0)+" P."):""}</span></div>`).join("")}<div class="sum"><small>Summe</small><b>${V.D.length?sum:"–"}</b></div></div></div>
+ <div class="trst"><div><small>Pfeile</small><b>${s.darts}</b></div><div><small>Punkte</small><b>${s.pts}</b></div><div><small>Average</small><b>${avg(s.pts,s.darts)}</b></div><div><small>${s.m=="501"?"Legs":"Quote"}</small><b>${hit}</b></div></div>
+ <div class="trbtn"><button id="miss">Daneben</button><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">Block überspringen</button>':""}</div>
+ <div id="trcam"></div>
+ <button id="fin" class="trfin">Beenden und speichern</button></div></div></div>`}
 const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
 const mon=d=>{const x=new Date(d+"T12:00:00");x.setDate(x.getDate()-(x.getDay()+6)%7);return x},zw=w=>35+12.5*w/12;
 function rows(){const S=DB.sessions.slice().reverse(),W=[...Array(12)].map(()=>({}));
@@ -459,7 +531,7 @@ ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.c
 $("#c3").onclick=()=>{WANT="ref";cm("Die Referenz wird gesetzt, sobald das Bild ruhig ist. Bitte die Scheibe leer lassen.")};
 $("#c4").onclick=()=>{WANT="det";cm("Ich prüfe, sobald das Bild ruhig ist …")};
 $("#c7").onclick=()=>{const todo=TURN.filter(t=>!t.tr);if(!(s&&!s.done))return cm("Es läuft kein Training. Starte zuerst eine Einheit im Wochenplan.");if(!todo.length)return cm("Keine neuen Pfeile zum Übernehmen.");
- todo.forEach(t=>{dart(t.c,t.v,t.x,t.y);t.tr=true});renderTurn();cm(todo.length+" Pfeil(e) ins Training übernommen.")};
+ todo.forEach(t=>{if(s&&!s.done)autoOne(t)});renderTurn();cm(todo.length+" Pfeil(e) ins Training übernommen.")};
 $("#turn").onclick=e=>{const b=e.target&&e.target.closest?e.target.closest("[data-r]"):null;if(!b)return;const t=TURN[+b.dataset.r];if(!t||t.r)return;
  t.r=b.dataset.ok=="1"?"ok":"bad";DB.cam[t.r]=(DB.cam[t.r]||0)+1;save();stt();renderTurn()};
 function renderTurn(){const e=$("#turn");if(!TURN.length){e.innerHTML='<b>Aktuelle Aufnahme</b><div class="mu">Noch kein Pfeil erkannt. Wirf einfach – die App erkennt jeden Pfeil von selbst. Beim Ziehen der Pfeile beginnt eine neue Aufnahme.</div>';return}
@@ -607,7 +679,7 @@ function softImg(im){// gleichmäßig leicht weichzeichnen (Binomialfilter 1-2-1
  return{...im,data:o}}
 // Pfeilmodell (aus den eigenen Pfeilen gemessen): Neigung nach oben th, zur Seite ph, Länge Spitze bis Flight-Ende L, sichtbare Spitze pt (mm)
 let DMOD={th:.24,ph:-.16,L:127,pt:26};
-let FW={cdM:2,cd2:0,pullE:1,pullN:300,pullK:2,pullA:5,pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
+let FW={autoMiss:1,cdM:2,cd2:0,pullE:1,pullN:300,pullK:2,pullA:5,pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
 function camModel(Hp,W,Hh,z){const K=CK&&CK.W==W?CK:{fl:.8*W*z,px:W/2,py:Hh/2},fl=K.fl,cx=K.px,cy=K.py,col=k=>[(Hp[k]-cx*Hp[6+k])/fl,(Hp[3+k]-cy*Hp[6+k])/fl,Hp[6+k]];
  const m1=col(0),m2=col(1),m3=col(2),nn=v=>Math.hypot(v[0],v[1],v[2]);let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;
  const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l);let r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]];const n3=nn(r3);r3=r3.map(v=>v/n3);
@@ -951,10 +1023,10 @@ function commitDart(x,y,o){const[c,v]=field(x,y);det={c,v,x,y};const T={c,v,x,y,
  const BD=bdist(x,y),UNS=BD<FW.unsure||!!o.weak||!!o.single;if(UNS)T.u=1;
  LOG.push(hm()+" Pfeil "+TURN.length+": "+c+" ("+o.src+(o.gap?", Abstand "+o.gap.toFixed(0)+" mm":"")+")"+(BD<FW.unsure?" knapp":""));DUO.last=o.how||o.src;renderTurn();ov();
  flash("🎯 Pfeil "+TURN.length+": "+fname(c,v)+(UNS?" (knapp – bitte prüfen)":""));
- cm("Pfeil "+TURN.length+" erkannt: "+fname(c,v)+(ROLE=="side"||!DUO.on?"":" ("+o.src+")")+(UNS?". Der Pfeil sitzt sehr knapp an einer Grenze oder war nur für eine Kamera sichtbar – bitte kurz prüfen.":". Stimmt das?")+(ROLE=="side"?" Gezählt wird am Tablet.":" Tippe unten auf ✓ oder ✗."))}
+ cm("Pfeil "+TURN.length+" erkannt: "+fname(c,v)+(ROLE=="side"||!DUO.on?"":" ("+o.src+")")+(UNS?". Der Pfeil sitzt sehr knapp an einer Grenze oder war nur für eine Kamera sichtbar – bitte kurz prüfen.":". Stimmt das?")+(ROLE=="side"?" Gezählt wird am Tablet.":" Tippe unten auf ✓ oder ✗."));if(ROLE!="side")autoTr()}
 function refit(T){if(T.r!=null)return;const F=fuseN(T.R),[c,v]=field(F.X[0],F.X[1]),old=T.c;T.c=c;T.v=v;T.x=F.X[0];T.y=F.X[1];T.src=srcLabel(T.R);T.how=F.how;
  const BD=bdist(T.x,T.y);T.u=BD<FW.unsure||T.R.every(r=>r.V.weak)?1:0;DUO.last=F.how;LOG.push(hm()+" Pfeil "+(TURN.indexOf(T)+1)+" ergänzt ("+T.src+"): "+old+" -> "+c+" ("+F.how+")");renderTurn();ov();
- if(old!=c)flash("🎯 Pfeil "+(TURN.indexOf(T)+1)+" angepasst: "+fname(c,v));cm("Pfeil "+(TURN.indexOf(T)+1)+" mit "+T.src+": "+fname(c,v)+(T.u?". Knapp an einer Grenze – bitte kurz prüfen.":".")+" Tippe unten auf ✓ oder ✗.")}
+ if(old!=c)flash("🎯 Pfeil "+(TURN.indexOf(T)+1)+" angepasst: "+fname(c,v));cm("Pfeil "+(TURN.indexOf(T)+1)+" mit "+T.src+": "+fname(c,v)+(T.u?". Knapp an einer Grenze – bitte kurz prüfen.":".")+" Tippe unten auf ✓ oder ✗.");autoFix(T,old)}
 // Zuordnung: zeitnah (PAIRT) und bevorzugt räumlich passend; ohne passenden Kandidaten nur, wenn es genau einen gibt
 function pickIn(list,id,V,now,getR,getAt){let best=null,bs=1e9,n=0;for(const e of list){const R=getR(e);if(!R||R.some(r=>r.id==id)||now-getAt(e)>DW.PAIRT)continue;n++;
   let s=1e9;for(const r of R){const sc=(nearV(V,r.V)?0:1000)+Math.hypot(V.p[0]-r.V.p[0],V.p[1]-r.V.p[1]);if(sc<s)s=sc}if(s<bs){bs=s;best=e}}
@@ -1044,6 +1116,26 @@ function bkUI(){const e=document.querySelector("#bks");if(!e)return;let o=null;t
  if(!o){e.innerHTML="<b>Raspberry Pi:</b> noch nicht abgeglichen. Das passiert automatisch, sobald die Ring-Kameras mit dem Tablet verbunden sind.";return}
  const d=new Date(o.at),p=v=>String(v).padStart(2,"0"),t=p(d.getDate())+"."+p(d.getMonth()+1)+". um "+p(d.getHours())+":"+p(d.getMinutes());
  e.innerHTML=o.ok?`<b style="color:#1f9a5f">✓ Auf dem Raspberry Pi gesichert</b> – zuletzt am ${t}, ${o.n} Einheiten (${o.id.replace("K","Kamera ")}).`:`<b style="color:#d64545">Der Raspberry Pi konnte zuletzt nicht speichern</b> (${t}). Bitte eine Sicherung herunterladen.`}
+// ===== Automatisch zählen (v23): erkannte Pfeile landen direkt im laufenden Training =====
+// Ein Pfeil wird übernommen, sobald alle aktiven Kameras ihn gemeldet haben (oder nach AUTOW ms).
+// Ändert eine spätere Kamera das Feld, wird der Pfeil im Training korrigiert (wenn er noch der letzte ist).
+// Beim Ziehen: Wurden nur 1–2 Pfeile erkannt, zählen die fehlenden als "Daneben" (FW.autoMiss).
+const AUTOW=2000;let AUTOT=null;
+const trOn=()=>ROLE!="side"&&s&&!s.done;
+function autoOne(T){if(T.tr||T.r=="bad")return;T.tr=true;T.sid=s.t0;T.hi=H.length;T.dn=DL.length;T.dl=null;dart(T.c,T.v,T.x,T.y);T.dl=DL.length>T.dn?DL[T.dn]:null}
+function autoTr(){if(!trOn()||typeof TURN=="undefined")return;const now=Date.now(),L=Math.max(1,liveN());
+ for(const T of TURN){if(T.tr||T.r=="bad")continue;const ok=!T.R||T.R.length>=L||now-T.at>=AUTOW;if(!ok)break;autoOne(T);if(!trOn())break}}
+function autoFix(T,old){if(!T.tr||T.c==old||!trOn()||T.sid!==s.t0)return;
+ if(DL.length==T.dn+1&&H.length==T.hi+1){T.dl=null;undo();T.hi=H.length;T.dn=DL.length;dart(T.c,T.v,T.x,T.y);T.dl=DL.length>T.dn?DL[T.dn]:null;trMsg("Pfeil korrigiert: "+cshort(old)+" → "+cshort(T.c));render()}
+ else{trMsg("Achtung: Ein früherer Pfeil wurde nachträglich als "+cshort(T.c)+" erkannt (gezählt ist "+cshort(old)+"). Bitte prüfen.");render()}}
+function autoPull(old){if(!trOn())return;old.forEach(T=>{if(!T.tr&&T.r!="bad"&&trOn())autoOne(T)});if(!trOn())return;
+ const k=old.filter(T=>T.tr&&T.sid===s.t0).length;if(!FW.autoMiss||k<1||k>=3){if(view==1)render();return}
+ let miss=s.m=="501"?(s.t>0?3-s.t:0):3-k;if(miss>0){for(let i=0;i<miss&&trOn();i++)dart("0",0);trMsg(miss+(miss==1?" Pfeil wurde":" Pfeile wurden")+" nicht erkannt und als Daneben gezählt. Falls doch getroffen: Rückgängig und auf der Scheibe antippen.")}
+ if(view==1)render()}
+let AUTOC=0;function autoTick(){if(ROLE=="side"||typeof TURN=="undefined")return;
+ if(TURN!==AUTOT){const old=AUTOT;AUTOT=TURN;if(old&&old.length)autoPull(old)}
+ autoTr();if(view==1&&++AUTOC%3==0){const e=document.querySelector("#trcams");if(e)e.innerHTML=trCams()}}
+setInterval(autoTick,350);
 function duoStop(){DUO.on=false;lss("dart_duo","0");try{CONN&&CONN.close()}catch(e){}for(const c of CONNS){try{c.close()}catch(e){}}CONNS=[];try{PEER&&PEER.destroy()}catch(e){}PEER=null;CONN=null;DUO.src={};duoUI()}
 function srcState(s){if(!s.conn||!s.conn.open)return"getrennt";if(Date.now()-s.hb>8000)return"keine Antwort";return s.cal?"ok":"Scheibe noch nicht erkannt"}
 function duoState(){if(!DUO.on)return"aus";if(ROLE=="main"){const ids=Object.keys(DUO.src);if(!ids.length)return"getrennt";return ids.some(k=>srcState(DUO.src[k])=="ok")?"ok":srcState(DUO.src[ids[0]])}
