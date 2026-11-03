@@ -2,6 +2,7 @@
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dart-Training</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2f3033"><link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAwFBMVEX/+db/8M/56cjb37vk0p3Zv42kwpmrtJa0o4C6mVqvklqmiVGFmHqIg2mPf198fmqPd06DclJybE9sYkhxWjxeV0hcTDthPC9LU0JARzs+OzMmNC4yMjQxMjMxMTQwMTMwMDMvMDMuMDN2JCBnJCBBIyE4GBgtLzIpLDEoKi8rHxkiJi8fJC4eIy4bHBwZFxYXGBYZFRUQGxgTFhYSFRUTExQKExIQERIIERIRDRALDQ8HDA8DBw4DBgwABgoAAgkgR1OkAAADAUlEQVR42s2W23qiMBSFOYoB0mANCBZNVVQO0oBjABGG93+roVVqq9XOzM1M7vDzx72y115bbvaHh/vHwPz5z4C5u37+LYBM3PZM3EgzYnf6HUDcmR9t4ngT+ZEqW3FwHyBuEK+d4cAwBkN7Y8iyZt0FXH9jG0AzcHsMVQWSLANyGyCT2FFVHJZV3Z7qEAIgm/EzuQWQeTQAVlnnCU12u4RRPK5HwIjW068BsvZVjVUpTfdlGoYslMGBHpim+h8J7sP7fYAbRrNi+2SPFosRkIbVjrIGA39OvgAmkYobmhSrkS7yw2KrybI+WhUJbbAaTa8BNx5oDU1zb7GUBAHWliwL0nLh7VPaGG3/LgHiO4CxtBx7LwdT4Ps/HyWBNw8v3rhMGQNOQC4Ad6NaVbJ/6sHyZauI+uhBF5XdSwl7T/ukstSN+xkgga2WCdvqAo+yFe4py6XSw6sc8oK+ZUmpWt1PcJ0CA9fJ3hF5kUdeKPNrwsuhh9pH0dknNX7oVHQlrUGYZ6uF0xfEHmxMzrY5s4E9UeiPF6ssD8H8U0mtZK1MC2+ZMRuKHGokhKQGciK0Wbb0irTU7FNN3KkHQ6OibJHmxcpzFA6Zum5Cru94qyJPF4zWxjCafADczQDXNEcKNPGoqMcKRAgqbl2MsAkVlNEaD073xL1rrmim8wLfk0RFR+jxESFdEaVe+5Ge0Qp3vftb4K2krCvJPZY07krKr0p6FV2/i+5z8FU04pSboi+uFbbX+ig16Pa1vjdu/N44p2ucc2zchVuvrEF8Xjpbo8LahTU+mA/mZ/Nl6Gi+w5X5Ptl719rb81p7b8/2jtxvBqgo+rzQDVAO7KsBelXxOqL704gyhoS3Ec1vjOhsNv0cAoXJi3dD4Dpm7KdtkR1jZv1VzMymbZAZ5yBLyzYw0io3bgVZS8wj4xyVP2iSV6V1JyrbqqanMG6TuM3jMsSqasdTci/ug4390MW9Bh6sKHC/Xyhz+7RQZnHgktlvrKzguLKC2dXX7y9F8j/+E/gnwC8X/R1GY3OtvQAAAABJRU5ErkJggg=="><meta name="mobile-web-app-capable" content="yes">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache">
 <style>
 :root{--bg:#f4f5f7;--cd:#fff;--tx:#1b1f27;--mu:#667085;--ac:#1f6feb;--ok:#1a7f4b;--bd:#d9dde3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -189,6 +190,35 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .pff{padding:4px 6px 6px}.pff input{width:100%;box-sizing:border-box;min-height:46px;font:inherit;font-size:18px;border:1px solid var(--bd);border-radius:10px;padding:0 12px;background:var(--bg);color:var(--tx)}
 .pfe{color:#d64545;font-size:14px;min-height:18px;margin:4px 2px}
 .pfbt{display:flex;gap:8px}.pfbt button{flex:1}
+.vl .vu{font-style:normal;font-size:18px;opacity:.6}
+.vl .rcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.vl .rc{background:var(--dk);color:#fff;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;position:relative;min-height:110px}
+.vl .rc.no{opacity:.55}
+.vl .rc.gold{background:var(--gold);color:#222}
+.vl .rc .ric{position:absolute;right:12px;top:10px;font-size:26px}
+.vl .rc small{font-size:14px;text-transform:uppercase;opacity:.7;padding-right:36px;line-height:1.2}
+.vl .rc b{font-size:34px;font-weight:400;line-height:1.15;margin-top:2px}
+.vl .rc .rd{font-size:14px;opacity:.7}
+.vl .wkhead{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.vl .wkhead>div{flex:1;text-align:center;display:flex;flex-direction:column}
+.vl .wkhead b{font-size:26px;text-transform:uppercase}.vl .wkhead span{font-size:16px;opacity:.7}
+.vl .wkhead button{min-width:60px;min-height:52px;border:0;border-radius:12px;background:var(--dk);color:#fff;font-size:26px}
+.vl .wkhead button:disabled{opacity:.25}
+.vl .wkbox ul{margin:0;padding-left:20px;font-size:17px;line-height:1.45}
+.vl .wkbox li{margin-bottom:4px}
+.vl .wkbox.g{border-left:6px solid #1f9a5f}.vl .wkbox.o{border-left:6px solid #e0a83a}.vl .wkbox.r{border-left:6px solid var(--gold)}
+.wp .wprb{margin-left:10px;min-height:34px;border:0;border-radius:999px;background:var(--dk);color:#fff;font-size:14px;padding:0 12px;text-transform:uppercase}
+.vl .vrow.f4{grid-template-columns:1.25fr 1fr .85fr .85fr}
+.fin .finnews{display:grid;gap:8px;margin-bottom:12px}
+.fin .finnews>div{background:var(--gold);color:#222;border-radius:14px;padding:12px 16px;font-size:19px}
+.fin .finnews span{opacity:.7;font-size:16px}
+.fin .trst{display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+.fin .trst small{display:block;font-size:14px;text-transform:uppercase;opacity:.65}.fin .trst b{font-size:30px;font-weight:400}
+.fin .finin{width:100%;box-sizing:border-box;min-height:48px;font:inherit;font-size:17px;border:1px solid rgba(127,127,127,.35);border-radius:10px;padding:0 12px;background:transparent;color:inherit}
+.fin .trbtn{display:flex;gap:8px;margin-bottom:12px}
+.fin .trbtn button{flex:1;min-height:60px;border:0;border-radius:14px;background:var(--dk);color:#fff;font-size:18px;font-weight:700;text-transform:uppercase}
+.fin .trbtn .wpgo2{background:var(--gold);color:#222}
+.fin .vpill{margin-left:6px}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n3" hidden>Einrichtung</button></nav>
@@ -286,7 +316,7 @@ function render(){const m=$("#m");if(view==3)return;trCamHome();if(view==0)m.inn
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
  if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam,z:Date.now()};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
- if(view==1)trCamMount(m);if(view==2)vBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1)}
+ if(view==1){trCamMount(m);const fc=m.querySelector("#fhc");if(fc&&DB.sessions[0])vHeatC(fc,vDl(DB.sessions[0],d=>d.x!=null),null);if(q("fvl"))q("fvl").onclick=()=>{VT=DAYS.indexOf(DB.sessions[0].k)+1;VF="Alle";go(2)}}if(view==2)vBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1)}
 
 // ===== Wochenplan (v23): gleicher Stil wie der Verlauf =====
 const WPL={mo:["T20-Treffer",r=>vHit(r,"T20",0),{u:100}],di:["Trefferquote",r=>vQ(r,()=>1),{p:1}],mi:["Doppel-Runde",r=>vRd(r,"d"),{u:"Pfeile",d:1,lb:1}],
@@ -302,7 +332,7 @@ function plan(){const tk=DAYS[today],m0=+mon(isoD()),S=DB.sessions,done=new Set(
  let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Heute · ${DN[today]}${td?' · <span style="color:#45d38f">✓ erledigt</span>':""}</div><h1>${P[tk].n}</h1><p>${P[tk].x}</p><div class="wpchips">${wpChips(tk).map(c=>`<span>${c}</span>`).join("")}</div></div>
  <div class="wpact"><div class="wplast"><small>Zuletzt${L.l?" · "+L.l:""}</small><b>${L.h}</b>${L.a}<small>${L.d}</small></div>${run?`<button class="wpgo" id="wpgo">Training fortsetzen</button><div class="wpsub">läuft: ${esc(s.name)}</div>`:`<button class="wpgo" data-start="${today}">${td?"Nochmal starten":"Training starten"}</button>`}</div></div>`;
  const n=DAYS.filter(k=>done.has(k)).length,zs=zw(Math.min(12,Math.max(1,wk)));
- t+=`<div class="vcard wpweek"><div class="wph"><div class="vh3" style="margin:0">Woche ${wk>12?wk:wk+" von 12"}</div><div class="wpcnt">${n} von 7 erledigt</div></div><div class="wpbar"><i style="width:${n/7*100}%"></i></div>
+ t+=`<div class="vcard wpweek"><div class="wph"><div class="vh3" style="margin:0">Woche ${wk>12?wk:wk+" von 12"}</div><div class="wpcnt">${n} von 7 erledigt <button class="wprb" onclick="VT=9;VWK=null;go(2)">Rückblick ›</button></div></div><div class="wpbar"><i style="width:${n/7*100}%"></i></div>
  <div class="wpdays">${DAYS.map((k,i)=>`<div class="${done.has(k)?"ok":""} ${i==today?"td":""}"><b>${VD[i+1]}</b><span>${done.has(k)?"✓":i==today?"●":""}</span><small>${P[k].n.replace(/ \(.*\)/,"")}</small></div>`).join("")}</div>
  <div class="vnote l">Ziel am Samstag: <b>${zs.toFixed(1).replace(".",",")} Average</b> (Plan: 35 → 47,5 in 12 Wochen)</div></div>`;
  t+=`<div class="wpgrid">${DAYS.map((k,i)=>{const l=wpLast(k),d=done.has(k);return`<div class="wpcard ${i==today?"today":""}"><div class="wptop"><span class="wpday">${VD[i+1]}</span><span class="wpdn">${DN[i]}</span>${d?'<span class="wpok">✓ erledigt</span>':""}</div>
@@ -336,7 +366,7 @@ function trCams(){const L=[],now=Date.now();
  if(ROLE=="main"&&DUO.on)Object.keys(DUO.src).sort().forEach(id=>{const x=DUO.src[id];if(!x)return;const live=x.conn&&x.conn.open&&now-x.hb<8000;L.push([srcName(id),live?(x.cal?"g":"o"):"r"])});
  if(!L.length)return'<span class="trc n">Keine Kamera aktiv – Treffer auf der Scheibe antippen</span><button class="trcb" onclick="go(3)">⚙ Einrichtung</button>';
  return'<span class="trl">Kameras</span>'+L.map(([n,c])=>`<span class="trc ${c}" onclick="go(3)" title="${c=="g"?"läuft":c=="o"?"sucht die Scheibe":"keine Verbindung"}"><i></i>${n}</span>`).join("")+(L.some(x=>x[1]!="g")?'<button class="trcb" onclick="go(3)">⚙ Einrichtung</button>':"")}
-function train(){if(!s||s.done)return trainOld();
+function train(){if(!s)return trainOld();if(s.done)return trainDone();
  const V=trVis(),bx=[0,1,2].map(i=>V.D[i]||null),sum=V.D.some(d=>d.b)?"Bust":V.D.reduce((a,d)=>a+(d.v||0),0),fresh=Date.now()-TRMSG.at<6000;
  let top="",big="",sub="",bar=null,hit="";
  if(s.m=="blocks"){const b=s.bl[s.bi];top=(b.r?(b.g=="s"?"Singles":"Doppel")+" · Runde "+b.r+" von 2 · ":"")+"Block "+(s.bi+1)+" von "+s.bl.length;big=b.t[0]=="N"?b.t.slice(1):b.t=="B"?"Bull":b.t=="DB"?"D-Bull":b.t;
@@ -365,7 +395,7 @@ function csv(){return["Woche;Datum;Average;Zielwert;Differenz;T20-Treffer (Mo);S
 // Jede Einheit speichert ab v23 alle Pfeile in r.dl: {c Feld, x/y Lage in mm (20 oben = y negativ), v Punkte, n Aufnahme-Nr.,
 //  Blöcke: t Ziel, i Block-Nr. | 501: l Leg, r Rest vor dem Pfeil, b Bust, f Leg beendet}
 let VT=+lsg("dart_vt","0")||0,VP=+lsg("dart_vp","5"),VM="heat",VF="Alle";if(![0,1,5,10].includes(VP))VP=5;
-const VD=["Übersicht","Mo","Di","Mi","Do","Fr","Sa","So"];
+const VD=["Übersicht","Mo","Di","Mi","Do","Fr","Sa","So","Rekorde","Woche"],VTO=[0,9,8,1,2,3,4,5,6,7];if(!(VT>=0&&VT<=9))VT=0;
 const vSes=k=>DB.sessions.filter(r=>r.k==k);
 const vMean=a=>{a=a.filter(v=>v!=null&&isFinite(v));return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
 const vSum=a=>a.filter(v=>v!=null&&isFinite(v)).reduce((x,y)=>x+y,0);
@@ -442,8 +472,7 @@ function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP
  <div><div class="vseg vper">${[[1,"Letzte 1"],[5,"Letzte 5"],[10,"Letzte 10"],[0,"Alle"]].map(([v,l])=>`<button data-vp="${v}" class="${VP==v?"on":""}">${l}</button>`).join("")}</div>`;
  if(!S.length)return t+`<div class="vpanel"><div class="vempty d">Noch keine ${P[k].n}-Einheit gespeichert. Starte sie im Wochenplan – danach erscheinen hier deine Werte.</div></div></div></div>`;
  t+=`<div class="vpanel"><div class="vrow vhd"><div>AUS ${C.length} ${C.length==1?"EINHEIT":"EINHEITEN"}</div><div>${C.length==1?"WERT":"DURCHSCHNITT"}</div><div>BESTWERT</div></div>${vRows(cfg.rows,C,Pv)}${cfg.cnt?vCnt(cfg.cnt,C):""}</div>`;
- if(cfg.grp){const G=cfg.grp.map(tg=>{const D=[].concat(...C.map(r=>vDl(r,d=>d.t==tg))),g=vGrp(D,tg),hb=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.h:null})),db=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.d:null}));return{tg,g,hb,db}});
-  t+=`<div class="vpanel"><div class="vrow v4 vhd"><div>GRUPPIERUNG</div><div>TREFFER</div><div>STREUUNG</div><div>TENDENZ</div></div>${G.map(({tg,g,hb,db})=>{const[vt,vc]=vVerd(g&&g.sp);return`<div class="vrow v4"><div class="vl1">${tg=="B"?"Bull":tg}</div><div><b>${db?Math.round(hb/db*100)+"<i>%</i>":"–"}</b><small>${db?hb+" von "+db:""}</small></div><div><b>${g&&g.sp!=null?Math.round(g.sp)+"<i> mm</i>":"–"}</b>${vt!="–"?`<span class="vpill ${vc}">${vt}</span>`:""}</div><div class="vtd">${vTend(g)}</div></div>`}).join("")}<div class="vnote">Streuung = wie weit die Pfeile einer Aufnahme im Schnitt von ihrer gemeinsamen Mitte liegen. Unter 15 mm = eng, 15–25 mm = ok. Tendenz = wohin deine Pfeile im Schnitt neben dem Ziel landen.</div></div>`}
+ if(cfg.grp)t+=vGrpPanel(C,cfg.grp);
  if(cfg.fbars){const L=DBL.map(d=>{const h=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.h:null})),n=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.d:null}));return[d,n?h/n*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
   t+=`<div class="vcard"><div class="vh3">Quote je Doppel</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}</div>`}
  const hard=(L,h)=>{const ok=L.filter(x=>x[1]!=null).map(x=>x[1]).sort((a,b)=>b-a),th=ok[Math.min(2,ok.length-1)];return L.map(x=>[x[0],x[1],x[1]!=null&&x[1]>=th&&x[1]>1?"b":""])};
@@ -453,7 +482,8 @@ function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP
 function vHeatBox(C,k){const fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
  return`<div class="vhl">PFEILE MIT POSITION: ${pos}<br>AUS ${withDl} ${withDl==1?"EINHEIT":"EINHEITEN"}${miss?" · "+miss+" OHNE POSITION":""}</div><canvas id="vhc" data-k="${k}"></canvas>${pos?"":`<div class="vempty">${C.length&&!withDl?"Diese Einheiten sind älter als Version 23 – da wurden die Positionen noch nicht gespeichert. Ab jetzt schon.":"Noch keine Pfeile mit Position."}</div>`}`}
 // Heatmap zeichnen
-function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))).filter(d=>d.x!=null);
+function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,D=[].concat(...C.map(r=>vDl(r,vFl))).filter(d=>d.x!=null);vHeatC(cv,D,["Alle","Singles","Doppel"].includes(VF)?null:(VF=="Bull"?"B":VF))}
+function vHeatC(cv,D,tg){
  const w=cv.clientWidth;if(!w)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=cv.height=Math.round(w*dpr);const g=cv.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
  const R=250,Sc=w/(2*R),cx=w/2,cy=w/2,dark=getComputedStyle(cv).color;
  g.save();g.translate(cx,cy);g.fillStyle="#2a2b2d";g.beginPath();g.arc(0,0,226*Sc,0,7);g.fill();
@@ -476,7 +506,7 @@ function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,fl=vFl,D=[].concat(...
  og.putImageData(im,0,0);g.imageSmoothingEnabled=true;g.imageSmoothingQuality="high";g.drawImage(oc,0,0,w,w);
  if(D.length<=150){g.fillStyle="rgba(255,255,255,.75)";D.forEach(d=>{g.beginPath();g.arc(cx+d.x*Sc,cy+d.y*Sc,Math.max(1.6,2.2*Sc),0,7);g.fill()})}
  // Ziel + Mitte der Pfeile (Tendenz)
- if(!["Alle","Singles","Doppel"].includes(VF)){const tg=VF=="Bull"?"B":VF,gr=vGrp(D,tg);if(gr){const[tx,ty]=gr.c,mx2=cx+(tx+gr.dx)*Sc,my2=cy+(ty+gr.dy)*Sc;
+ if(tg){const gr=vGrp(D,tg);if(gr){const[tx,ty]=gr.c,mx2=cx+(tx+gr.dx)*Sc,my2=cy+(ty+gr.dy)*Sc;
   g.strokeStyle="#fff";g.lineWidth=2;g.setLineDash([5,4]);g.beginPath();g.arc(cx+tx*Sc,cy+ty*Sc,Math.max(7,9*Sc),0,7);g.stroke();g.setLineDash([]);
   g.strokeStyle="#111";g.lineWidth=5;g.beginPath();g.moveTo(mx2-8,my2);g.lineTo(mx2+8,my2);g.moveTo(mx2,my2-8);g.lineTo(mx2,my2+8);g.stroke();g.strokeStyle="#fff";g.lineWidth=2.5;g.stroke();
   g.fillStyle=dark;g.font="600 15px Arial";g.textAlign="left";g.textBaseline="alphabetic";g.fillText("○ Ziel   ✛ Mitte deiner Pfeile: "+vTend(gr),8,w-10)}}}
@@ -495,9 +525,10 @@ function vOver(){const R=rows(),S=DB.sessions,sa=S.filter(x=>x.k=="sa"),last=sa.
   return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table></div>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
  t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" id="bks" style="margin-bottom:8px;font-size:15px"></div><div class="mu" style="margin-bottom:8px">Deine Daten liegen in diesem Browser und – sobald die Ring-Kameras verbunden sind – zusätzlich auf dem Raspberry Pi. Fehlt dem Tablet etwas, holt es sich die Daten beim nächsten Verbinden automatisch zurück. Für ganz sicher: ab und zu eine Sicherung herunterladen.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
  return t}
-function hist(){return`<div class="vl">${SAVEERR?'<div class="vcard" style="background:#d64545;color:#fff"><b>Der Speicher im Browser ist voll – die letzten Änderungen wurden nicht gespeichert.</b> Bitte unter Übersicht eine Sicherung herunterladen und Bescheid geben.</div>':""}<div class="vtabs">${VD.map((d,i)=>`<button data-vt="${i}" class="${VT==i?"on":""}">${d}</button>`).join("")}</div>${VT?vDay(DAYS[VT-1]):vOver()}</div>`}
+function hist(){return`<div class="vl">${SAVEERR?'<div class="vcard" style="background:#d64545;color:#fff"><b>Der Speicher im Browser ist voll – die letzten Änderungen wurden nicht gespeichert.</b> Bitte unter Übersicht eine Sicherung herunterladen und Bescheid geben.</div>':""}<div class="vtabs">${VTO.map(i=>`<button data-vt="${i}" class="${VT==i?"on":""}">${VD[i]}</button>`).join("")}</div>${VT==0?vOver():VT==8?vRecs():VT==9?vWeek():vDay(DAYS[VT-1])}</div>`}
 function vBind(m){const q=s=>m.querySelector(s);
- m.querySelectorAll("[data-vt]").forEach(b=>b.onclick=()=>{VT=+b.dataset.vt;VF="Alle";lss("dart_vt",String(VT));render()});
+ m.querySelectorAll("[data-vt]").forEach(b=>b.onclick=()=>{VT=+b.dataset.vt;VF="Alle";if(VT==9)VWK=null;lss("dart_vt",String(VT));render()});
+ m.querySelectorAll("[data-vw]").forEach(b=>b.onclick=()=>{VWK=Math.min(0,(VWK||0)+ +b.dataset.vw);render()});
  m.querySelectorAll("[data-vp]").forEach(b=>b.onclick=()=>{VP=+b.dataset.vp;lss("dart_vp",String(VP));render()});
  m.querySelectorAll("[data-vm]").forEach(b=>b.onclick=()=>{VM=b.dataset.vm;render()});
  m.querySelectorAll("[data-vf]").forEach(b=>b.onclick=()=>{VF=b.dataset.vf;render()});
@@ -507,6 +538,78 @@ function vBind(m){const q=s=>m.querySelector(s);
  if(q("#bkf"))q("#bkf").onchange=function(){const f=this.files&&this.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||o.app!="dart"||!o.db||!Array.isArray(o.db.sessions))throw"keine Dart-Sicherung";
   const sg=r=>r.date+"|"+r.k+"|"+r.darts+"|"+r.pts,have=new Set(DB.sessions.map(r=>r.id)),hs=new Set(DB.sessions.map(sg)),z=DB.z||0;let n=0,j=0;o.db.sessions.slice().sort((a,b)=>a.id-b.id).forEach(r=>{if(!r||!r.id||have.has(r.id)||hs.has(sg(r)))return;if(r.id<=z)r=Object.assign({},r,{id:z+1+(j++)});DB.sessions.push(r);n++});DB.sessions.sort((a,b)=>b.id-a.id);DB.notes=Object.assign({},o.db.notes||{},DB.notes||{});save();render();
   const e=$("#bkm");if(e)e.textContent=n+" Einheit(en) aus der Sicherung übernommen."}catch(e){const x=$("#bkm");if(x)x.textContent="Das ist keine gültige Sicherung ("+e+")."}};rd.readAsText(f)}}
+// ===== Rekorde, Wochenrückblick, Abschluss-Bildschirm (v23) =====
+const dD=d=>new Date(d+"T12:00:00"),dS=x=>x.toISOString().slice(0,10),addD=(d,n)=>{const x=dD(d);x.setDate(x.getDate()+n);return dS(x)};
+const f1=v=>v==null||!isFinite(v)?"–":(Math.round(v*10)/10).toFixed(1).replace(".",",");
+// --- Rekorde: Bestwerte über alle Einheiten des Profils (bei Gleichstand zählt das erste Mal) ---
+const RECS=[
+ {k:"hv",ic:"🎯",t:"Höchste Aufnahme",b:"max",g:r=>{const V=vVis(r);return V&&V.length?Math.max(...V.map(v=>v.sc)):null},f:v=>String(v)},
+ {k:"asa",ic:"📈",t:"Bester Spieltag-Average",b:"max",g:r=>r.k=="sa"?r.avg:null,f:v=>f1(v)},
+ {k:"ado",ic:"📊",t:"Bester Scoring-Average",b:"max",g:r=>r.k=="do"?r.avg:null,f:v=>f1(v)},
+ {k:"lsa",ic:"🏁",t:"Bestes Leg mit Double-Out",b:"min",g:r=>r.k=="sa"&&r.legs&&r.legs.length?Math.min(...r.legs):null,f:v=>v+" Pfeile"},
+ {k:"ldo",ic:"⏱️",t:"Bestes Leg (Scoring)",b:"min",g:r=>r.k=="do"&&r.legs&&r.legs.length?Math.min(...r.legs):null,f:v=>v+" Pfeile"},
+ {k:"co",ic:"✅",t:"Höchstes Checkout",b:"max",g:r=>{if(r.k!="sa")return null;const V=vVis(r);if(!V)return null;const f=V.filter(v=>v.f).map(v=>v.r0);return f.length?Math.max(...f):null},f:v=>String(v)},
+ {k:"t20",ic:"🔴",t:"Meiste T20-Treffer (Mo)",b:"max",g:r=>r.k=="mo"?vHit(r,"T20",0):null,f:v=>v+" von 100"},
+ {k:"di",ic:"🎳",t:"Beste Trefferquote (Di)",b:"max",g:r=>r.k=="di"?vQ(r,()=>1):null,f:v=>f1(v)+" %"},
+ {k:"mi",ic:"🔁",t:"Schnellste Doppel-Runde (Mi)",b:"min",g:r=>{if(r.k!="mi")return null;const a=[1,2].map(j=>vRd(r,"d",j)).filter(v=>v!=null);return a.length?Math.min(...a):null},f:v=>v+" Pfeile"},
+ {k:"fr",ic:"💯",t:"Beste Doppelquote (Fr)",b:"max",g:r=>r.k=="fr"?vQ(r,()=>1):null,f:v=>f1(v)+" %"}];
+function vRec(S){const o={};S.slice().reverse().forEach(r=>{RECS.forEach(R=>{const v=R.g(r);if(v==null||!isFinite(v))return;const c=o[R.k];if(!c||(R.b=="max"?v>c.v:v<c.v))o[R.k]={v,r}})});return o}
+const n180=S=>vSum(S.map(r=>vBand(r,180,999)||0));
+function vStreak(S){const D=[...new Set(S.map(r=>r.date))].sort();let best=0,run=0,prev=null;D.forEach(d=>{run=prev&&addD(prev,1)==d?run+1:1;if(run>best)best=run;prev=d});
+ const t=isoD();let cur=0,d=D.includes(t)?t:addD(t,-1);while(D.includes(d)){cur++;d=addD(d,-1)}return{cur,best}}
+function vRecs(){const S=DB.sessions,R=vRec(S),st=vStreak(S),c180=n180(S),first180=S.slice().reverse().find(r=>(vBand(r,180,999)||0)>0);
+ let t=`<div class="vcard vkpi v4k"><div class="vttl">Fleiß</div><div><small>Einheiten</small><b>${S.length}</b></div><div><small>Pfeile</small><b>${vSum(S.map(r=>r.darts))}</b></div><div><small>Serie aktuell</small><b>${st.cur}<i class="vu"> ${st.cur==1?"Tag":"Tage"}</i></b></div><div><small>Längste Serie</small><b>${st.best}<i class="vu"> ${st.best==1?"Tag":"Tage"}</i></b></div></div>`;
+ t+=`<div class="rcgrid"><div class="rc gold"><span class="ric">🔥</span><small>180er gesamt</small><b>${c180}</b><span class="rd">${first180?"Die erste am "+vDate(first180.date):"Die erste kommt noch!"}</span></div>`;
+ t+=RECS.map(x=>{const r=R[x.k];return`<div class="rc${r?"":" no"}"><span class="ric">${x.ic}</span><small>${x.t}</small><b>${r?x.f(r.v):"–"}</b><span class="rd">${r?vDate(r.r.date)+" · "+esc(r.r.name.split(" · ")[1]||r.r.name):"noch kein Wert"}</span></div>`}).join("")+"</div>";
+ return t+'<div class="vnote l" style="margin-top:10px">Rekorde gelten für das aktive Profil. Bei Gleichstand zählt das erste Mal.</div>'}
+// --- Wochenrückblick ---
+let VWK=null;const wkDef=()=>{const m0=dS(mon(isoD()));return today==0&&!DB.sessions.some(r=>dS(mon(r.date))==m0)?-1:0};
+function vWeek(){if(VWK==null)VWK=wkDef();const S=DB.sessions,m0=dS(mon(isoD())),ws=addD(m0,7*VWK),we=addD(ws,6),pws=addD(ws,-7),inW=(r,a)=>{const m=dS(mon(r.date));return m==a};
+ const W=S.filter(r=>inW(r,ws)),PW=S.filter(r=>inW(r,pws)),first=S.length?dS(mon(S[S.length-1].date)):ws,wn=Math.round((dD(ws)-dD(first))/864e5/7)+1,done=new Set(W.map(r=>r.k)),last=(L,k)=>L.find(r=>r.k==k);
+ const sa=last(W,"sa"),psa=last(PW,"sa"),zs=wn>=1?zw(Math.min(12,wn)):null,good=[],work=[];
+ // Vergleich mit der Vorwoche je Tag
+ const rows=DAYS.map((k,i)=>{const a=last(W,k),p=last(PW,k),f=WPL[k],v=a?f[1](a):null,pv=p?f[1](p):null;
+  if(v!=null&&pv!=null&&Math.abs(v-pv)>1e-9){const up=v>pv,ok=f[2].lb?!up:up,txt=`${DN[i]}: ${f[0]} ${vFmt(pv,f[2]).replace(/<[^>]+>/g,"")} → ${vFmt(v,f[2]).replace(/<[^>]+>/g,"")}`.replace(/(\d)\.(\d)/g,"$1,$2"),rel=Math.abs(v-pv)/(Math.abs(pv)||1);(ok?good:work).push({t:txt,w:rel})}
+  return{k,i,a,v,pv,f}});
+ if(sa&&zs!=null){const d=sa.avg-zs;(d>=0?good:work).push({t:`Samstag ${d>=0?"über":"unter"} deinem Plan: ${f1(sa.avg)} statt ${f1(zs)} (${d>=0?"+":""}${f1(d)})`,w:9})}
+ // Doppel und Triple dieser Woche
+ const agg=(f)=>{const M={};W.forEach(r=>(r.bl||[]).filter(f).forEach(b=>{const o=M[b.t]||(M[b.t]={h:0,d:0});o.h+=b.h;o.d+=b.d}));return Object.entries(M).filter(([t,o])=>o.d>=8).map(([t,o])=>({t:t=="DB"?"Bull":t,q:o.h/o.d*100}))};
+ const DBq=agg(b=>b.t[0]=="D"&&b.g!="s").sort((a,b)=>b.q-a.q);if(DBq.length>=2){good.push({t:`Stärkstes Doppel: ${DBq[0].t} (${Math.round(DBq[0].q)} %)`,w:2});work.push({t:`Schwächstes Doppel: ${DBq[DBq.length-1].t} (${Math.round(DBq[DBq.length-1].q)} %)`,w:2})}
+ const TRq=agg(b=>b.t[0]=="T").sort((a,b)=>b.q-a.q);if(TRq.length>=2){good.push({t:`Bestes Triple: ${TRq[0].t} (${Math.round(TRq[0].q)} %)`,w:1.5});work.push({t:`Schwächstes Triple: ${TRq[TRq.length-1].t} (${Math.round(TRq[TRq.length-1].q)} %)`,w:1.5})}
+ const T20=[].concat(...W.map(r=>vDl(r,d=>d.t=="T20"))),g20=vGrp(T20,"T20");if(g20&&g20.n>=20&&(Math.abs(g20.dx)>=4||Math.abs(g20.dy)>=4))work.push({t:`Deine T20-Pfeile landen im Schnitt ${vTend(g20)}`,w:1.8});
+ // ausgelassene Tage (nur vergangene Tage)
+ const lim=VWK<0?7:today,miss=DAYS.slice(0,lim).map((k,i)=>done.has(k)?null:VD[i+1]).filter(Boolean);if(miss.length)work.push({t:`Nicht trainiert: ${miss.join(", ")}`,w:miss.length>2?5:1});
+ const RW=vRec(S),recs=RECS.filter(x=>RW[x.k]&&RW[x.k].r.date>=ws&&RW[x.k].r.date<=we);
+ good.sort((a,b)=>b.w-a.w);work.sort((a,b)=>b.w-a.w);
+ let t=`<div class="wkhead"><button data-vw="-1">‹</button><div><b>Woche ${wn>=1?wn:"–"}</b><span>${vDate(ws)} – ${vDate(we)}${VWK==0?" · diese Woche":VWK==-1?" · letzte Woche":""}</span></div><button data-vw="1"${VWK>=0?" disabled":""}>›</button></div>`;
+ t+=`<div class="vcard vkpi v4k"><div class="vttl">Woche im Überblick</div><div><small>Trainingstage</small><b>${done.size}<i class="vu"> / 7</i></b></div><div><small>Pfeile</small><b>${vSum(W.map(r=>r.darts))}</b></div><div><small>Minuten</small><b>${vSum(W.map(r=>r.dur||0))||"–"}</b></div><div><small>Samstag-Average</small><b class="${sa&&zs!=null?(sa.avg>=zs?"vg":"vb"):""}">${sa?f1(sa.avg):"–"}</b></div></div>`;
+ if(!W.length)return t+`<div class="vcard"><div class="vempty">In dieser Woche wurde noch nichts gespeichert.</div></div>`;
+ const li=(L,n)=>L.slice(0,n).map(x=>`<li>${x.t}</li>`).join("")||'<li class="mu">–</li>';
+ t+=`<div class="vgrid"><div><div class="vcard wkbox g"><div class="vh3">👍 Gut gelaufen</div><ul>${li(good,4)}</ul></div><div class="vcard wkbox o"><div class="vh3">🎯 Daran arbeiten</div><ul>${li(work,4)}</ul></div>${recs.length?`<div class="vcard wkbox r"><div class="vh3">🏆 Rekorde dieser Woche</div><ul>${recs.map(x=>`<li>${x.ic} ${x.t}: <b>${x.f(RW[x.k].v)}</b> (${vDate(RW[x.k].r.date)})</li>`).join("")}</ul></div>`:""}</div>`;
+ t+=`<div><div class="vpanel"><div class="vrow vhd"><div>TAG</div><div>DIESE WOCHE</div><div>VORWOCHE</div></div>${rows.map(o=>`<div class="vrow"><div class="vl1">${VD[o.i+1]}<small>${P[o.k].n}${o.a?"":" · nicht trainiert"}</small></div><div><b>${o.v!=null?vFmt(o.v,o.f[2]):(o.a?"✓":"–")}</b>${vArrow(o.v,o.pv,o.f[2])}<small>${o.f[0]}</small></div><div><b>${o.pv!=null?vFmt(o.pv,o.f[2]):"–"}</b></div></div>`).join("")}</div></div></div>`;
+ return t}
+// --- Gruppierungs-Tabelle (Di), auch für den Abschluss-Bildschirm ---
+function vGrpPanel(C,grp){const G=grp.map(tg=>{const D=[].concat(...C.map(r=>vDl(r,d=>d.t==tg))),g=vGrp(D,tg),hb=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.h:null})),db=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==tg);return b?b.d:null}));return{tg,g,hb,db}});
+ return`<div class="vpanel"><div class="vrow v4 vhd"><div>GRUPPIERUNG</div><div>TREFFER</div><div>STREUUNG</div><div>TENDENZ</div></div>${G.map(({tg,g,hb,db})=>{const[vt,vc]=vVerd(g&&g.sp);return`<div class="vrow v4"><div class="vl1">${tg=="B"?"Bull":tg}</div><div><b>${db?Math.round(hb/db*100)+"<i>%</i>":"–"}</b><small>${db?hb+" von "+db:""}</small></div><div><b>${g&&g.sp!=null?Math.round(g.sp)+"<i> mm</i>":"–"}</b>${vt!="–"?`<span class="vpill ${vc}">${vt}</span>`:""}</div><div class="vtd">${vTend(g)}</div></div>`}).join("")}<div class="vnote">Streuung = wie weit die Pfeile einer Aufnahme im Schnitt von ihrer gemeinsamen Mitte liegen. Unter 15 mm = eng, 15–25 mm = ok. Tendenz = wohin deine Pfeile im Schnitt neben dem Ziel landen.</div></div>`}
+// --- Abschluss-Bildschirm nach dem Training ---
+function finNews(r){const S=DB.sessions,P0=S.filter(x=>x!==r),A=vRec(S),B=vRec(P0),o=[];
+ RECS.forEach(x=>{const a=A[x.k],b=B[x.k];if(a&&a.r===r&&b)o.push(`${x.ic} <b>Neuer Rekord: ${x.t}</b> – ${x.f(a.v)} <span>(vorher ${x.f(b.v)})</span>`)});
+ const c0=n180(P0),c1=n180(S);if(c1>c0)o.unshift(c0==0?`🔥 <b>Deine erste 180!</b>`:`🔥 <b>${c1-c0==1?"Eine 180":(c1-c0)+"× 180"}!</b> <span>(insgesamt ${c1})</span>`);
+ const st=vStreak(S);if(st.cur>=3&&r.date==isoD())o.push(`📅 <b>${st.cur} Tage am Stück trainiert</b>${st.cur>=st.best?" – deine längste Serie!":""}`);return o}
+function trainDone(){if(!s.saved||!DB.sessions.length||DB.sessions[0].k!=s.k)return`<div class="vl"><div class="vcard"><div class="vh3">Training beendet</div><div class="mu">Es wurde kein Pfeil geworfen, deshalb ist nichts gespeichert.</div></div><button class="pri" id="new">Zurück zum Wochenplan</button></div>`;
+ const r=DB.sessions[0],k=r.k,S=vSes(k),pr=S[1]||null,cfg=VS[k],L=WPL[k],v=L[1](r),pv=pr?L[1](pr):null,news=finNews(r),di=DAYS.indexOf(k);
+ const rowsH=cfg.rows.map(([lab,f,o])=>{o=o||{};const a=f(r),b=pr?f(pr):null,all=S.map(f).filter(x=>x!=null&&isFinite(x)),bs=all.length?(o.lb?Math.min(...all):Math.max(...all)):null,rec=a!=null&&S.length>1&&a===bs&&all.filter(x=>x===bs).length==1;
+  return`<div class="vrow"><div class="vl1">${lab}</div><div><b>${vFmt(a,o)}</b>${vArrow(a,b,o)}${rec?'<span class="vpill o">Rekord</span>':""}</div><div><b>${vFmt(b,o)}</b></div><div><b>${vFmt(bs,o)}</b></div></div>`}).join("");
+ const cnt=cfg.cnt?[[60,100,"60+"],[100,140,"100+"],[140,180,"140+"],[180,999,"180"]].map(([lo,hi,l])=>`<div><small>${l}</small><b>${vBand(r,lo,hi,cfg.cnt.f)||0}</b></div>`).join(""):"";
+ let t=`<div class="vl wp fin"><div class="wphero"><div><div class="k">Fertig · ${DN[di]} · ${vDate(r.date)}${r.dur?" · "+r.dur+" Min.":""}</div><h1>${P[k].n}</h1><p>${r.darts} Pfeile · ${r.pts} Punkte · Average ${f1(r.avg)}${r.legs?" · "+r.legs.length+" Legs":""}</p></div>
+ <div class="wpact"><div class="wplast"><small>${L[0]} heute</small><b>${vFmt(v,L[2])}</b>${vArrow(v,pv,L[2])}<small>${pv!=null?"letztes Mal: "+vFmt(pv,L[2]).replace(/<[^>]+>/g,""):"erstes Mal"}</small></div></div></div>`;
+ if(news.length)t+=`<div class="finnews">${news.map(x=>`<div>${x}</div>`).join("")}</div>`;
+ t+=`<div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE · ${vDl(r,d=>d.x!=null).length} MIT POSITION</div><canvas id="fhc"></canvas></div></div><div>
+ <div class="vpanel"><div class="vrow f4 vhd"><div></div><div>HEUTE</div><div>LETZTES MAL</div><div>BESTWERT</div></div>${rowsH.replace(/class="vrow"/g,'class="vrow f4"')}</div>
+ ${cnt?`<div class="vcard fincnt"><div class="vh3">Aufnahmen heute</div><div class="trst">${cnt}</div></div>`:""}${cfg.grp?vGrpPanel([r],cfg.grp):""}
+ <div class="vcard"><div class="vh3">Notiz</div><input id="note" placeholder="Wie lief es? (optional)" value="${esc(r.note||"")}" class="finin"></div>
+ <div class="trbtn"><button id="fvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">Zum Wochenplan</button></div></div></div></div>`;
+ return t}
 let vRz=0;window.addEventListener("resize",()=>{clearTimeout(vRz);vRz=setTimeout(()=>{if(view==2){const hc=document.querySelector("#vhc");if(hc)vHeat(hc,hc.dataset.k)}},200)});
 
 // Kamera
