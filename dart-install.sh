@@ -51,6 +51,18 @@ if command -v raspi-config >/dev/null 2>&1; then
   sudo raspi-config nonint do_boot_behaviour B4 && echo "✓ Automatische Anmeldung am Desktop an"
   sudo raspi-config nonint do_blanking 1 && echo "✓ Bildschirmschoner aus"
 fi
+# Betrieb ohne Bildschirm: Ohne angeschlossenen Bildschirm startet der Desktop (und damit die Kamera-Fenster)
+# sonst evtl. gar nicht. Deshalb bekommt der Pi einen festen Bildschirm 1920x1080 an HDMI 1 – auch wenn keiner dran ist.
+# Sicherung der Originaldatei: cmdline.txt.vor-dart (zum Rückgängigmachen einfach zurückkopieren)
+CMDL="${DART_CMDLINE:-/boot/firmware/cmdline.txt}"; [ -f "$CMDL" ] || CMDL=/boot/cmdline.txt
+if [ -f "$CMDL" ]; then
+  if grep -q "video=HDMI-A-1" "$CMDL"; then echo "✓ Betrieb ohne Bildschirm war schon eingerichtet"
+  else
+    [ -f "$CMDL.vor-dart" ] || sudo cp "$CMDL" "$CMDL.vor-dart"
+    sudo sed -i '1 s/[[:space:]]*$/ video=HDMI-A-1:1920x1080@60D/' "$CMDL" && echo "✓ Betrieb ohne Bildschirm eingerichtet (fester Bildschirm 1920×1080)"
+  fi
+else echo "⚠ cmdline.txt nicht gefunden – ohne Bildschirm startet der Desktop evtl. nicht (dann HDMI-Dummy-Stecker nutzen)."; fi
+
 # WLAN-Stromsparen aus (stabilere Verbindung zum Tablet)
 if command -v nmcli >/dev/null 2>&1; then
   nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="802-11-wireless"{print $1}' | while read -r C; do
