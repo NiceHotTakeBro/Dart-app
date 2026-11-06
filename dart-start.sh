@@ -53,7 +53,7 @@ fenster(){
       --disable-renderer-backgrounding \
       --disable-backgrounding-occluded-windows \
       --noerrdialogs --disable-session-crashed-bubble --disable-infobars \
-      --no-first-run --password-store=basic --disable-features=Translate \
+      --no-first-run --no-default-browser-check --password-store=basic --disable-features=Translate \
       --window-position=$(( (i-1)*430 )),0 --window-size=430,700 \
       >> "$D/kamera$i.log" 2>&1
     log "Kamera-Fenster $i wurde beendet (Code $?) – Neustart in 5 s"
