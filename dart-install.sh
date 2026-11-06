@@ -70,8 +70,8 @@ if command -v nmcli >/dev/null 2>&1; then
 fi
 
 # Kameras prüfen
-N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c 'video-index0$')
-if [ "$N" -ge 3 ]; then echo "✓ $N Kameras erkannt"; else echo "⚠ Nur $N Kamera(s) erkannt – bitte alle 3 Kameras einstecken."; fi
+N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c 'usb.*video-index0$')
+if [ "$N" -ge 3 ]; then echo "✓ $N USB-Kameras erkannt"; else echo "⚠ Nur $N USB-Kamera(s) erkannt – bitte alle 3 Kameras einstecken."; fi
 echo
 echo "Fertig. Jetzt neu starten mit:  sudo reboot"
 echo "Nach dem Neustart öffnen sich die 3 Kamera-Fenster von selbst."

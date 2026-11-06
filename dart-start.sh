@@ -27,15 +27,15 @@ if ! flock -n 9; then log "läuft schon – zweiter Start abgebrochen"; exit 0; 
 # Auf Internet warten (höchstens 2 Minuten)
 HOST=$(echo "$URL" | sed -E 's#^[a-z]+://([^/]+).*#\1#')
 for i in $(seq 1 60); do getent hosts "$HOST" >/dev/null 2>&1 && break; sleep 2; done
-# Auf die Kameras warten (höchstens 1 Minute) – je USB-Anschluss ein Eintrag
+# Auf die Kameras warten (höchstens 1 Minute) – je USB-Kamera ein Eintrag (eingebaute Bausteine des Pi 5 zählen nicht)
 N=0
 for i in $(seq 1 30); do
-  N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c 'video-index0$')
+  N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c 'usb.*video-index0$')
   [ "$N" -ge 3 ] && break; sleep 2
 done
 log "Start: Internet $(getent hosts "$HOST" >/dev/null 2>&1 && echo ok || echo FEHLT) | Kameras gefunden: $N | Code $CODE | Zahlen ${ZAHLEN[*]}"
 # Welche Kamera steckt wo (hilft, falls sich die Reihenfolge einmal vertauscht)
-for p in /dev/v4l/by-path/*video-index0; do [ -e "$p" ] && log "  Anschluss $(basename "$p" | sed 's/-video-index0//') -> $(readlink -f "$p")"; done
+for p in /dev/v4l/by-path/*usb*video-index0; do [ -e "$p" ] && log "  Anschluss $(basename "$p" | sed 's/-video-index0//') -> $(readlink -f "$p")"; done
 
 fenster(){
   local i=$1 dir="$D/kamera$i"
