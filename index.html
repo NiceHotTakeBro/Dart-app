@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8">
+<html lang="de" translate="no"><head><meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dart-Training</title>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2f3033"><link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAwFBMVEX/+db/8M/56cjb37vk0p3Zv42kwpmrtJa0o4C6mVqvklqmiVGFmHqIg2mPf198fmqPd06DclJybE9sYkhxWjxeV0hcTDthPC9LU0JARzs+OzMmNC4yMjQxMjMxMTQwMTMwMDMvMDMuMDN2JCBnJCBBIyE4GBgtLzIpLDEoKi8rHxkiJi8fJC4eIy4bHBwZFxYXGBYZFRUQGxgTFhYSFRUTExQKExIQERIIERIRDRALDQ8HDA8DBw4DBgwABgoAAgkgR1OkAAADAUlEQVR42s2W23qiMBSFOYoB0mANCBZNVVQO0oBjABGG93+roVVqq9XOzM1M7vDzx72y115bbvaHh/vHwPz5z4C5u37+LYBM3PZM3EgzYnf6HUDcmR9t4ngT+ZEqW3FwHyBuEK+d4cAwBkN7Y8iyZt0FXH9jG0AzcHsMVQWSLANyGyCT2FFVHJZV3Z7qEAIgm/EzuQWQeTQAVlnnCU12u4RRPK5HwIjW068BsvZVjVUpTfdlGoYslMGBHpim+h8J7sP7fYAbRrNi+2SPFosRkIbVjrIGA39OvgAmkYobmhSrkS7yw2KrybI+WhUJbbAaTa8BNx5oDU1zb7GUBAHWliwL0nLh7VPaGG3/LgHiO4CxtBx7LwdT4Ps/HyWBNw8v3rhMGQNOQC4Ad6NaVbJ/6sHyZauI+uhBF5XdSwl7T/ukstSN+xkgga2WCdvqAo+yFe4py6XSw6sc8oK+ZUmpWt1PcJ0CA9fJ3hF5kUdeKPNrwsuhh9pH0dknNX7oVHQlrUGYZ6uF0xfEHmxMzrY5s4E9UeiPF6ssD8H8U0mtZK1MC2+ZMRuKHGokhKQGciK0Wbb0irTU7FNN3KkHQ6OibJHmxcpzFA6Zum5Cru94qyJPF4zWxjCafADczQDXNEcKNPGoqMcKRAgqbl2MsAkVlNEaD073xL1rrmim8wLfk0RFR+jxESFdEaVe+5Ge0Qp3vftb4K2krCvJPZY07krKr0p6FV2/i+5z8FU04pSboi+uFbbX+ig16Pa1vjdu/N44p2ucc2zchVuvrEF8Xjpbo8LahTU+mA/mZ/Nl6Gi+w5X5Ptl719rb81p7b8/2jtxvBqgo+rzQDVAO7KsBelXxOqL704gyhoS3Ec1vjOhsNv0cAoXJi3dD4Dpm7KdtkR1jZv1VzMymbZAZ5yBLyzYw0io3bgVZS8wj4xyVP2iSV6V1JyrbqqanMG6TuM3jMsSqasdTci/ug4390MW9Bh6sKHC/Xyhz+7RQZnHgktlvrKzguLKC2dXX7y9F8j/+E/gnwC8X/R1GY3OtvQAAAABJRU5ErkJggg=="><meta name="mobile-web-app-capable" content="yes">
@@ -288,7 +289,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 29</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 30</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -1012,10 +1013,10 @@ $("#c1").onclick=()=>{const fp=document.permissionsPolicy||document.featurePolic
  const VC=RINGON()?{width:{ideal:1280},height:{ideal:720}}:{width:{ideal:4096},height:{ideal:3072},aspectRatio:{ideal:4/3}};if(DB.cam.dev)VC.deviceId={exact:DB.cam.dev};else VC.facingMode="environment";
  navigator.mediaDevices.getUserMedia({video:VC,audio:false}).catch(e=>{if(KNR){DB.cam.dev=null;save();throw e}if(DB.cam.dev){DB.cam.dev=null;save();return navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:4096},height:{ideal:3072}},audio:false})}throw e}).then(st=>{if(!RINGON())maxRes(st);hwZoomInit(st);camList().catch(()=>{});cv.srcObject=st;keepAwake();cv.onloadedmetadata=()=>{HB=Hi=null;BASE=null;PREV=null;ref=null;EMPTY=null;TURN=[];MASK=null;renderTurn();ov();setSt("search");cm("Kamera läuft. Ich suche die Scheibe …");autoTry(0);startMon()}}).catch(e=>{cm("Kamera nicht verfügbar: "+(e.name||e)+(KNR?". Neuer Versuch in 10 Sekunden …":". Erlaube den Kamerazugriff im Browser."));if(KNR){LOG.push(hm()+" Kamera "+KNR+" startet nicht ("+(e.name||e)+") – neuer Versuch in 10 s");clearTimeout(window.__rct);window.__rct=setTimeout(()=>{if(!cv.srcObject)ringStartCam()},10000)}})};
 $("#cback").onclick=()=>go(s&&!s.done?1:0);
-$("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm("Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
+$("#c2").onclick=()=>{ca=true;cal=[];HB=Hi=null;det=null;cm(RINGON()?"Punkt 1 von 4: 20 (die Zahl im Bild suchen – bei Ring-Kameras liegt die Scheibe gedreht). Tippe die Außenkante des Doppelrings.":"Punkt 1 von 4: 20 (oben). Tippe die Außenkante des Doppelrings.");ov()};
 ovc.onclick=e=>{if(!ca)return;const r=ovc.getBoundingClientRect();cal.push([(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]);
- if(cal.length==4){ca=false;let pc=cal;const fr=frame();if(fr){const PO=polish(cal.map(([u,v])=>[.5+(u-vcx(fr))*fr.z,.5+(v-vcy(fr))*fr.z]),fr);BASE=PO.s;pc=PO.q.map(([u,v])=>[vcx(fr)+(u-.5)/fr.z,vcy(fr)+(v-.5)/fr.z])}setCal(pc);setSt("ok");DB.cam.cal=pc;save();try{autoZoom()}catch(e){}cm("Scheibe markiert. Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
- else cm("Punkt "+(cal.length+1)+" von 4: "+["","6 (rechts)","3 (unten)","11 (links)"][cal.length]+". Tippe die Außenkante des Doppelrings.");ov()};
+ if(cal.length==4){ca=false;let pc=cal;const fr=frame();if(fr){const PO=polishIt(polish(cal.map(([u,v])=>[.5+(u-vcx(fr))*fr.z,.5+(v-vcy(fr))*fr.z]),fr,[6,4,2,1,.5,.25]).q,fr);BASE=PO.s;pc=PO.q.map(([u,v])=>[vcx(fr)+(u-.5)/fr.z,vcy(fr)+(v-.5)/fr.z])}setCal(pc);setSt("ok");DB.cam.cal=pc;save();try{autoZoom()}catch(e){}let zt="";if(RINGON()){const cz=ringCamZahl();if(cz){lss("dart_zahl",String(cz.zahl));lss("dart_zahl_url",QP.get("zahl")||"");zt=" Diese Kamera sitzt bei Zahl "+cz.zahl+".";const rz=$("#rzahl");if(rz)rz.value=cz.zahl}}LOG.push(hm()+" Scheibe von Hand markiert"+zt);cm("Scheibe markiert."+zt+" Passt das grüne Gitter zur Scheibe? Wenn nicht, nochmal markieren.")}
+ else cm("Punkt "+(cal.length+1)+" von 4: "+(RINGON()?["","6","3","11"][cal.length]+" (die Zahl im Bild suchen)":["","6 (rechts)","3 (unten)","11 (links)"][cal.length])+". Tippe die Außenkante des Doppelrings.");ov()};
 $("#c3").onclick=()=>{WANT="ref";cm("Die Referenz wird gesetzt, sobald das Bild ruhig ist. Bitte die Scheibe leer lassen.")};
 $("#c4").onclick=()=>{WANT="det";cm("Ich prüfe, sobald das Bild ruhig ist …")};
 $("#c7").onclick=()=>{const todo=TURN.filter(t=>!t.tr);if(!(s&&!s.done)&&!(MCH&&!MCH.done))return cm("Es läuft kein Training. Starte zuerst eine Einheit im Wochenplan.");if(!todo.length)return cm("Keine neuen Pfeile zum Übernehmen.");
@@ -1098,7 +1099,7 @@ function fmaps(f){const W=f.width,Hh=f.height,d=f.data,n=W*Hh,rg=new Float32Arra
  const bl=a=>{const o=new Float32Array(n);for(let j=1;j<Hh-1;j++)for(let i=1;i<W-1;i++){const p=j*W+i;o[p]=(a[p]+a[p-1]+a[p+1]+a[p-W]+a[p+W]+a[p-W-1]+a[p-W+1]+a[p+W-1]+a[p+W+1])/9}return o};
  return{W,Hh,rg:bl(rg),L:bl(L)}}
 function bil(a,W,Hh,x,y){if(!(x>=1&&y>=1&&x<W-2&&y<Hh-2))return NaN;const i=x|0,j=y|0,fx=x-i,fy=y-j,p=j*W+i;return a[p]*(1-fx)*(1-fy)+a[p+1]*fx*(1-fy)+a[p+W]*(1-fx)*fy+a[p+W+1]*fx*fy}
-function polish(q,f,steps){steps=steps||[3,2,1,.5,.25];const F=fmaps(f),S=samples(),W=F.W,Hh=F.Hh,h0=hom(BP,q),Ls=[];
+function polish(q,f,steps){steps=steps||[3,2,1,.5,.25];const F=f.__F||(f.__F=fmaps(f)),S=samples(),W=F.W,Hh=F.Hh,h0=hom(BP,q),Ls=[];
  const pv=(h,s)=>{const[u,v]=ap(h,s[0],s[1]),[u2,v2]=ap(h,s[4],s[5]),a=bil(F.L,W,Hh,u*W,v*Hh),b=bil(F.L,W,Hh,u2*W,v2*Hh);return isNaN(a)||isNaN(b)?NaN:a-b};
  S.forEach(s=>{if(s[2]==2){const d=pv(h0,s);if(!isNaN(d))Ls.push(Math.abs(d))}});
  if(Ls.length<100)return{q,s:0};const sd=(Ls.reduce((a,b)=>a+b,0)/Ls.length)||1,wt=[1,1,.7,.5];
@@ -1388,7 +1389,7 @@ function findDart(f,ref,toBoard,Hp,MK,strict,emp){CK=camK(f);MK=MK||boardMask(f.
   if(!hidden)vec=[tip[0]-fp[0],tip[1]-fp[1],W]}
  return{tip,hidden,vec,farEnd,fit:FT,comp:C,noise:comps.slice(1).flat(),nC,T,med,how,el,d,second,grown,ext,trace:TR,shaft,Rpx,cover,lineLen,dLen}}
 
-function autoCal(){let f=frame();if(!f)return false;const tr=g=>{if(RINGON()){const r=ringFit(g);return r&&r.s>=GMIN?r.q:null}return autoFit(g,false)||autoFit(g,true)};let q=tr(f);
+function autoCal(){let f=frame();if(!f)return false;const tr=g=>{if(RINGON()){const r=ringFit(g);return r&&r.s>=RGMIN?r.q:null}return autoFit(g,false)||autoFit(g,true)};let q=tr(f);
  if(!q&&Z>1){const f2=frame(1);if(f2){const q2=tr(f2);if(q2){q=q2;f=f2}}}
  if(!q){showDbg();return false}
  const PO=polishIt(q,f);q=PO.q;
@@ -1401,7 +1402,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 29 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 30 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -1450,12 +1451,12 @@ function applyCal(c,f,moved){const oldHi=Hi,pts=fromA(c.q,f);setCal(pts);DB.cam.
  else{MASK=null;flash("✓ Scheibe erkannt");cm("Scheibe erkannt. Gleich bereit …")}
  ov();setSt("ok");try{autoZoom()}catch(e){}}
 function calCheck(f){// true = in diesem Durchgang keine Pfeilerkennung
- if(!HB){setSt("search");let c=fullFit(f),ff=f;if(!(c&&c.s>=GMIN)&&Z>1){const f1=frame(1);if(f1){c=fullFit(f1);ff=f1}}if(c&&c.s>=GMIN)applyCal(c,ff,false);else setSt("lost");return true}
+ if(!HB){setSt("search");let c=fullFit(f),ff=f;if(!(c&&c.s>=gmin())&&Z>1){const f1=frame(1);if(f1){c=fullFit(f1);ff=f1}}if(c&&c.s>=gmin())applyCal(c,ff,false);else setSt("lost");return true}
  const qa=toA(cal,f),s0=polish(qa,f,[]).s,B=BASE||s0;
  if(s0>=.9*B){BASE=Math.max(B,s0);PEND=null;if(MST!="ok")setSt("ok");return false}
  setSt("check");const r=polish(qa,f),mv=dispPx(r.q,qa,f);
- if(mv<1.5&&r.s>=GMIN){if(mv>=.7&&r.s>s0){const oh=Hi;setCal(fromA(r.q,f));DB.cam.cal=cal;save();moveRefs(oh,f);ov()}BASE=r.s;PEND=null;setSt("ok");return false}
- let c=r.s>=Math.max(GMIN,.85*B)?r:null;if(!c){const a=fullFit(f);if(a&&a.s>=GMIN)c=a}if(!c&&Z>1){const f1=frame(1);if(f1){const a=fullFit(f1);if(a&&a.s>=GMIN){applyCal(a,f1,true);return true}}}
+ if(mv<1.5&&r.s>=gmin()){if(mv>=.7&&r.s>s0){const oh=Hi;setCal(fromA(r.q,f));DB.cam.cal=cal;save();moveRefs(oh,f);ov()}BASE=r.s;PEND=null;setSt("ok");return false}
+ let c=r.s>=Math.max(gmin(),.85*B)?r:null;if(!c){const a=fullFit(f);if(a&&a.s>=gmin())c=a}if(!c&&Z>1){const f1=frame(1);if(f1){const a=fullFit(f1);if(a&&a.s>=gmin()){applyCal(a,f1,true);return true}}}
  if(!c){PEND=null;setSt("lost");return true}
  if(c.s>=.85*B||(PEND&&dispPx(c.q,PEND.q,f)<1.5))applyCal(c,f,true);else PEND=c;
  return true}
@@ -1473,9 +1474,12 @@ function addOrRemove(C,f,R0,E){// ist der Fleck ein neuer Pfeil (add) oder ein g
 let ROLE=(()=>{try{return localStorage.getItem("dart_role")||"main"}catch(e){return"main"}})(),PEER=null,CONN=null,CONNS=[],DUOT=null;
 const MYID=KNR?"K"+KNR:"H";
 const DUO={groups:[],src:{},pulls:{},imgs:{},bad:{},pst:null,lastHb:0,on:false,msg:"",last:null,cnt:{both:0,main:0,side:0}};
-const DW={WAITM:1500,WAITP:3200,MAXP:6500,WAIT2:1500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,LGAP:12,INC:4,LT:3,RB:30,LGB:12,SAB:4,PAIRT:6500,PULLW:6000};
+const DW={W3:0,WAITM:1500,WAITP:3200,MAXP:6500,WAIT2:1500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,LGAP:12,INC:4,LT:3,RB:30,LGB:12,SAB:4,PAIRT:6500,PULLW:6000};
 function lsg(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}}function lss(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function duoSend(o){try{if(ROLE=="main"){for(const c of CONNS)if(c.open)c.send(o)}else if(CONN&&CONN.open)CONN.send(o)}catch(e){}}
+// PeerJS verwirft JSON-Nachrichten ab etwa 16 KB still – größere (Kamerabilder, Sicherung) gehen in Stücken
+let PTB={};
+function csend(c,o){const j=JSON.stringify(o);if(j.length<=4000){c.send(o);return}const k=Date.now().toString(36)+Math.random().toString(36).slice(2,6),n=Math.ceil(j.length/4000);for(let i=0;i<n;i++)c.send({t:"pt",k,i,n,d:j.slice(i*4000,(i+1)*4000)})}
+function duoSend(o){try{if(ROLE=="main"){for(const c of CONNS)if(c.open)csend(c,o)}else if(CONN&&CONN.open)csend(CONN,o)}catch(e){}}
 function srcName(id){return id=="T"?"Tablet":id=="H"?"Handy":/^K\d$/.test(id)?"Kamera "+id.slice(1):id}
 function remLive(){const now=Date.now();return Object.keys(DUO.src).filter(id=>{const s=DUO.src[id];return s.conn&&s.conn.open&&now-s.hb<8000&&s.cal})}
 function ownLive(){return!!(HB&&cv&&cv.srcObject&&MST!="lost"&&MST!="off"&&MST!="search")}// kurz "prüfen"/"Bewegung" zählt weiter als aktiv
@@ -1519,37 +1523,40 @@ function refit(T){if(T.r!=null)return;const F=fuseN(T.R),[c,v]=field(F.X[0],F.X[
 function pickIn(list,id,V,now,getR,getAt){let best=null,bs=1e9,n=0;for(const e of list){const R=getR(e);if(!R||R.some(r=>r.id==id)||now-getAt(e)>DW.PAIRT)continue;n++;
   let s=1e9;for(const r of R){const sc=(nearV(V,r.V)?0:1000)+Math.hypot(V.p[0]-r.V.p[0],V.p[1]-r.V.p[1]);if(sc<s)s=sc}if(s<bs){bs=s;best=e}}
  if(best&&bs>=1000&&n>1)return null;return best}
-function addRep(id,V){const now=Date.now();V.at=now;
+function addRep(id,V){const now=Date.now();V.at=now;try{LOG.push(hm()+" "+srcName(id)+" meldet "+field(V.p[0],V.p[1])[0].replace(/^0$/,"daneben")+" ("+Math.round(V.p[0])+"/"+Math.round(V.p[1])+")"+(V.weak?" schwach":"")+(V.n?" Nr. "+V.n:""))}catch(e){}
  // zuerst ein wartender Wurf (gerade erst gesehen), dann ein schon gezählter Pfeil, dem diese Kamera noch fehlt
  const G=pickIn(DUO.groups,id,V,now,g=>g.R,g=>g.at);if(G){G.R.push({id,V});if(G.R.length>=liveN())commitG(G);return}
  const T=pickIn(TURN.filter(t=>t.r==null&&t.R),id,V,now,t=>t.R,t=>t.at);if(T){T.R.push({id,V});DUO.cnt.both++;refit(T);return}
  const G2={R:[{id,V}],at:now};DUO.groups.push(G2);if(liveN()<=1)commitG(G2)}
 function commitG(G){const i=DUO.groups.indexOf(G);if(i>=0)DUO.groups.splice(i,1);
- if(TURN.length>=3&&!(G.R.length==1&&G.R[0].id=="T"))return;// mehr als drei Pfeile gibt es nicht: Rest ist eine Fehlmeldung
+ if(TURN.length>=3&&!(G.R.length==1&&G.R[0].id=="T")){LOG.push(hm()+" verworfen (schon 3 Pfeile): "+G.R.map(r=>srcName(r.id)).join("+"));return}// mehr als drei Pfeile gibt es nicht: Rest ist eine Fehlmeldung
  const F=fuseN(G.R),single=G.R.length==1&&G.R[0].id!="T"&&liveN()>1;if(G.R.length>1)DUO.cnt.both++;else if(G.R[0].id=="T")DUO.cnt.main++;else DUO.cnt.side++;
+ try{LOG.push(hm()+" gezählt: "+field(F.X[0],F.X[1])[0].replace(/^0$/,"daneben")+" aus "+G.R.map(r=>srcName(r.id)).join("+")+(G.R.length>1?" ("+F.how+")":""))}catch(e){}
  commitDart(F.X[0],F.X[1],{src:srcLabel(G.R),gap:F.gap,how:F.how,weak:G.R.every(r=>r.V.weak),single,R:G.R,at:G.at})}
 function duoLocal(V){// ein Pfeil wurde auf diesem Gerät bestätigt
  if(ROLE=="side"){duoSend({t:"dart",id:MYID,p:V.p,d:V.d,weak:V.weak,n:V.n,th:V.th,cov:V.cov});commitDart(V.p[0],V.p[1],{src:srcName(MYID),weak:V.weak});return}
  if(!DUO.on||!duoLive()){DUO.cnt.main++;commitDart(V.p[0],V.p[1],{src:"Tablet",weak:V.weak,R:[{id:"T",V}]});return}
  addRep("T",V)}
 function duoPullReset(why){PULLSEQ++;TURN=[];DVEC=[];DUO.groups=[];det=null;DPX=null;LOG.push(hm()+" gezogen ("+why+")");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");duoSend({t:"turn"})}
-function duoRecv(m,conn){if(!m||typeof m!="object")return;if(typeof m.t=="string"&&m.t.slice(0,2)=="bk"){bkRecv(m,conn);return}const now=Date.now();DUO.lastHb=now;
+function duoRecv(m,conn){if(!m||typeof m!="object")return;if(m.t=="pt"&&typeof m.k=="string"&&m.n>0&&m.n<2000){const now=Date.now();for(const x in PTB)if(now-PTB[x].at>90000)delete PTB[x];const B=PTB[m.k]||(PTB[m.k]={p:[],c:0,at:now});if(B.p[m.i]==null){B.p[m.i]=String(m.d);B.c++}if(B.c>=m.n){delete PTB[m.k];let o=null;try{o=JSON.parse(B.p.join(""))}catch(e){}if(o)duoRecv(o,conn)}return}if(typeof m.t=="string"&&m.t.slice(0,2)=="bk"){bkRecv(m,conn);return}const now=Date.now();DUO.lastHb=now;
  if(ROLE=="main"){const id=typeof m.id=="string"&&/^(H|K\d)$/.test(m.id)?m.id:(conn&&conn.__id)||"H";if(conn)conn.__id=id;
   const s=DUO.src[id]||(DUO.src[id]={hb:0,cal:false,st:"",conn:null});s.hb=now;s.conn=conn||s.conn;
   if(m.t=="hb"||m.t=="hello"){s.cal=!!m.cal;s.st=m.st||"";s.zahl=m.zahl||0;DUO.pst=m;duoUI();return}
   if(m.t=="dart"&&Array.isArray(m.p)&&Array.isArray(m.d)){addRep(id,{p:m.p,d:m.d,weak:!!m.weak,n:m.n||0,th:m.th||0,cov:m.cov||0});return}
-  if(m.t=="img"&&typeof m.data=="string"){DUO.imgs[id]={data:m.data,at:now};duoUI();return}
+  if(m.t=="img"&&typeof m.data=="string"){if(m.data)DUO.imgs[id]={data:m.data,at:now};const n=Object.keys(DUO.imgs).length;cm(m.data?"Kamerabilder: "+n+" angekommen – unten bei „Weitere Kameras“. Die gelbe 20 muss auf der echten 20 sitzen.":srcName(id)+": kein Bild ("+(m.why||"?")+").");duoUI();return}
+  if(m.t=="imgF"){if(DUO.td){DUO.td.cams[id]=m;const k=Object.keys(DUO.td.cams).length;cm("Testdaten: "+k+" von "+DUO.td.n+" Kameras angekommen …");if(k>=DUO.td.n)tdSave()}return}
   if(m.t=="pull"){DUO.pulls[id]=now;LOG.push(hm()+" "+srcName(id)+": Pfeile gezogen");
    if(!ownLive()&&TURN.length+DUO.groups.length+(typeof AUTOK!="undefined"?AUTOK.length:0)>0){const L=remLive(),n=L.filter(k=>now-(DUO.pulls[k]||0)<DW.PULLW).length,need=L.length>=3?2:1;if(n>=need){DUO.pulls={};duoPullReset(n+" Kamera(s)")}}return}
   return}
  if(m.t=="hb"||m.t=="hello"){DUO.pst=m;duoUI();return}
  if(m.t=="turn"){TURN=[];DVEC=[];renderTurn();ov();return}
- if(m.t=="snap"){const d=ringSnap();if(d)duoSend({t:"img",id:MYID,data:d});return}
+ if(m.t=="snap"){const d=ringSnap();if(d)duoSend({t:"img",id:MYID,data:d});else duoSend({t:"img",id:MYID,data:"",why:cv.srcObject?"noch kein Bild":"Kamera aus"});return}
+ if(m.t=="snapF"){let d="";try{if(cv.videoWidth){const c=document.createElement("canvas");c.width=cv.videoWidth;c.height=cv.videoHeight;c.getContext("2d").drawImage(cv,0,0);d=c.toDataURL("image/jpeg",.9)}}catch(e){}duoSend({t:"imgF",id:MYID,data:d,cal:cal&&cal.length==4?cal:null,zahl:ringZahl(),w:cv.videoWidth||0,h:cv.videoHeight||0,st:MST,log:LOG.slice(-60),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y}))});return}
  if(m.t=="set20"&&isFinite(m.u)&&isFinite(m.v)){ringSet20(+m.u,+m.v);const d=ringSnap();if(d)duoSend({t:"img",id:MYID,data:d});return}}
 function duoTick(){if(ROLE!="main")return;const now=Date.now(),L=liveN(),busy=PDART&&PDART.kind=="add";
  for(const G of DUO.groups.slice()){const age=now-G.at,k=G.R.length;
   if(k>=Math.max(1,L))commitG(G);else if(k>=2&&age>DW.WAIT2)commitG(G);
-  else if(k==1){const own=G.R[0].id=="T";if(own?age>DW.WAITM:(age>DW.MAXP||(age>DW.WAITP&&(!ownLive()||(!busy&&MST=="ok")))))commitG(G)}}}
+  else if(k==1){const own=G.R[0].id=="T";if(own?age>DW.WAITM:(age>DW.MAXP||(age>DW.WAITP&&(DW.W3?remLive().length<3:true)&&(!ownLive()||(!busy&&MST=="ok")))))commitG(G)}}}
 function duoReset(){DUO.groups=[];if(ROLE=="main")duoSend({t:"turn"});else duoSend({t:"pull",id:MYID})}
 function loadPJ(cb){if(window.Peer)return cb();const U=["https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js","https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];let i=0;
  const nx=()=>{if(i>=U.length){DUO.msg="Die Verbindungs-Bibliothek konnte nicht geladen werden. Ist das Internet an?";duoUI();return}const s=document.createElement("script");s.src=U[i++];s.onload=cb;s.onerror=nx;document.head.appendChild(s)};nx()}
@@ -1560,19 +1567,26 @@ function setConn(c){if(ROLE=="main"){if(!CONNS.includes(c))CONNS.push(c);CONNS=C
 function duoStart(){DUO.on=true;lss("dart_duo","1");if(PEER){duoUI();return}
  if(ROLE=="main"){let code=lsg("dart_code","");if(!/^\d{4}$/.test(code)){code=String(1000+Math.floor(Math.random()*9000));lss("dart_code",code)}let tries=0;DUO.msg="Verbinde …";duoUI();
   loadPJ(()=>{const mk=()=>{PEER=new Peer("ldart-"+code,{debug:0});PEER.on("open",()=>{DUO.msg="";duoUI()});PEER.on("connection",c=>setConn(c));
-    PEER.on("error",e=>{if(e.type=="unavailable-id"&&tries++<8){try{PEER.destroy()}catch(_){}PEER=null;DUO.msg="Code ist noch belegt, versuche es gleich wieder …";duoUI();setTimeout(mk,4000)}else if(e.type!="peer-unavailable"){DUO.msg="Verbindungsproblem ("+e.type+"). Das Tablet arbeitet allein weiter.";duoUI()}});
+    PEER.on("error",e=>{if(e.type=="unavailable-id"&&tries++<30){try{PEER.destroy()}catch(_){}PEER=null;DUO.msg="Code ist noch belegt, versuche es gleich wieder …";duoUI();setTimeout(mk,4000)}else if(e.type!="peer-unavailable"){DUO.msg="Verbindungsproblem ("+e.type+"). Das Tablet arbeitet allein weiter.";duoUI()}});
     PEER.on("disconnected",()=>{try{PEER.reconnect()}catch(e){}})};mk()})}
  else{const code=lsg("dart_code","");if(!/^\d{4}$/.test(code)){DUO.msg="Bitte den 4-stelligen Code vom Tablet eingeben.";duoUI();return}DUO.msg="Suche das Tablet …";duoUI();
   loadPJ(()=>{PEER=new Peer({debug:0});const dial=()=>{if(!PEER||PEER.destroyed||(CONN&&CONN.open))return;try{setConn(PEER.connect("ldart-"+code,{reliable:true,serialization:"json"}))}catch(e){}};
    PEER.on("open",dial);PEER.on("error",e=>{DUO.msg=e.type=="peer-unavailable"?"Tablet nicht gefunden. Ist dort die Kopplung gestartet? Ich versuche es weiter …":"Verbindungsproblem ("+e.type+"), versuche es weiter …";duoUI()});
-   PEER.on("disconnected",()=>{try{PEER.reconnect()}catch(e){}});setInterval(dial,5000)})}
- if(!DUOT)DUOT=setInterval(()=>{const h=hello();h.t="hb";duoSend(h);duoTick();duoUI();bkTick()},1000)}
+   PEER.on("disconnected",()=>{try{PEER.reconnect()}catch(e){}});clearInterval(DUO.di);DUO.di=setInterval(dial,5000)})}
+ if(!DUOT)DUOT=setInterval(()=>{const h=hello();h.t="hb";duoSend(h);duoTick();duoUI();bkTick();if(ROLE=="main"&&duoLive()&&document.visibilityState!="hidden")keepAwake()},1000)}
+// Wächter: Verbindung nach Standby, Netzproblem oder Neustart des Tablets von selbst wieder aufbauen
+function duoWatch(){if(LOG.length>500)LOG.splice(0,LOG.length-400);if(!DUO.on)return;const now=Date.now();
+ if(!PEER||PEER.destroyed){if(window.Peer&&now-(DUO.wAt||0)>6000){DUO.wAt=now;PEER=null;if(ROLE!="main")CONN=null;LOG.push(hm()+" Verbindung wird neu aufgebaut");duoStart()}return}
+ if(PEER.disconnected){try{PEER.reconnect()}catch(e){}return}
+ if(ROLE!="main"&&CONN&&CONN.open&&DUO.lastHb&&now-DUO.lastHb>15000){LOG.push(hm()+" Tablet antwortet nicht – verbinde neu");try{CONN.close()}catch(e){}CONN=null;DUO.lastHb=now}}
+try{setInterval(duoWatch,4000)}catch(e){}
+try{document.addEventListener("visibilitychange",()=>{if(document.visibilityState=="visible"){try{duoWatch()}catch(e){}if(ROLE=="main"&&DUO.on)keepAwake()}})}catch(e){}
 // ===== Sicherung auf dem Raspberry Pi (über die Kamera-Verbindung) =====
 // Jedes Ring-Kamera-Fenster (?kamera=N) hält eine Kopie aller Trainingsdaten. Abgleich in beide Richtungen:
 // fehlt dem Tablet etwas (neues Tablet, Inkognito, gelöschte Browserdaten), kommt es vom Pi zurück.
 // "Alle Daten löschen" merkt sich den Zeitpunkt (z); ältere Einheiten kommen dann nicht zurück.
 // Große Daten werden in Stücken geschickt (eine Nachricht darf nicht zu groß sein).
-const BKC=60000;let BKIN={},BKSIG="",BKT=0;
+const BKC=3000;let BKIN={},BKSIG="",BKT=0;
 function bkMine(){if(ROLE=="main"){const p={};for(const k in ST.p){const d=ST.p[k].db||{};p[k]={name:ST.p[k].name,s:d.sessions||[],n:d.notes||{},z:d.z||0,m:d.ms||[],x:d.mx||[]}}return{p,t:ST.tours||{}}}
  try{const o=JSON.parse(lsg("dart_bk","")||"null");if(o&&o.p)return o}catch(e){}return{p:{}}}
 function bkCount(B){let n=0;for(const k in B.p)n+=(B.p[k].s||[]).length;return n}
@@ -1591,7 +1605,7 @@ function bkMerge(dst,src,srcWins){let ch=false;for(const k in src.p||{}){const a
 function bkApplyMain(B){for(const k in B.p){const a=B.p[k];if(!ST.p[k])ST.p[k]={name:a.name,db:{sessions:[]}};const d=ST.p[k].db;ST.p[k].name=a.name||ST.p[k].name;d.sessions=a.s;d.notes=a.n;d.z=a.z||0;d.ms=a.m||d.ms||[];d.mx=a.x||d.mx||[]}
  if(B.t)ST.tours=B.t;DB=ST.p[ST.cur].db;DB.cam=ST.cam;save();try{mMig()}catch(e){}}
 function bkSend(c,o){try{if(!c||!c.open)return;const s=JSON.stringify(o),k=Date.now().toString(36)+Math.random().toString(36).slice(2,6),n=Math.max(1,Math.ceil(s.length/BKC));
- for(let i=0;i<n;i++)c.send({t:"bkC",id:MYID,k,i,n,d:s.slice(i*BKC,(i+1)*BKC)})}catch(e){}}
+ for(let i=0;i<n;i++)csend(c,{t:"bkC",id:MYID,k,i,n,d:s.slice(i*BKC,(i+1)*BKC)})}catch(e){}}
 function bkSig(){let s="";for(const k in ST.p){const d=ST.p[k].db||{},S=d.sessions||[];s+=k+":"+ST.p[k].name+":"+(d.z||0)+":"+S.length+":"+(S[0]?S[0].id:0)+":"+S.map(r=>r.note||"").join("¦")+":"+JSON.stringify(d.notes||{})+":"+(d.ms||[]).length+":"+(d.mx||[]).length+"|"}const TT=Object.values(ST.tours||{});return s+"T"+TT.length+":"+TT.reduce((m,t)=>Math.max(m,t.upd||0),0)}
 function bkTick(){if(ROLE!="main"||++BKT%3)return;const L=CONNS.filter(c=>c.open&&c.__bk);if(!L.length)return;const g=bkSig();if(g==BKSIG)return;BKSIG=g;const o=bkMine();L.forEach(c=>bkSend(c,o))}
 function bkRecv(m,conn){
@@ -1638,17 +1652,24 @@ function duoState(){if(!DUO.on)return"aus";if(ROLE=="main"){const ids=Object.key
 function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="ok"?"#1a7f4b":s=="aus"?"#555":"#b7791f",badge=(t,s)=>'<span style="display:inline-block;background:'+col(s)+';color:#fff;padding:4px 10px;border-radius:8px;font-weight:700;margin:2px 4px 2px 0">● '+t+"</span>";
  $("#d1").className=ROLE=="main"?"pri":"";$("#d2").className=ROLE=="side"?"pri":"";const c7=$("#c7");if(c7)c7.style.display=ROLE=="side"?"none":"";let h="";
  if(ROLE=="main"){const ids=Object.keys(DUO.src).sort();h+='<div style="margin:6px 0">'+(!DUO.on?badge("Weitere Kameras aus","aus"):ids.length?ids.map(k=>{const s=srcState(DUO.src[k]);return badge(srcName(k)+(DUO.src[k].zahl?" (Zahl "+DUO.src[k].zahl+")":"")+(s=="ok"?" verbunden":": "+s),s)}).join(""):badge("noch keine Kamera verbunden","getrennt"))+"</div>";
-  const code=lsg("dart_code","");h+=DUO.on?'<div>Code für Handy / Ring-Kameras: <b style="font-size:30px;letter-spacing:4px">'+(code||"…")+'</b></div><div class="mu">Am Handy „Dieses Gerät ist eine weitere Kamera“ wählen und den Code eingeben. Die Ring-Kameras am Raspberry Pi verbinden sich mit diesem Code von selbst. Das Tablet zählt die Pfeile; die eigene Tablet-Kamera ist dabei optional.</div><div class="row" style="margin-top:6px"><button id="d5">Kamerabilder ansehen</button><button id="d4">Weitere Kameras ausschalten</button></div><div class="row" style="margin-top:8px;justify-content:flex-start;align-items:center"><input id="dcode2" inputmode="numeric" maxlength="4" placeholder="Code" style="width:110px;font-size:20px;letter-spacing:3px;text-align:center"><button id="d6">Code ändern</button></div><div class="mu">Nur nötig, wenn das Tablet zurückgesetzt wurde: hier denselben Code eintragen, der in dart-start.sh auf dem Raspberry Pi steht.</div>':'<button id="d3" class="pri">Weitere Kameras koppeln</button>';
+  const code=lsg("dart_code","");h+=DUO.on?'<div>Code für Handy / Ring-Kameras: <b style="font-size:30px;letter-spacing:4px">'+(code||"…")+'</b></div><div class="mu">Am Handy „Dieses Gerät ist eine weitere Kamera“ wählen und den Code eingeben. Die Ring-Kameras am Raspberry Pi verbinden sich mit diesem Code von selbst. Das Tablet zählt die Pfeile; die eigene Tablet-Kamera ist dabei optional.</div><div class="row" style="margin-top:6px"><button id="d5">Kamerabilder ansehen</button><button id="d7">Testdaten speichern</button><button id="d8">'+(DUO.showLog?"Protokoll ausblenden":"Protokoll zeigen")+'</button><button id="d4">Weitere Kameras ausschalten</button></div><div class="row" style="margin-top:8px;justify-content:flex-start;align-items:center"><input id="dcode2" inputmode="numeric" maxlength="4" placeholder="Code" style="width:110px;font-size:20px;letter-spacing:3px;text-align:center"><button id="d6">Code ändern</button></div><div class="mu">Nur nötig, wenn das Tablet zurückgesetzt wurde: hier denselben Code eintragen, der in dart-start.sh auf dem Raspberry Pi steht.</div>':'<button id="d3" class="pri">Weitere Kameras koppeln</button>';
   if(DUO.on&&DUO.last)h+='<div class="mu" style="margin-top:4px">Letzter Abgleich: '+DUO.last+" · mehrere Kameras "+DUO.cnt.both+" · nur Tablet "+DUO.cnt.main+" · nur eine andere Kamera "+DUO.cnt.side+"</div>";
   const im=Object.keys(DUO.imgs).sort();if(im.length)h+='<div class="row" style="margin-top:6px;flex-wrap:wrap">'+im.map(k=>'<div style="text-align:center"><img data-src="'+k+'" src="'+DUO.imgs[k].data+'" style="width:220px;border-radius:6px;display:block;cursor:crosshair"><span class="mu">'+srcName(k)+"</span></div>").join("")+'</div><div class="mu">Die gelbe 20 muss auf der echten 20 sitzen. Wenn nicht: im Bild auf die echte 20 tippen.</div>';
+  if(DUO.showLog)h+='<pre style="max-height:320px;overflow:auto;font-size:12px;line-height:1.35;white-space:pre-wrap;background:rgba(127,127,127,.12);padding:8px;border-radius:8px;margin-top:6px">'+esc(LOG.slice(-80).join("\n")||"Noch keine Einträge.")+"</pre>";
   const bad=Object.keys(DUO.bad||{}).filter(k=>DUO.bad[k]>=4);if(bad.length)h+='<div class="mu" style="margin-top:4px;color:#c8372d">⚠ '+bad.map(srcName).join(", ")+' passt oft nicht zu den anderen Kameras. Bitte „Kamerabilder ansehen“ und prüfen, ob die gelbe 20 richtig sitzt.</div>'}
  else{h+='<div style="margin:6px 0">'+badge(st=="ok"?"Tablet verbunden":st=="aus"?"Verbindung aus":"Tablet: "+st,st)+(KNR?'<span class="mu">Ring-Kamera '+KNR+"</span>":"")+"</div>";
   h+='<div class="row" style="align-items:center"><input id="dcode" inputmode="numeric" maxlength="4" placeholder="Code" value="'+lsg("dart_code","")+'" style="width:110px;font-size:24px;letter-spacing:4px;text-align:center"><button id="d3" class="pri">'+(DUO.on?"Neu verbinden":"Mit Tablet verbinden")+'</button>'+(DUO.on?'<button id="d4">Trennen</button>':"")+"</div>"+'<div class="mu">Dieses Gerät ist eine weitere Kamera: Es erkennt die Pfeile mit und schickt sie ans Tablet. Gezählt wird am Tablet. Bildschirm bitte anlassen.</div>'}
  if(DUO.msg)h+='<div class="mu" style="margin-top:4px;color:#b7791f">'+DUO.msg+"</div>";
- if(DUO.lastH!=h){DUO.lastH=h;b.innerHTML=h;const d3=$("#d3"),d4=$("#d4"),d5=$("#d5");if(d3)d3.onclick=()=>{if(ROLE=="side"){const v=($("#dcode").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Bitte den 4-stelligen Code vom Tablet eingeben.";duoUI();return}lss("dart_code",v);if(PEER){try{PEER.destroy()}catch(e){}PEER=null;CONN=null}}duoStart()};if(d4)d4.onclick=duoStop;const d6=$("#d6");if(d6)d6.onclick=()=>{const v=($("#dcode2").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Der Code muss aus 4 Ziffern bestehen.";DUO.lastH="";duoUI();return}lss("dart_code",v);duoStop();DUO.msg="";DUO.lastH="";duoStart();cm("Neuer Code "+v+" – die Ring-Kameras verbinden sich damit.")};if(d5)d5.onclick=()=>{DUO.imgs={};duoSend({t:"snap"});cm("Kamerabilder angefordert …")};
+ if(DUO.lastH!=h){DUO.lastH=h;b.innerHTML=h;const d3=$("#d3"),d4=$("#d4"),d5=$("#d5");if(d3)d3.onclick=()=>{if(ROLE=="side"){const v=($("#dcode").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Bitte den 4-stelligen Code vom Tablet eingeben.";duoUI();return}lss("dart_code",v);if(PEER){try{PEER.destroy()}catch(e){}PEER=null;CONN=null}}duoStart()};if(d4)d4.onclick=duoStop;const d6=$("#d6");if(d6)d6.onclick=()=>{const v=($("#dcode2").value||"").replace(/\D/g,"");if(!/^\d{4}$/.test(v)){DUO.msg="Der Code muss aus 4 Ziffern bestehen.";DUO.lastH="";duoUI();return}lss("dart_code",v);duoStop();DUO.msg="";DUO.lastH="";duoStart();cm("Neuer Code "+v+" – die Ring-Kameras verbinden sich damit.")};if(d5)d5.onclick=()=>{DUO.imgs={};duoSend({t:"snap"});cm("Kamerabilder angefordert … sie erscheinen gleich unten bei „Weitere Kameras“.");clearTimeout(DUO.snT);DUO.snT=setTimeout(()=>{if(!Object.keys(DUO.imgs).length)cm("Keine Kamerabilder angekommen. Sind die Kameras verbunden (grün)? Sonst am Pi „Neu verbinden“.")},20000)};
+ const d7=$("#d7");if(d7)d7.onclick=()=>{const n=Object.keys(DUO.src).filter(k=>DUO.src[k].conn&&DUO.src[k].conn.open).length;if(!n){cm("Keine Kamera verbunden.");return}DUO.td={at:Date.now(),cams:{},n};duoSend({t:"snapF"});cm("Testdaten werden gesammelt … ("+n+" Kamera"+(n==1?"":"s")+")");clearTimeout(DUO.tdT);DUO.tdT=setTimeout(tdSave,30000)};
+ const d8=$("#d8");if(d8)d8.onclick=()=>{DUO.showLog=!DUO.showLog;DUO.lastH="";duoUI()};
 }}
+function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
+ try{const o={app:"dart-testdaten",v:30,at:new Date().toISOString(),log:LOG.slice(-200),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+  a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
- if(s&&s.conn&&s.conn.open){try{s.conn.send({t:"set20",u:(e.clientX-r.left)/r.width,v:(e.clientY-r.top)/r.height})}catch(_){}cm(srcName(id)+": 20 wird neu gesetzt …")}}
+ if(s&&s.conn&&s.conn.open){try{csend(s.conn,{t:"set20",u:(e.clientX-r.left)/r.width,v:(e.clientY-r.top)/r.height})}catch(_){}cm(srcName(id)+": 20 wird neu gesetzt …")}}
 function duoInit(){const bx=$("#dbox");if(bx&&bx.addEventListener)bx.addEventListener("click",duoImgClick);$("#d1").onclick=()=>{if(ROLE!="main"){duoStop();ROLE="main";lss("dart_role","main");lss("dart_code","")}duoUI()};$("#d2").onclick=()=>{if(ROLE!="side"){duoStop();ROLE="side";lss("dart_role","side")}duoUI()};
  duoUI();if(lsg("dart_duo","0")=="1")setTimeout(duoStart,500)}
 // ===== Ring-Kamera: Scheibe finden über die bekannte Halterung =====
@@ -1666,12 +1687,35 @@ function ringCand(th,R,Zc,roll,f){const a=th*Math.PI/180,C=[R*Math.sin(a),-R*Mat
  return BP.map(([bx,by])=>{const P=[bx-C[0],by-C[1],-C[2]],xc=P[0]*X2[0]+P[1]*X2[1]+P[2]*X2[2],yc=P[0]*Y2[0]+P[1]*Y2[1]+P[2]*Y2[2],zc=P[0]*fw[0]+P[1]*fw[1]+P[2]*fw[2];
   const u=.5+RG.foc*xc/zc,v=.5+RG.foc*asp*yc/zc;return[.5+(u-cx)*z,.5+(v-cy)*z]})}
 function ringFit(f){return ringFit1(f,ringZahl())}
-function ringFit1(f,zahl){if(!zahl||!f)return null;const thu=ORD.indexOf(zahl)*18,L=[];
- for(let th=thu-RG.thw;th<=thu+RG.thw;th+=RG.ths)for(const Zc of RG.zs)for(const R of RG.rs)for(const roll of RG.rolls){const q=ringCand(th,R,Zc,roll,f);
-  if(q.some(p=>!isFinite(p[0])||p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3))continue;L.push({q,s:polish(q,f,[]).s})}
+// Vorlagen aus dem echten Aufbau (Autodarts-Halter am Winmau Plasma, Bild 1280×720, 11.11.2026):
+// Lage der 4 Kalibrierpunkte (Doppelring bei 20, 6, 3, 11) im Bild, wenn die Kamera beim Winkel th sitzt.
+// Die Kameras schauen nicht genau auf die Mitte und steiler als im einfachen Lochkamera-Modell – deshalb diese Vorlagen.
+const RTPL=[{th:0,q:[[.4793,.6653],[.2249,.3173],[.4773,.1230],[.7237,.3139]]},{th:234,q:[[.2747,.1754],[.5602,.1121],[.7160,.4331],[.2909,.5722]]},{th:121.4,q:[[.7190,.1641],[.6927,.5800],[.2675,.4298],[.4245,.0996]]}],RGMIN=1.1;
+function gmin(){return RINGON()?RGMIN:GMIN}
+// Nummerierung um k·36° drehen (das Muster der Scheibe sieht danach gleich aus)
+function rotN(P,k){if(!k)return P;const Hi=hom(BP,P),R=k*36*Math.PI/180,co=Math.cos(R),si=Math.sin(R);return BP.map(([x,y])=>ap(Hi,x*co-y*si,x*si+y*co))}
+// Winkel der Kamera um die Scheibe (Grad, 0 = bei der 20) aus 4 Kalibrierpunkten (Bild 0..1)
+function camTh(P){try{const F=FOC||RG.foc,asp=cv.videoWidth&&cv.videoHeight?cv.videoWidth/cv.videoHeight:16/9,H=hom(BP,P),fy=F*asp;
+ const ki=v=>[(v[0]-.5*v[2])/F,(v[1]-.5*v[2])/fy,v[2]],m1=ki([H[0],H[3],H[6]]),m2=ki([H[1],H[4],H[7]]),m3=ki([H[2],H[5],1]),nn=v=>Math.hypot(...v);
+ let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l),r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+ const C=[-dot(r1,t),-dot(r2,t),-dot(r3,t)];return((Math.atan2(C[0],-C[1])*180/Math.PI)%360+360)%360}catch(e){return NaN}}
+function ringFit1(f,zahl){if(!f)return null;const thu=zahl?ORD.indexOf(zahl)*18:0,L=[],okq=q=>!q.some(p=>!isFinite(p[0])||p[0]<-.3||p[0]>1.3||p[1]<-.3||p[1]>1.3);
+ // a) zuletzt gespeicherte Lage (z. B. nach einem Neustart): nur fein nachstellen
+ const sv=DB.cam&&DB.cam.cal;if(sv&&sv.length==4){const q0=toA(sv,f);if(okq(q0)){const r=polishIt(polish(q0,f,[6,3,1.5,.75]).q,f);
+  if(r.s>=RGMIN&&dispPx(r.q,q0,f)<40){r.zahl=zahl;LOG.push(hm()+" Ring-Suche: gespeicherte Lage passt (Wert "+r.s.toFixed(2)+")");return r}}}
+ // b) Vorlagen der echten Halterung – ein 36°-Fenster genügt, weil die Scheibe nach 36° gleich aussieht
+ //    (dazu etwas größer/kleiner und verschoben, falls eine Kamera etwas anders sitzt)
+ for(const T of RTPL){const G=hom(BP,T.q),c0=ap(G,0,0);for(let a=-18;a<18;a+=3){const d=-(thu+a-T.th)*Math.PI/180,co=Math.cos(d),si=Math.sin(d),q0=BP.map(([x,y])=>ap(G,co*x-si*y,si*x+co*y));
+  for(const sc of[.9,1,1.1])for(const dx of[-.05,0,.05])for(const dy of[-.07,0,.07]){const q=toA(q0.map(([u,v])=>[c0[0]+(u-c0[0])*sc+dx,c0[1]+(v-c0[1])*sc+dy]),f);if(okq(q))L.push({q,s:polish(q,f,[]).s})}}}
+ // c) einfaches Lochkamera-Modell um die angegebene Zahl
+ if(zahl)for(let th=thu-RG.thw;th<=thu+RG.thw;th+=RG.ths)for(const Zc of RG.zs)for(const R of RG.rs)for(const roll of RG.rolls){const q=ringCand(th,R,Zc,roll,f);if(okq(q))L.push({q,s:polish(q,f,[]).s})}
  L.sort((a,b)=>b.s-a.s);let best=null;
- for(const c of L.slice(0,RG.top)){const r=polish(polish(c.q,f,[24,16,8,4,2,1,.5,.25]).q,f);if(!best||r.s>best.s)best=r}
- if(best){best.zahl=zahl;LOG.push(hm()+" Ring-Suche bei Zahl "+zahl+": Wert "+best.s.toFixed(2))}return best}
+ for(const c of L.slice(0,RG.top+2)){const r=polish(polish(c.q,f,[24,16,8,4,2,1,.5,.25]).q,f);if(!best||r.s>best.s)best=r}
+ if(!best)return null;
+ // d) Nummerierung: so um Vielfache von 36° drehen, dass die Kamera bei der angegebenen Zahl sitzt
+ if(zahl){const P=fromA(best.q,f);let bk=0,bd=1e9;for(let k=0;k<10;k++){const th=camTh(rotN(P,k)),dd=Math.abs(((th-thu)%360+540)%360-180);if(dd<bd){bd=dd;bk=k}}if(bk)best.q=toA(rotN(P,bk),f);best.dth=bd}
+ best.zahl=zahl;LOG.push(hm()+" Ring-Suche bei Zahl "+zahl+": Wert "+best.s.toFixed(2)+(best.dth!=null?" (Kamera-Lage ±"+Math.round(best.dth)+"°)":""));return best}
+
 // Nur echte Kameras: Chromium hängt an USB-Kameras "(vvvv:pppp)" an; eingebaute Bausteine des Pi 5 werden aussortiert
 function camPick(ds){const v0=ds.filter(d=>d.kind=="videoinput"),usb=v0.filter(d=>/\([0-9a-f]{4}:[0-9a-f]{4}\)\s*$/i.test(d.label||""));if(usb.length)return usb;const v=v0.filter(d=>!/pispbe|rp1-cfe|hevc|codec|bcm2835|unicam|isp/i.test(d.label||""));return v.length?v:v0}
 // Kamera Nummer KNR wählen (Reihenfolge wie vom System gemeldet), dann starten

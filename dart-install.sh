@@ -70,7 +70,7 @@ if command -v nmcli >/dev/null 2>&1; then
 fi
 
 # Kameras prüfen
-N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c 'usb.*video-index0$')
+N=$(ls /dev/v4l/by-path/ 2>/dev/null | grep -c -- '-usb-.*video-index0$')
 if [ "$N" -ge 3 ]; then echo "✓ $N USB-Kameras erkannt"; else echo "⚠ Nur $N USB-Kamera(s) erkannt – bitte alle 3 Kameras einstecken."; fi
 echo
 echo "Fertig. Jetzt neu starten mit:  sudo reboot"
