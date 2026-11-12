@@ -289,7 +289,7 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 <nav><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 37</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 39</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -1168,7 +1168,7 @@ function softImg(im){// gleichmäßig leicht weichzeichnen (Binomialfilter 1-2-1
  return{...im,data:o}}
 // Pfeilmodell (aus den eigenen Pfeilen gemessen): Neigung nach oben th, zur Seite ph, Länge Spitze bis Flight-Ende L, sichtbare Spitze pt (mm)
 let DMOD={th:.24,ph:-.16,L:127,pt:26};
-let FW={fcAny:1,mBand:1,mbW0:5,mbW1:.16,mbL:1.3,noRecal:1,recalT:120000,sameKeep:1,samePx:3,qpF:.15,qpMax:25,absQ:1,absN:40,absT:20000,calm:350,dupT:3000,dupMM:4,gh:0,act:1,actT:40,fcB:14,emaQ:1,sm:1500,ccCalm:800,mm:1,mmR:2,fc:1,fcN:1,qp:1,qpN:2,hp:1,hpT:8000,mAll:1,multi:1,autoMiss:1,cdM:2,cd2:0,pullE:1,pullN:300,pullK:2,pullA:5,pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
+let FW={mDef:1,fcAny:1,mBand:1,mbW0:5,mbW1:.16,mbL:1.3,noRecal:1,recalT:120000,sameKeep:1,samePx:3,qpF:.15,qpMax:25,absQ:1,absN:40,absT:20000,calm:350,dupT:3000,dupMM:4,gh:0,act:1,actT:40,fcB:14,emaQ:1,sm:1500,ccCalm:800,mm:1,mmR:2,fc:1,fcN:1,qp:1,qpN:2,hp:1,hpT:8000,mAll:1,multi:1,autoMiss:1,cdM:2,cd2:0,pullE:1,pullN:300,pullK:2,pullA:5,pt:1.5,bar:1,fl:.5,bt:1,be:.6,pk:2,st:9,sp:14,sl:12,spt:8,mq:.5,e0a:1.5,e0b:5,e1:25,ntop:5,cs:[5,6,2],FIT:1,lim:[30,45,95,165,40],oe:0,lt:0,vis:1,vt0:25,vt1:12,vk:4,vw:6,vf:.6,REG:1,rR:10,rS:3,rStep:24,rTex:6,rOut:.3,regMin:.12,LK:1,mix:1,mixLat:4,mixOcc:12,tr2:1,trRes:5,occT:1,hidX:0,hidXmax:.15,occMax:.5,trGB:40,trGP:.3,bridge:0,arc:1,arcR:4,arcL:60,bic:1,quick:1,latc:1,shortModel:1,noShaft:0,frag:1,occV:0,unsure:.8,occVmin:3,occVlat:.08,hid:1,hidK:0,hidM:0,hidW:3,hidE:.08,hidEnd:.2,fragMin:15,fragR:.5,shortMin:.008,qT:60,qMin:3,pfIdle:300,pfDart:1100,brMax:25,brRun:3,lkG:25,lkS:40,lkSmin:8,lkIt:8};
 function camModel(Hp,W,Hh,z){const K=CK&&CK.W==W?CK:{fl:.8*W*z,px:W/2,py:Hh/2},fl=K.fl,cx=K.px,cy=K.py,col=k=>[(Hp[k]-cx*Hp[6+k])/fl,(Hp[3+k]-cy*Hp[6+k])/fl,Hp[6+k]];
  const m1=col(0),m2=col(1),m3=col(2),nn=v=>Math.hypot(v[0],v[1],v[2]);let l=2/(nn(m1)+nn(m2));if(m3[2]*l<0)l=-l;
  const r1=m1.map(v=>v*l),r2=m2.map(v=>v*l),t=m3.map(v=>v*l);let r3=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]];const n3=nn(r3);r3=r3.map(v=>v/n3);
@@ -1410,7 +1410,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 37 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 39 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -1500,7 +1500,7 @@ function addOrRemove(C,f,R0,E){// ist der Fleck ein neuer Pfeil (add) oder ein g
 let ROLE=(()=>{try{return localStorage.getItem("dart_role")||"main"}catch(e){return"main"}})(),PEER=null,CONN=null,CONNS=[],DUOT=null;
 const MYID=KNR?"K"+KNR:"H";
 const DUO={groups:[],src:{},pulls:{},imgs:{},bad:{},pst:null,lastHb:0,on:false,msg:"",last:null,cnt:{both:0,main:0,side:0}};
-const DW={MISSX:1,REPLD:45,PREF:1,TRI:1,TRP:4,TRA:30,REPL:1,AGR:6,W3:0,WAITM:1500,WAITP:1200,MAXP:4000,WAIT2:500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,LGAP:12,INC:4,LT:3,RB:30,LGB:12,SAB:4,PAIRT:6500,PULLW:6000};
+const DW={XLOS:0,XLP:4,XLA:40,PAIRF:1,PFX:.5,XPREF:0,ACUT:1,AXO:1,FULLW:1,AXK:.8,ASC:1,ATRA:45,ATRP:4,ANEAR:60,AN2:15,AWK:1.5,APEN:.15,MISSX:1,REPLD:45,PREF:1,TRI:1,TRP:4,TRA:30,REPL:1,AGR:6,W3:0,WAITM:1500,WAITP:1200,MAXP:4000,WAIT2:500,NEAR:50,PERP:8,SA:4,SP:1.2,GAP:15,FMAX:12,LGAP:12,INC:4,LT:3,RB:30,LGB:12,SAB:4,PAIRT:6500,PULLW:6000};
 function lsg(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}}function lss(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 // PeerJS verwirft JSON-Nachrichten ab etwa 16 KB still – größere (Kamerabilder, Sicherung) gehen in Stücken
 let PTB={};
@@ -1521,7 +1521,7 @@ function fuse2(a,b){const bull=Math.hypot((a.p[0]+b.p[0])/2,(a.p[1]+b.p[1])/2)<D
  const gap=Math.hypot(a.p[0]-b.p[0],a.p[1]-b.p[1]);
  // Liegen die beiden Einzelergebnisse weit auseinander, hat sich eine Kamera geirrt. Richtig ist meist der Punkt, der auf der Pfeillinie der anderen Kamera liegt.
  if(gap>(bull?DW.LGB:DW.LGAP)){const ab=pdl(a.p,b),ba=pdl(b.p,a);let t;
-  if(a.weak!=b.weak)t=!a.weak;else if(ab<DW.LT&&ba>=DW.LT)t=true;else if(ba<DW.LT&&ab>=DW.LT)t=false;else if(ab<ba*.5)t=true;else if(ba<ab*.5)t=false;else t=(a.cov||0)>=(b.cov||0);
+  if(a.weak!=b.weak)t=!a.weak;else if(DW.XPREF&&!!a.x!=!!b.x)t=!a.x;else if(ab<DW.LT&&ba>=DW.LT)t=true;else if(ba<DW.LT&&ab>=DW.LT)t=false;else if(ab<ba*.5)t=true;else if(ba<ab*.5)t=false;else t=(a.cov||0)>=(b.cov||0);
   X=t?a.p:b.p;how=t?"A":"B";
   if(DW.MISSX&&Math.hypot(X[0],X[1])>170){const Y=wlsV([a,b],200),al=v=>Math.abs((Y[0]-v.p[0])*v.d[0]+(Y[1]-v.p[1])*v.d[1]);
    if(isFinite(Y[0])&&Math.hypot(Y[0],Y[1])<=168&&al(a)<=DW.TRA&&al(b)<=DW.TRA&&pdl(Y,a)<=DW.TRP&&pdl(Y,b)<=DW.TRP){X=Y;how="Schnittpunkt"}}}
@@ -1536,6 +1536,10 @@ function fuseN(R){if(R.length==1)return{X:R[0].V.p.slice(),gap:0,how:srcName(R[0
   if(inc.length>2){const md=a=>{a=a.slice().sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};X=inc.length==R.length?[md(R.map(r=>r.V.p[0])),md(R.map(r=>r.V.p[1]))]:wlsV(inc.map(k=>R[k].V))}return{X,gap:bg,how:inc.length==R.length?"Schnittpunkt ("+R.length+" Kameras)":"Schnittpunkt ("+inc.map(k=>srcName(R[k].id)).join(" + ")+")"}}
  if(DW.TRI&&R.length>=3){const X=wlsV(R.map(r=>r.V));let ok=isFinite(X[0])&&isFinite(X[1]);for(const r of R){const v=r.V,dx=X[0]-v.p[0],dy=X[1]-v.p[1],k=v.weak?2:1;if(Math.abs(dx*v.d[1]-dy*v.d[0])>DW.TRP*k||Math.abs(dx*v.d[0]+dy*v.d[1])>DW.TRA*k)ok=false}
   if(ok)return{X,gap:bg,how:"Schnittpunkt der Blicklinien ("+R.length+" Kameras)"}}
+ if(DW.PAIRF&&R.length>=3){let PB=null;for(let i=0;i<R.length;i++)for(let j=i+1;j<R.length;j++){const a=R[i].V,b=R[j].V;if(Math.abs(a.d[0]*b.d[1]-a.d[1]*b.d[0])<DW.PFX)continue;
+   const Y=wlsV([a,b],200);if(!isFinite(Y[0])||!isFinite(Y[1]))continue;let c=0;for(const v of [a,b]){const k=v.weak?2:1,dx=Y[0]-v.p[0],dy=Y[1]-v.p[1],al=Math.abs(dx*v.d[0]+dy*v.d[1])/(DW.TRA*k),pp=Math.abs(dx*v.d[1]-dy*v.d[0])/(DW.TRP*k);c=Math.max(c,al*al+pp*pp)}
+   c+=(a.x?.5:0)+(b.x?.5:0)+(a.weak?.25:0)+(b.weak?.25:0);if(c<=1.5&&(!PB||c<PB.c))PB={c,Y,i,j}}
+  if(PB)return{X:PB.Y,gap:bg,how:"Schnittpunkt ("+srcName(R[PB.i].id)+" + "+srcName(R[PB.j].id)+")"}}
  let best=0,bs=1e9;R.forEach((a,i)=>{let s=(a.V.weak?5:0);R.forEach((b,j)=>{if(i!=j)s+=pdl(a.V.p,b.V)});if(s<bs){bs=s;best=i}});
  return{X:R[best].V.p.slice(),gap:bg,how:srcName(R[best].id)+" (sicherer)"}}
 function nearV(a,b){const d=Math.hypot(a.p[0]-b.p[0],a.p[1]-b.p[1]);if(d<DW.NEAR)return true;
@@ -1553,8 +1557,23 @@ function refit(T){if(T.r!=null)return;const F=fuseN(T.R),[c,v]=field(F.X[0],F.X[
 function pickIn(list,id,V,now,getR,getAt){let best=null,bs=1e9,n=0;for(const e of list){const R=getR(e);if(!R||R.some(r=>r.id==id)||now-getAt(e)>DW.PAIRT)continue;n++;
   let s=1e9;for(const r of R){const sc=(nearV(V,r.V)?0:1000)+Math.hypot(V.p[0]-r.V.p[0],V.p[1]-r.V.p[1]);if(sc<s)s=sc}if(!V.x&&R.every(r=>r.V.x))s+=300;if(s<bs){bs=s;best=e}}
  if(best&&bs>=1000&&(n>1||V.x))return null;return best}
+// Wie gut passt Meldung V zu den Meldungen M (andere Kameras) eines Pfeils? <=1 passt (Schnittpunkt der Blicklinien nahe an allen)
+function assocCost(M,V){const S=M.map(r=>r.V).concat([V]);let dmin=1e9;for(const r of M){const d=Math.hypot(V.p[0]-r.V.p[0],V.p[1]-r.V.p[1]);if(d<dmin)dmin=d}
+ if(dmin>DW.ANEAR)return Infinity;const X=wlsV(S,200);if(!isFinite(X[0])||!isFinite(X[1]))return(dmin/DW.AN2)**2;
+ let c=0;for(const v of S){const dx=X[0]-v.p[0],dy=X[1]-v.p[1],k=v.x?DW.AXK:v.weak?DW.AWK:1,al=Math.abs(dx*v.d[0]+dy*v.d[1])/(DW.ATRA*k),pp=Math.abs(dx*v.d[1]-dy*v.d[0])/(DW.ATRP*k);c=Math.max(c,al*al+pp*pp)}
+ if(S.length==2&&Math.abs(S[0].d[0]*S[1].d[1]-S[0].d[1]*S[1].d[0])<.35)c=Math.max(c,(dmin/DW.AN2)**2);return c}
 function addRep(id,V){const now=Date.now();V.at=now;try{LOG.push(hm()+" "+srcName(id)+" meldet "+field(V.p[0],V.p[1])[0].replace(/^0$/,"daneben")+" ("+Math.round(V.p[0])+"/"+Math.round(V.p[1])+")"+(V.weak?" schwach":"")+(V.x?" (weiterer)":"")+(V.lat?" nach "+V.lat+" s":""))}catch(e){}
+ // Zusatzfund genau in Blickrichtung eines Pfeils, den dieselbe Kamera schon gemeldet hat: derselbe Pfeil (nur die Tiefe ist ungenau)
+ if(V.x&&DW.XLOS){const all=[];TURN.forEach((t,i)=>{if(t.r==null&&t.R)t.R.forEach(r=>{if(r.id==id)all.push([r,"Pfeil "+(i+1)])})});DUO.groups.forEach(g=>g.R.forEach(r=>{if(r.id==id)all.push([r,"wartender Fund"])}));
+  for(const [r,nm] of all){const dx=V.p[0]-r.V.p[0],dy=V.p[1]-r.V.p[1],al=Math.abs(dx*V.d[0]+dy*V.d[1]),pp=Math.abs(dx*V.d[1]-dy*V.d[0]);if(pp<DW.XLP&&al<DW.XLA){LOG.push(hm()+" Zusatzfund von "+srcName(id)+" liegt in Blickrichtung genau bei "+nm+" – derselbe Pfeil, nicht gezählt");return}}}
  // zuerst ein wartender Wurf (gerade erst gesehen), dann ein schon gezählter Pfeil, dem diese Kamera noch fehlt
+ if(DW.ASC){const cand=[];
+  for(const g of DUO.groups){if(g.R.some(r=>r.id==id)||now-g.at>DW.PAIRT)continue;const xo=!V.x&&g.R.every(r=>r.V.x),c=assocCost(g.R,V);if(c<=(xo?DW.AXO:DW.ACUT))cand.push({g,c:c+(xo?.3:0)+(g.R.length==1?DW.APEN:0)})}
+  for(const t of TURN){if(t.r!=null||!t.R||t.R.some(r=>r.id==id)||now-t.at>DW.PAIRT)continue;if(V.x&&t.R.length>1)continue;const c=assocCost(t.R,V);if(c<=DW.ACUT)cand.push({t,c:c+(t.R.length==1?DW.APEN:0)})}
+  cand.sort((a,b)=>a.c-b.c);const B=cand[0];
+  if(B&&B.t){B.t.R.push({id,V});DUO.cnt.both++;refit(B.t);return}
+  if(B&&B.g){const G=B.g;G.R.push({id,V});if(G.R.length>=liveN()||(DW.AGR&&G.R.length==2&&!G.R.some(r=>r.V.x)&&Math.hypot(G.R[0].V.p[0]-G.R[1].V.p[0],G.R[0].V.p[1]-G.R[1].V.p[1])<DW.AGR))commitG(G);return}
+  const G2={R:[{id,V}],at:now};DUO.groups.push(G2);if(liveN()<=1)commitG(G2);return}
  let G=pickIn(DUO.groups,id,V,now,g=>g.R,g=>g.at);
  if(G&&DW.PREF&&!V.x&&!G.R.some(r=>nearV(V,r.V))){const T0=pickIn(TURN.filter(t=>t.r==null&&t.R),id,V,now,t=>t.R,t=>t.at);if(T0&&T0.R.some(r=>nearV(V,r.V))){T0.R.push({id,V});DUO.cnt.both++;refit(T0);return}}
  if(G){G.R.push({id,V});if(G.R.length>=liveN()||(DW.AGR&&G.R.length==2&&!G.R.some(r=>r.V.x)&&Math.hypot(G.R[0].V.p[0]-G.R[1].V.p[0],G.R[0].V.p[1]-G.R[1].V.p[1])<DW.AGR))commitG(G);return}
@@ -1595,7 +1614,7 @@ function duoRecv(m,conn){if(!m||typeof m!="object")return;if(m.t=="pt"&&typeof m
 function duoTick(){if(ROLE!="main")return;const now=Date.now(),L=liveN(),busy=PDART&&PDART.kind=="add";
  for(const G of DUO.groups.slice()){const age=now-G.at,k=G.R.length;if(k==1&&G.R[0].V.x){if(age>DW.MAXP){const i=DUO.groups.indexOf(G);if(i>=0)DUO.groups.splice(i,1);LOG.push(hm()+" Zusatzfund nur von "+srcName(G.R[0].id)+" – nicht gezählt")}continue}
   if(k>=Math.max(1,L))commitG(G);else if(k>=2&&age>DW.WAIT2)commitG(G);
-  else if(k==1){const own=G.R[0].id=="T";if(own?age>DW.WAITM:(age>DW.MAXP||(age>DW.WAITP&&(DW.W3?remLive().length<3:true)&&(!ownLive()||(!busy&&MST=="ok")))))commitG(G)}}}
+  else if(k==1){const own=G.R[0].id=="T";if(DW.FULLW&&TURN.length>=3&&!own){if(age>DW.MAXP)commitG(G)}else if(own?age>DW.WAITM:(age>DW.MAXP||(age>DW.WAITP&&(DW.W3?remLive().length<3:true)&&(!ownLive()||(!busy&&MST=="ok")))))commitG(G)}}}
 function duoReset(){DUO.groups=[];if(ROLE=="main")duoSend({t:"turn"});else{LPULL=Date.now();NREP=0;QPC=0;LASTD=null;UNKT=0;duoSend({t:"pull",id:MYID})}}
 function loadPJ(cb){if(window.Peer)return cb();const U=["https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js","https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];let i=0;
  const nx=()=>{if(i>=U.length){DUO.msg="Die Verbindungs-Bibliothek konnte nicht geladen werden. Ist das Internet an?";duoUI();return}const s=document.createElement("script");s.src=U[i++];s.onload=cb;s.onerror=nx;document.head.appendChild(s)};nx()}
@@ -1712,7 +1731,7 @@ function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="
  const d8=$("#d8");if(d8)d8.onclick=()=>{DUO.showLog=!DUO.showLog;DUO.lastH="";duoUI()};
 }}
 function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
- try{const o={app:"dart-testdaten",v:37,at:new Date().toISOString(),log:LOG.slice(-200),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+ try{const o={app:"dart-testdaten",v:39,at:new Date().toISOString(),log:LOG.slice(-200),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
   a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
   cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
@@ -1868,7 +1887,7 @@ function dartCheck(f,force){
   else if(force)cm("Etwas Großes ist im Bild (Hand oder Person?) oder das Licht hat sich geändert. Bitte kurz warten.");return}
  BIGN=0;if(!R.err){PULLC=0;PULLA=0}
  if(R.err=="Kein Pfeil erkannt."&&RC()){if(R.quiet||R.nC<FW.absN||R.why=="nichts")UNKT=0;else if(!UNKT){UNKT=Date.now();UNKD=0;LOG.push(hm()+" Änderung im Bild ("+R.nC+" Punkte), aber kein Pfeil erkannt – wird nicht übernommen");recAdd("unklar",{nC:R.nC,why:String(R.why||R.short||"")})}else if(Date.now()-UNKT>FW.absT&&!UNKD){UNKD=1;LOG.push(hm()+" unklare Änderung nach "+Math.round(FW.absT/1000)+" s übernommen")}}
- if(R.err){const was=PDART;PDART=null;if(force)cm("Kein neuer Pfeil gefunden.");
+ if(R.err){const was=PDART;PDART=null;if(force)cm("Kein neuer Pfeil gefunden.");if(FW.mDef&&MQS.length&&!was&&R.err=="Kein Pfeil erkannt.")mdStep();
   // Große Änderung verworfen (dunkle Flights auf dunklen Feldern sehen wie Lichtänderung aus): Referenz kurz festhalten und prüfen, ob die Scheibe wieder leer ist – dann wurden die Pfeile gezogen
   if(FW.pullE&&TURN.length&&EMPTY&&!ref.warped&&sv(EMPTY,f)&&EMPTY.width==f.width&&EMPTY.height==f.height){if(R.nC>FW.pullN*(f.width/640)**2)PULLA=FW.pullA;
    if(PULLA>0){PULLA--;const e=findDart(f,EMPTY,G.toB,G.Hp,MASK,true);if(e.err=="Kein Pfeil erkannt."&&(!FW.absQ||e.quiet||e.nC<FW.absN)){if(++PULLC>=FW.pullK){PULLC=0;PULLA=0;ref=f;EMPTY=f;PULLSEQ++;TURN=[];DVEC=[];det=null;DPX=null;duoReset();LOG.push(hm()+" gezogen");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");return}}else PULLC=0;return}}
@@ -1897,19 +1916,23 @@ function dartDone(f,R,G,kind){
  duoLocal(V);if((RC()||window.__ID||window.__MU)&&FW.multi&&!ref0.warped&&!NOISY&&(window.__ID||FW.mAll||MVCNT>=2||LASTMV>=1200))try{moreDarts(f,ref0,R,G,b0)}catch(e){}MVCNT=0}
 // Nach einem erkannten Pfeil im selben Bild weitersuchen: den gefundenen Pfeil in der Referenz "abdecken" und erneut vergleichen.
 // Zusatzfunde werden als x gemeldet; das Tablet zählt sie nur, wenn eine zweite Kamera denselben Pfeil sieht.
-function moreDarts(f,ref0,R0,G,b0){const W=f.width,H=f.height,tips=[b0],n0=R0.comp.length;let ref=ref0,R=R0,rad=6,found=0;
- for(let it=0;it<5&&found<2;it++){const o=new Uint8ClampedArray(ref.data),m=new Uint8Array(W*H);
-  const F=R.fit,band=FW.mBand&&rad<12&&F&&F.tipPx&&F.endPx&&isFinite(F.tipPx[0])&&isFinite(F.endPx[0]);let tx=0,ty=0,ux=0,uy=1,L=1;
-  if(band){tx=F.tipPx[0];ty=F.tipPx[1];L=Math.hypot(F.endPx[0]-tx,F.endPx[1]-ty)||1;ux=(F.endPx[0]-tx)/L;uy=(F.endPx[1]-ty)/L}
-  for(const p of R.comp){const x=p%W,y=(p-x)/W;
-   if(band){const t=(x-tx)*ux+(y-ty)*uy,q=Math.abs((x-tx)*uy-(y-ty)*ux),w=FW.mbW0*W/800+Math.max(0,t)*FW.mbW1;if(t<-8*W/800||t>L*FW.mbL||q>w)continue}
-   for(let dy=-rad;dy<=rad;dy++){const Y=y+dy;if(Y<0||Y>=H)continue;for(let dx=-rad;dx<=rad;dx++){const X=x+dx;if(X>=0&&X<W)m[Y*W+X]=1}}}
-  const a=f.data;for(let i=0;i<W*H;i++)if(m[i]){const k=i*4;o[k]=a[k];o[k+1]=a[k+1];o[k+2]=a[k+2]}ref={...ref,data:o};
-  R=findDart(f,ref,G.toB,G.Hp,MASK,!!ref.warped||NOISY,EMPTY);if(R.err)break;
-  const b=G.toB(R.tip[0],R.tip[1]),dup=tips.some(t=>Math.hypot(t[0]-b[0],t[1]-b[1])<6),small=R.comp.length<n0*.05;
-  if(dup||small){rad=12;continue}rad=6;tips.push(b);found++;
-  const u=R.trace&&R.trace.u||[0,1],b1=G.toB(R.tip[0]-u[0]*15,R.tip[1]-u[1]*15);let dd=[b1[0]-b[0],b1[1]-b[1]];const dn=Math.hypot(dd[0],dd[1])||1;dd=[dd[0]/dn,dd[1]/dn];
-  LOG.push(hm()+" weiterer Pfeil im selben Bild");duoLocal({p:b,d:dd,weak:!!R.hidden,n:R.comp.length,th:0,cov:0,x:1})}}
+let MQS=[];
+function moreDarts(f,ref0,R0,G,b0){MQS.push({f,ref:ref0,R:R0,G,tips:[b0],n0:R0.comp.length,rad:6,found:0,it:0,mk:MASK,ps:PULLSEQ});if(MQS.length>3)MQS.shift();if(!FW.mDef)while(MQS.length)mdStep()}
+// ein Suchschritt: den bisher gefundenen Pfeil in der Referenz "abdecken" und erneut vergleichen
+function mdStep(){const S=MQS[0];if(!S)return;const f=S.f,W=f.width,H=f.height;
+ if(S.it>=5||S.found>=2||S.ps!=PULLSEQ||S.mk!==MASK||!MASK||MASK.inB.length!=W*H){MQS.shift();return}S.it++;
+ const R=S.R,rad=S.rad,o=new Uint8ClampedArray(S.ref.data),m=new Uint8Array(W*H);
+ const F=R.fit,band=FW.mBand&&rad<12&&F&&F.tipPx&&F.endPx&&isFinite(F.tipPx[0])&&isFinite(F.endPx[0]);let tx=0,ty=0,ux=0,uy=1,L=1;
+ if(band){tx=F.tipPx[0];ty=F.tipPx[1];L=Math.hypot(F.endPx[0]-tx,F.endPx[1]-ty)||1;ux=(F.endPx[0]-tx)/L;uy=(F.endPx[1]-ty)/L}
+ for(const p of R.comp){const x=p%W,y=(p-x)/W;
+  if(band){const t=(x-tx)*ux+(y-ty)*uy,q=Math.abs((x-tx)*uy-(y-ty)*ux),w=FW.mbW0*W/800+Math.max(0,t)*FW.mbW1;if(t<-8*W/800||t>L*FW.mbL||q>w)continue}
+  for(let dy=-rad;dy<=rad;dy++){const Y=y+dy;if(Y<0||Y>=H)continue;for(let dx=-rad;dx<=rad;dx++){const X=x+dx;if(X>=0&&X<W)m[Y*W+X]=1}}}
+ const a=f.data;for(let i=0;i<W*H;i++)if(m[i]){const k=i*4;o[k]=a[k];o[k+1]=a[k+1];o[k+2]=a[k+2]}S.ref={...S.ref,data:o};
+ const R2=findDart(f,S.ref,S.G.toB,S.G.Hp,MASK,!!S.ref.warped||NOISY,EMPTY);if(R2.err){MQS.shift();return}S.R=R2;
+ const b=S.G.toB(R2.tip[0],R2.tip[1]),dup=S.tips.some(t=>Math.hypot(t[0]-b[0],t[1]-b[1])<6),small=R2.comp.length<S.n0*.05;
+ if(dup||small){S.rad=12;return}S.rad=6;S.tips.push(b);S.found++;
+ const u=R2.trace&&R2.trace.u||[0,1],b1=S.G.toB(R2.tip[0]-u[0]*15,R2.tip[1]-u[1]*15);let dd=[b1[0]-b[0],b1[1]-b[1]];const dn=Math.hypot(dd[0],dd[1])||1;dd=[dd[0]/dn,dd[1]/dn];
+ LOG.push(hm()+" weiterer Pfeil im selben Bild");duoLocal({p:b,d:dd,weak:!!R2.hidden,n:R2.comp.length,th:0,cov:0,x:1})}
 function tick(){if(!cv.srcObject||!cv.videoWidth){if(MST!="off")setSt("off");PREV=null;return}if(ca)return;
  const fr=frame();if(!fr)return;const now=Date.now(),m=motion(fr),calm=m<=4;
  // Rauschminderung: bei ruhigem Bild mit dem vorigen ruhigen Bild mitteln (Rauschen und Nachschärfen der Kamera halbieren sich)
