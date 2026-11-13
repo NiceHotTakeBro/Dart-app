@@ -13,7 +13,7 @@
 import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.5"
+VERSION = "0.6"
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -123,7 +123,7 @@ class Kamera(threading.Thread):
             self.offen += 1
             self.status, self.info, self.fehler = "start", info, 0
             log("Kamera %d geöffnet: %s" % (self.nr, info))
-            n, t0, letzt = 0, time.time(), 0.0
+            n, t0, letzt = 0, time.monotonic(), 0.0
             try:
                 while True:
                     if not cap.grab():                      # Bild abholen (noch nicht auspacken)
@@ -134,7 +134,7 @@ class Kamera(threading.Thread):
                         continue
                     self.fehler = 0
                     n += 1
-                    jetzt = time.time()
+                    jetzt = time.monotonic()
                     if self.wunsch or jetzt - letzt >= self.takt:   # nur auspacken, wenn ein Bild gebraucht wird (spart Rechenzeit)
                         ok, f = cap.retrieve()
                         if ok and f is not None and f.ndim == 3:
@@ -163,22 +163,22 @@ class Kamera(threading.Thread):
         if not bilder:
             self.status, self.info = "fehlt", "keine Testbilder"
             return
-        self.info, t0 = "Testbilder (%d)" % len(bilder), time.time()
+        self.info, t0 = "Testbilder (%d)" % len(bilder), time.monotonic()
         dauer, erst = float(os.environ.get("DART_FAKE_T", "1")), float(os.environ.get("DART_FAKE_T0", "0"))
         bilder = [cv2.resize(b, (1280, 720)) for b in bilder]
         while True:
-            t = time.time() - t0
+            t = time.monotonic() - t0
             i = 0 if t < erst else min(len(bilder) - 1, int((t - erst) / dauer)) if os.environ.get("DART_FAKE_T0") else int(t / dauer) % len(bilder)
             f = bilder[i]
             with self.lock:
-                self.bild, self.zeit = f, time.time()
+                self.bild, self.zeit = f, time.monotonic()
             self.status, self.fps = "ok", 10.0
             self.liefern(f)
             time.sleep(0.05)
 
     def aktuell(self, max_alter=3.0):
         with self.lock:
-            if self.bild is None or time.time() - self.zeit > max_alter:
+            if self.bild is None or time.monotonic() - self.zeit > max_alter:
                 return None
             return self.bild.copy()
 
@@ -230,12 +230,12 @@ class Kern:
         # Ab 0.5 schreibt ein eigener Faden in den Rechenkern. Wer etwas schicken will (Tablet-Nachricht, Kamerabild),
         # legt es nur ab und ist sofort fertig – rechnet der Kern gerade, muss niemand warten (vorher konnten dabei
         # die Leitungen der Brücke volllaufen).
-        self.q, self.fr, self.ev, self.t_start = collections.deque(maxlen=400), None, threading.Event(), time.time()
+        self.q, self.fr, self.ev, self.t_start = collections.deque(maxlen=400), None, threading.Event(), time.monotonic()
         threading.Thread(target=self.schreiber, daemon=True).start()
         threading.Thread(target=self.lauf, daemon=True).start()
 
     def lebt(self):
-        return self.p is not None and self.p.poll() is None and time.time() - self.hb < 6
+        return self.p is not None and self.p.poll() is None and time.monotonic() - self.hb < 6
 
     def schreibe(self, art, daten):
         with self.wl:
@@ -260,14 +260,14 @@ class Kern:
                 p = self.p
                 if p is None or p.poll() is not None:
                     continue
-                t0 = time.time()
+                t0 = time.monotonic()
                 try:
                     p.stdin.write(art + struct.pack("<I", len(d)) + d)
                     p.stdin.flush()
                 except Exception:
                     pass
-                if time.time() - t0 > 8 and time.time() - self.t_start > 60:     # (gleich nach dem Start rechnet er sich erst ein)
-                    log("Kamera %d: Rechenkern nahm %.0f s lang nichts an" % (self.k.nr, time.time() - t0))
+                if time.monotonic() - t0 > 8 and time.monotonic() - self.t_start > 60:     # (gleich nach dem Start rechnet er sich erst ein)
+                    log("Kamera %d: Rechenkern nahm %.0f s lang nichts an" % (self.k.nr, time.monotonic() - t0))
 
     def bild(self, w, h, rgba):
         self.schreibe(b"F", struct.pack("<HH", w, h) + rgba)
@@ -299,7 +299,7 @@ class Kern:
                 time.sleep(5)
                 continue
             self.starts += 1
-            self.t_start = time.time()
+            self.t_start = time.monotonic()
             log("Kamera %d: Rechenkern gestartet" % k.nr)
             try:
                 for zeile in self.p.stdout:
@@ -336,7 +336,7 @@ class Kern:
                 Z.sende(k.nr, {"t": "rb", "id": k.id, "r": r, "z": m.get("z", 0)})
             return
         if t in ("hb", "hello"):
-            self.hb, self.cal, self.st = time.time(), bool(m.get("cal")), m.get("st", "")
+            self.hb, self.cal, self.st = time.monotonic(), bool(m.get("cal")), m.get("st", "")
             self.ms = m.get("ms", self.ms)
             if k.status != "ok":
                 m["st"], m["cal"] = "off", False
@@ -384,7 +384,7 @@ class Zentrale:
             self.cond.notify_all()
 
     def hole(self, ab, warte=8.0):
-        ende = time.time() + warte
+        ende = time.monotonic() + warte
         with self.cond:
             if ab <= 0:                                    # Brücke frisch gestartet: alte Nachrichten nicht nachliefern (Tablet ist eh neu verbunden)
                 ab = max(0, self.nr - 3)
@@ -392,9 +392,9 @@ class Zentrale:
                 ab = 0
             while True:
                 neu = [m for n, m in self.aus if n > ab]
-                if neu or time.time() >= ende:
+                if neu or time.monotonic() >= ende:
                     return self.nr, neu
-                self.cond.wait(max(0.05, ende - time.time()))
+                self.cond.wait(max(0.05, ende - time.monotonic()))
 
     def brueckenbericht(self, arg):
         b = self.br
@@ -415,10 +415,10 @@ class Zentrale:
                 "zahl": self.zahlen[k.nr - 1], "neu": VERSION}
 
     def takt(self):
-        start, letzter = time.time(), 0.0
+        start, letzter = time.monotonic(), 0.0
         while True:
             time.sleep(1)
-            jetzt = time.time()
+            jetzt = time.monotonic()
             # Wächter: meldet sich die Brücke 20 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
             if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 20:
                 letzter = jetzt
@@ -442,7 +442,7 @@ class Zentrale:
                         p.kill()
                     except Exception:
                         pass
-            if time.time() - self.bruecke < 12 and self.verb:
+            if time.monotonic() - self.bruecke < 12 and self.verb:
                 for k in self.kams:                        # Kamera ohne laufenden Rechenkern meldet sich selbst (als "noch nicht bereit")
                     kn = self.kern(k.nr)
                     if not (kn and kn.lebt()):
@@ -450,14 +450,14 @@ class Zentrale:
 
     def empfang(self, m, knr):
         t = m.get("t") if isinstance(m, dict) else None
-        self.br_in = time.time()
+        self.br_in = time.monotonic()
         if t == "_br":                                     # die Brücke meldet etwas über sich (eingefroren, unsichtbar …)
             log("Brücke: %s (%s)" % (str(m.get("e"))[:40], str(m.get("vis"))[:20]))
             return
         k = self.kams[max(1, min(3, knr)) - 1]
         kn = self.kern(k.nr)
         if t in ("hb", "hello"):                           # Herzschlag vom Tablet: nur merken – der Rechenkern braucht ihn nicht
-            self.tablet = time.time()
+            self.tablet = time.monotonic()
             return
         if t == "_open":
             log("Kamera %d: Verbindung zum Tablet steht" % k.nr)
@@ -467,8 +467,8 @@ class Zentrale:
             log("Kamera %d: Verbindung zum Tablet getrennt" % k.nr)
             return
         if t == "aus":                                     # "Pi herunterfahren" (kommt je Verbindung einmal – nur einmal ausführen)
-            if time.time() - self.aus_zeit > 20:
-                self.aus_zeit = time.time()
+            if time.monotonic() - self.aus_zeit > 20:
+                self.aus_zeit = time.monotonic()
                 log("Herunterfahren angefordert")
                 self.sende(k.nr, {"t": "ausok", "id": k.id})
                 threading.Timer(1.5, herunterfahren).start()
@@ -581,7 +581,7 @@ class Web(http.server.BaseHTTPRequestHandler):
             if pfad == "/":
                 return self.antwort(200, BRUECKE.replace("__CODE__", Z.code).replace("__VERSION__", VERSION), "text/html; charset=utf-8")
             if pfad == "/out":
-                Z.bruecke, Z.verb = time.time(), int(arg.get("v", "0") or 0)
+                Z.bruecke, Z.verb = time.monotonic(), int(arg.get("v", "0") or 0)
                 Z.brueckenbericht(arg)
                 c, m = Z.hole(int(arg.get("c", "0") or 0))
                 return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION}), "application/json")
@@ -641,7 +641,7 @@ class Web(http.server.BaseHTTPRequestHandler):
 
 
 def status_text(Z):
-    jetzt = time.time()
+    jetzt = time.monotonic()
     z = ["Dart-Kameras neues Programm %s | %s | Code %s" % (VERSION, time.strftime("%F %T"), Z.code or "FEHLT"),
          "Brücke zum Tablet: %s | Tablet: %s" % ("läuft" if jetzt - Z.bruecke < 12 else "FEHLT",
                                                          ("verbunden (%d von 3 Kameras)" % Z.verb) if Z.verb and jetzt - Z.tablet < 8 else "nicht verbunden"),
@@ -691,12 +691,12 @@ def selbsttest():
         if cap is None:
             print("Kamera %d: FEHLER %s" % (i, info))
             continue
-        t0, n, f = time.time(), 0, None
+        t0, n, f = time.monotonic(), 0, None
         for _ in range(40):
             if cap.grab():
                 n += 1
         ok, f = cap.retrieve()
-        dt = time.time() - t0
+        dt = time.monotonic() - t0
         cap.release()
         if ok and f is not None:
             ziel = os.path.join(DIR, "test_k%d.jpg" % i)

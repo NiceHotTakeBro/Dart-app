@@ -51,6 +51,12 @@ exec 8>"$D/lock-neu"
 if ! flock -n 8; then log "läuft schon – zweiter Start abgebrochen"; exit 0; fi
 BROWSER=$(command -v chromium || command -v chromium-browser)
 log "Start neues Programm"
+# Der Pi hat keine Batterie-Uhr: nach dem Einschalten stellt er die Zeit erst übers Netz – die Uhr springt dann um die
+# ausgeschaltete Zeit vor. Kurz darauf warten (höchstens 45 s), damit sie nicht mitten im Betrieb springt.
+if command -v timedatectl >/dev/null 2>&1 && [ -n "$(timedatectl show -p NTPSynchronized --value 2>/dev/null)" ]; then
+  for i in $(seq 1 45); do [ "$(timedatectl show -p NTPSynchronized --value 2>/dev/null)" = "yes" ] && break; sleep 1; done
+  log "Uhr gestellt: $(timedatectl show -p NTPSynchronized --value 2>/dev/null) (nach $i s)"
+fi
 ( while true; do python3 "$N/dart-pi.py" >> "$D/pi.log" 2>&1 8>&-; log "Programm beendet (Code $?) – Neustart in 3 s"; sleep 3; done ) &
 for i in $(seq 1 40); do curl -fsS -m 2 http://127.0.0.1:8771/status >/dev/null 2>&1 && break; sleep 1; done
 if [ -z "$BROWSER" ]; then log "FEHLER: Chromium nicht gefunden – keine Brücke zum Tablet"; wait; exit 1; fi
@@ -61,7 +67,8 @@ while true; do
   fi
   T0=$(date +%s)
   # Die Brücke läuft ohne Fenster (kann dann nicht "einschlafen", wenn niemand auf den Pi-Bildschirm schaut).
-  "$BROWSER" $OHNE --user-data-dir="$dir" --app="http://127.0.0.1:8771/" \
+  # Ohne Grafikkarte (--disable-gpu): sie zeigt nichts an – und am 13.11. hing sie, als der Grafik-Teil von Chromium abstürzte.
+  "$BROWSER" $OHNE --disable-gpu --user-data-dir="$dir" --app="http://127.0.0.1:8771/" \
     --autoplay-policy=no-user-gesture-required --disable-background-timer-throttling --disable-renderer-backgrounding \
     --disable-backgrounding-occluded-windows --noerrdialogs --disable-session-crashed-bubble --disable-infobars \
     --no-first-run --no-default-browser-check --password-store=basic --disable-features=Translate,IntensiveWakeUpThrottling \
