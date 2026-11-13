@@ -10,16 +10,17 @@
 #  Browser-Fenster (die "Brücke", Seite /) hält die Verbindung zum Tablet und reicht
 #  Nachrichten in beide Richtungen durch. Gerechnet wird nur hier und in den Kernen.
 # =============================================================================
-import base64, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
+import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.4"
+VERSION = "0.5"
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
 DATEN = os.environ.get("DART_DATEN", os.path.join(HOME, ".dart"))
 FAKE = os.environ.get("DART_FAKE", "")          # Test ohne Kameras: Ordner mit K1*.jpg/png, K2*, K3*
 APPDIR = os.environ.get("DART_APPDIR", "")      # Test: Tablet-App unter /app/ ausliefern
+TEST_INVERZ = float(os.environ.get("DART_TEST_INVERZ", "0") or 0)   # Test: Annahme vom Tablet künstlich verzögern (s)
 
 LOG = []
 LOCK = threading.Lock()
@@ -226,21 +227,47 @@ class Kern:
     def __init__(self, Z, k):
         self.Z, self.k, self.p, self.wl = Z, k, None, threading.Lock()
         self.hb, self.cal, self.st, self.ms, self.starts, self.recimg = 0.0, False, "", 0, 0, {}
+        # Ab 0.5 schreibt ein eigener Faden in den Rechenkern. Wer etwas schicken will (Tablet-Nachricht, Kamerabild),
+        # legt es nur ab und ist sofort fertig – rechnet der Kern gerade, muss niemand warten (vorher konnten dabei
+        # die Leitungen der Brücke volllaufen).
+        self.q, self.fr, self.ev, self.t_start = collections.deque(maxlen=400), None, threading.Event(), time.time()
+        threading.Thread(target=self.schreiber, daemon=True).start()
         threading.Thread(target=self.lauf, daemon=True).start()
 
     def lebt(self):
         return self.p is not None and self.p.poll() is None and time.time() - self.hb < 6
 
     def schreibe(self, art, daten):
-        p = self.p
-        if p is None or p.poll() is not None:
-            return
-        try:
-            with self.wl:
-                p.stdin.write(art + struct.pack("<I", len(daten)) + daten)
-                p.stdin.flush()
-        except Exception:
-            pass
+        with self.wl:
+            if art == b"F":
+                self.fr = daten                            # von den Bildern zählt nur das neueste
+            else:
+                self.q.append(daten)
+        self.ev.set()
+
+    def schreiber(self):
+        while True:
+            self.ev.wait(1.0)
+            self.ev.clear()
+            while True:
+                with self.wl:
+                    if self.q:
+                        art, d = b"M", self.q.popleft()
+                    elif self.fr is not None:
+                        art, d, self.fr = b"F", self.fr, None
+                    else:
+                        break
+                p = self.p
+                if p is None or p.poll() is not None:
+                    continue
+                t0 = time.time()
+                try:
+                    p.stdin.write(art + struct.pack("<I", len(d)) + d)
+                    p.stdin.flush()
+                except Exception:
+                    pass
+                if time.time() - t0 > 8 and time.time() - self.t_start > 60:     # (gleich nach dem Start rechnet er sich erst ein)
+                    log("Kamera %d: Rechenkern nahm %.0f s lang nichts an" % (self.k.nr, time.time() - t0))
 
     def bild(self, w, h, rgba):
         self.schreibe(b"F", struct.pack("<HH", w, h) + rgba)
@@ -260,6 +287,9 @@ class Kern:
                 node = shutil.which("node") or shutil.which("nodejs")
                 continue
             os.makedirs(DATEN, exist_ok=True)
+            with self.wl:                                  # Reste für den alten Kern verwerfen
+                self.q.clear()
+                self.fr = None
             try:
                 err = open(os.path.join(DATEN, "kern%d.log" % k.nr), "ab")
                 self.p = subprocess.Popen([node, "--max-old-space-size=700", kern, app, str(k.nr), str(Z.zahlen[k.nr - 1]), Z.code or "0000",
@@ -269,6 +299,7 @@ class Kern:
                 time.sleep(5)
                 continue
             self.starts += 1
+            self.t_start = time.time()
             log("Kamera %d: Rechenkern gestartet" % k.nr)
             try:
                 for zeile in self.p.stdout:
@@ -339,6 +370,8 @@ class Zentrale:
         self.kams, self.code, self.zahlen = kams, code, zahlen
         self.aus, self.nr, self.cond = [], 0, threading.Condition()
         self.bruecke, self.tablet, self.verb, self.aus_zeit = 0.0, 0.0, 0, 0.0
+        self.br = {"lag": 0, "vis": "?", "q": 0, "buf": 0, "maxlag": 0}  # was die Brücke über sich meldet (zur Fehlersuche)
+        self.br_in = 0.0                                   # wann zuletzt etwas von der Brücke kam (/in)
         self.kerne = [] if os.environ.get("DART_OHNE_KERN") else [Kern(self, k) for k in kams]
         threading.Thread(target=self.takt, daemon=True).start()
 
@@ -353,13 +386,26 @@ class Zentrale:
     def hole(self, ab, warte=8.0):
         ende = time.time() + warte
         with self.cond:
-            if ab > self.nr:                               # Programm wurde neu gestartet: Zählung beginnt von vorn
+            if ab <= 0:                                    # Brücke frisch gestartet: alte Nachrichten nicht nachliefern (Tablet ist eh neu verbunden)
+                ab = max(0, self.nr - 3)
+            elif ab > self.nr:                             # Programm wurde neu gestartet: Zählung beginnt von vorn
                 ab = 0
             while True:
                 neu = [m for n, m in self.aus if n > ab]
                 if neu or time.time() >= ende:
                     return self.nr, neu
                 self.cond.wait(max(0.05, ende - time.time()))
+
+    def brueckenbericht(self, arg):
+        b = self.br
+        try:
+            lag = int(float(arg.get("lag", "0") or 0))
+            b.update(lag=lag, vis=arg.get("vis", "?")[:12], q=int(arg.get("q", "0") or 0), buf=int(float(arg.get("buf", "0") or 0)))
+            b["maxlag"] = max(b["maxlag"], lag)
+            if lag > 3000:
+                log("Brücke stockte %.1f s (Seite %s)" % (lag / 1000, b["vis"]))
+        except Exception:
+            pass
 
     def kern(self, knr):
         return self.kerne[knr - 1] if 1 <= knr <= len(self.kerne) else None
@@ -373,14 +419,29 @@ class Zentrale:
         while True:
             time.sleep(1)
             jetzt = time.time()
-            # Wächter: meldet sich die Brücke 25 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
-            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 25:
+            # Wächter: meldet sich die Brücke 20 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
+            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 20:
                 letzter = jetzt
-                log("Brücke meldet sich nicht – wird neu gestartet")
+                b = self.br
+                log("Brücke meldet sich nicht – wird neu gestartet (letzte Abfrage vor %.0f s, letzte Nachricht von ihr vor %s, "
+                    "zuletzt gemeldet: %s, Stocken bis %d ms, Warteschlange %d, Puffer %d)" % (
+                        jetzt - self.bruecke, ("%.0f s" % (jetzt - self.br_in)) if self.br_in else "–", b["vis"], b["lag"], b["q"], b["buf"]))
+                for z in bruecke_log_ende():
+                    log("  Brücke: " + z)
                 try:
                     subprocess.call(["pkill", "-9", "-f", "--", "--user-data-dir=" + os.path.join(DATEN, "bruecke")])
                 except Exception:
                     pass
+            # Wächter für die Rechenkerne: kommt von einem 45 s lang kein Lebenszeichen, hängt er – beenden, er startet dann neu
+            for kn in self.kerne:
+                p = kn.p
+                if p is not None and p.poll() is None and kn.hb and jetzt - kn.hb > 45 and jetzt - kn.t_start > 90:
+                    log("Kamera %d: Rechenkern antwortet seit %.0f s nicht – wird neu gestartet" % (kn.k.nr, jetzt - kn.hb))
+                    kn.hb = jetzt
+                    try:
+                        p.kill()
+                    except Exception:
+                        pass
             if time.time() - self.bruecke < 12 and self.verb:
                 for k in self.kams:                        # Kamera ohne laufenden Rechenkern meldet sich selbst (als "noch nicht bereit")
                     kn = self.kern(k.nr)
@@ -389,10 +450,15 @@ class Zentrale:
 
     def empfang(self, m, knr):
         t = m.get("t") if isinstance(m, dict) else None
+        self.br_in = time.time()
+        if t == "_br":                                     # die Brücke meldet etwas über sich (eingefroren, unsichtbar …)
+            log("Brücke: %s (%s)" % (str(m.get("e"))[:40], str(m.get("vis"))[:20]))
+            return
         k = self.kams[max(1, min(3, knr)) - 1]
         kn = self.kern(k.nr)
-        if t in ("hb", "hello"):
+        if t in ("hb", "hello"):                           # Herzschlag vom Tablet: nur merken – der Rechenkern braucht ihn nicht
             self.tablet = time.time()
+            return
         if t == "_open":
             log("Kamera %d: Verbindung zum Tablet steht" % k.nr)
             if not (kn and kn.lebt()):
@@ -424,6 +490,20 @@ class Zentrale:
                               "st": k.status, "aw": 1280, "log": lg, "rec": [], "turn": [], "neu": VERSION, "kamera": k.info})
 
 
+def bruecke_log_ende(n=6):
+    """Die letzten Zeilen, die der Brücken-Browser selbst geschrieben hat (aus der letzten Minute) – zur Fehlersuche."""
+    p = os.path.join(DATEN, "bruecke.log")
+    try:
+        if time.time() - os.path.getmtime(p) > 90:
+            return []
+        with open(p, "rb") as f:
+            f.seek(max(0, os.path.getsize(p) - 6000))
+            z = [x.strip() for x in f.read().decode("utf-8", "replace").splitlines() if x.strip()]
+        return [x[:220] for x in z[-n:]]
+    except Exception:
+        return []
+
+
 def herunterfahren():
     if os.environ.get("DART_AUS_TEST"):
         open(os.environ["DART_AUS_TEST"], "w").write("aus")
@@ -445,9 +525,18 @@ img{width:100%;border-radius:6px;display:block;margin-top:6px;background:#000;mi
 <div class="mu">Dieses Fenster hält nur die Verbindung zum Tablet (Code __CODE__). Bitte offen lassen.</div>
 <img id="b1"><img id="b2"><img id="b3"><pre id="lg"></pre>
 <script>
-const CODE="__CODE__",V={};let CUR=0,NTX=0,NRX=0,MSG="";
+const CODE="__CODE__",V={};let CUR=0,NTX=0,NRX=0,MSG="",LAG=0,LT=Date.now();
+// Stockt diese Seite (Rechner beschäftigt, Browser bremst sie)? Wird bei jeder Abfrage mitgemeldet.
+setInterval(()=>{const n=Date.now();LAG=Math.max(LAG,n-LT-500);LT=n},500);
+for(const e of ["freeze","resume","visibilitychange"])document.addEventListener(e,()=>post({t:"_br",e,vis:document.visibilityState},0));
 const st=()=>{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length,e=document.getElementById("st");e.textContent=n==3?"Tablet verbunden (3 Kameras)":n?"Tablet verbunden ("+n+" von 3 Kameras)":(MSG||"Suche das Tablet …");e.className=n==3?"ok":""};
-const post=(m,k)=>fetch("/in?k="+k,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(m)}).catch(()=>{});
+// Nachrichten vom Tablet: gesammelt und immer nur EINE Sendung zur Zeit – so bleibt die Abfrage-Leitung (/out) immer frei.
+const IQ=[];let INF=0;
+function post(m,k){IQ.push([k,m]);if(IQ.length>600)IQ.splice(0,IQ.length-600);flush()}
+async function flush(){if(INF||!IQ.length)return;INF=1;const b=IQ.splice(0,IQ.length);
+ try{const ac=new AbortController(),to=setTimeout(()=>ac.abort(),10000);await fetch("/in",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({b}),signal:ac.signal});clearTimeout(to)}catch(e){}
+ INF=0;if(IQ.length)setTimeout(flush,0)}
+function bufMax(){let b=0;for(const k of [1,2,3]){const c=V[k]&&V[k].c;if(c&&c.open){try{b=Math.max(b,(c.dataChannel&&c.dataChannel.bufferedAmount)||0,(c.bufferSize||0)*16000)}catch(e){}}}return b}
 function csend(c,o){const j=JSON.stringify(o);if(j.length<=4000){c.send(o);return}const k=Date.now().toString(36)+Math.random().toString(36).slice(2,6),n=Math.ceil(j.length/4000);for(let i=0;i<n;i++)c.send({t:"pt",k,i,n,d:j.slice(i*4000,(i+1)*4000)})}
 function rx(k,m){const v=V[k];v.rx=Date.now();NRX++;if(!m||typeof m!="object")return;
  if(m.t=="pt"&&typeof m.k=="string"&&m.n>0&&m.n<8000){const B=v.pt[m.k]||(v.pt[m.k]={p:[],c:0});if(B.p[m.i]==null){B.p[m.i]=String(m.d);B.c++}if(B.c>=m.n){delete v.pt[m.k];let o=null;try{o=JSON.parse(B.p.join(""))}catch(e){}if(o)post(o,k)}return}
@@ -459,7 +548,8 @@ function start(){if(!window.Peer){MSG="Verbindungs-Bibliothek fehlt (Internet?)"
  if(!/^\d{4}$/.test(CODE)){MSG="Kein Code gefunden (dart-start.sh)";st();return}for(const k of [1,2,3])mk(k);st()}
 setInterval(()=>{const now=Date.now();for(const k of [1,2,3]){const v=V[k];if(!v||!v.p)continue;if(v.p.destroyed){mk(k);continue}if(v.p.disconnected){try{v.p.reconnect()}catch(e){}continue}
  if(v.c&&v.c.open&&v.rx&&now-v.rx>15000){try{v.c.close()}catch(e){}v.c=null;v.rx=now}dial(k)}st()},5000);
-async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const ac=new AbortController(),to=setTimeout(()=>ac.abort(),20000);const r=await fetch("/out?c="+CUR+"&v="+n,{cache:"no-store",signal:ac.signal});const o=await r.json();clearTimeout(to);CUR=o.c;
+async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const ac=new AbortController(),to=setTimeout(()=>ac.abort(),12000);
+ const r=await fetch("/out?c="+CUR+"&v="+n+"&lag="+LAG+"&vis="+document.visibilityState+"&q="+IQ.length+"&buf="+bufMax(),{cache:"no-store",signal:ac.signal});LAG=0;const o=await r.json();clearTimeout(to);CUR=o.c;
  if(o.v&&o.v!="__VERSION__"){location.reload();return}
  for(const e of o.m){const v=V[e.k];if(v&&v.c&&v.c.open){try{csend(v.c,e.m);NTX++}catch(x){}}}}catch(e){await new Promise(r=>setTimeout(r,1500))}}}
 function ladeLib(cb){if(window.Peer)return cb();const U=["/peerjs.min.js","https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js","https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];let i=0;
@@ -492,6 +582,7 @@ class Web(http.server.BaseHTTPRequestHandler):
                 return self.antwort(200, BRUECKE.replace("__CODE__", Z.code).replace("__VERSION__", VERSION), "text/html; charset=utf-8")
             if pfad == "/out":
                 Z.bruecke, Z.verb = time.time(), int(arg.get("v", "0") or 0)
+                Z.brueckenbericht(arg)
                 c, m = Z.hole(int(arg.get("c", "0") or 0))
                 return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION}), "application/json")
             if pfad == "/status":
@@ -527,9 +618,17 @@ class Web(http.server.BaseHTTPRequestHandler):
             n = int(self.headers.get("Content-Length", "0") or 0)
             roh = self.rfile.read(n) if n > 0 else b""
             if self.path.startswith("/in"):
+                if TEST_INVERZ:                            # nur für Tests: langsame Annahme nachstellen
+                    time.sleep(TEST_INVERZ)
                 try:
                     q = self.path.partition("?")[2]
-                    self.Z.empfang(json.loads(roh.decode("utf-8", "replace")), int(dict(p.split("=", 1) for p in q.split("&") if "=" in p).get("k", "1")))
+                    m = json.loads(roh.decode("utf-8", "replace"))
+                    if isinstance(m, dict) and isinstance(m.get("b"), list):   # ab 0.5: mehrere Nachrichten in einer Sendung
+                        for e in m["b"]:
+                            if isinstance(e, list) and len(e) == 2:
+                                self.Z.empfang(e[1], int(e[0] or 0))
+                    else:
+                        self.Z.empfang(m, int(dict(p.split("=", 1) for p in q.split("&") if "=" in p).get("k", "1")))
                 except Exception as e:
                     log("Nachricht nicht verstanden: %s" % e)
                 return self.antwort(200, "ok")
@@ -545,7 +644,8 @@ def status_text(Z):
     jetzt = time.time()
     z = ["Dart-Kameras neues Programm %s | %s | Code %s" % (VERSION, time.strftime("%F %T"), Z.code or "FEHLT"),
          "Brücke zum Tablet: %s | Tablet: %s" % ("läuft" if jetzt - Z.bruecke < 12 else "FEHLT",
-                                                         ("verbunden (%d von 3 Kameras)" % Z.verb) if Z.verb and jetzt - Z.tablet < 8 else "nicht verbunden")]
+                                                         ("verbunden (%d von 3 Kameras)" % Z.verb) if Z.verb and jetzt - Z.tablet < 8 else "nicht verbunden"),
+         "Brücke: längstes Stocken %d ms | Seite %s | wartende Nachrichten %d | Sendepuffer %d" % (Z.br["maxlag"], Z.br["vis"], Z.br["q"], Z.br["buf"])]
     for k in Z.kams:
         alter = jetzt - k.zeit if k.zeit else -1
         kn = Z.kern(k.nr)
