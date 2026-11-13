@@ -1,0 +1,77 @@
+// =============================================================================
+//  Dart-Kameras: Rechenkern für EINE Ring-Kamera (läuft unter Node, ohne Browser)
+//  Aufruf (macht dart-pi.py):  node dart-kern.js app.js <Kamera-Nr> <Zahl> <Code> <Speicherdatei>
+//  Lädt genau die Erkennung aus der Dart-App (index.html) – dieselbe Rechnung wie bisher im
+//  Browser-Fenster, nur ohne Fenster, Video und Anzeige. Bilder kommen von dart-pi.py (stdin),
+//  Meldungen gehen als Zeilen an dart-pi.py (stdout) und von dort über die Brücke ans Tablet.
+// =============================================================================
+const fs = require('fs');
+const [APP, NR, ZAHL, CODE, STORE] = process.argv.slice(2);
+const RT = setTimeout, RI = setInterval;
+const out = o => { try { process.stdout.write(JSON.stringify(o) + "\n") } catch (e) {} };
+const fehler = (wo, e) => out({ t: "_err", wo, e: String(e && e.stack || e).slice(0, 500) });
+process.on('uncaughtException', e => fehler("unerwartet", e));
+process.on('unhandledRejection', e => fehler("unerwartet (Promise)", e));
+
+// ---- Attrappen für alles, was im Browser Anzeige wäre ----
+const mk = () => { const t = function () {}; return new Proxy(t, { get: (o, k) => { if (k === Symbol.toPrimitive) return () => ''; if (k === 'length') return 0; if (['className', 'innerHTML', 'textContent', 'value'].includes(k)) return o[k] ?? ''; if (k === 'style' || k === 'dataset') return o[k] ?? (o[k] = {}); if (k === 'querySelectorAll') return () => []; if (k === 'getContext') return () => mk(); if (k === 'getBoundingClientRect') return () => ({ left: 0, top: 0, width: 640, height: 480 }); if (k === 'then' || k === 'toJSON') return undefined; return o[k] ?? mk() }, set: (o, k, v) => { o[k] = v; return true }, apply: () => mk() }) };
+const els = {};
+global.window = global;
+global.document = { querySelector: s => els[s] || (els[s] = mk()), createElement: () => mk(), permissionsPolicy: null, addEventListener: () => {}, visibilityState: "visible" };
+global.navigator = { mediaDevices: null };
+global.addEventListener = () => {}; global.getComputedStyle = () => ({ color: "" });
+global.URL = { createObjectURL: () => '', revokeObjectURL: () => {} }; global.confirm = () => true; global.prompt = () => null; global.alert = () => {};
+global.location = { search: "?kamera=" + NR + "&zahl=" + ZAHL + "&code=" + CODE + "&aus=1", href: "", reload() {} };
+// ---- eigener Speicher (Kalibrierung, Trainings-Sicherung) in einer Datei ----
+let LS = {}; try { LS = JSON.parse(fs.readFileSync(STORE, 'utf8')) || {} } catch (e) {}
+let lsT = null; const lsSave = () => { if (lsT) return; lsT = RT(() => { lsT = null; try { fs.writeFileSync(STORE + ".tmp", JSON.stringify(LS)); fs.renameSync(STORE + ".tmp", STORE) } catch (e) { fehler("Speicher", e) } }, 800) };
+global.localStorage = { getItem: k => (k in LS ? LS[k] : null), setItem: (k, v) => { v = String(v); if (LS[k] !== v) { LS[k] = v; lsSave() } }, removeItem: k => { if (k in LS) { delete LS[k]; lsSave() } } };
+// Beim Laden der App dürfen keine Zeitgeber starten (Kamera öffnen, Verbindung aufbauen …) – das übernimmt dieser Kern.
+global.setTimeout = () => 0; global.setInterval = () => 0; global.clearTimeout = () => {}; global.clearInterval = () => {};
+global.__K = { out, fehler, RT, RI, NR: +NR };
+
+const KLEBER = `
+;(()=>{const K=global.__K,q=s=>document.querySelector(s);
+ ROLE="side";DUO.on=true;DUO.lastHb=Date.now();CONN={open:true,send:m=>K.out(m),close(){}};
+ csend=(c,o)=>c.send(o);                       // Stückeln großer Nachrichten macht die Brücke
+ const cvm=q('#cv');cvm.videoWidth=1280;cvm.videoHeight=720;cvm.srcObject={getVideoTracks:()=>[],getTracks:()=>[]};
+ AZ=false;try{setView(1,[.5,.5],true)}catch(e){}AW=800;ADAPT=3;
+ let CUR=null,LASTF=0,RECN=0;frame=function(){return CUR};
+ // Bilder für die Testdaten: der Kern merkt sich nur eine Nummer, das Bild legt dart-pi.py dazu
+ recAdd=function(k,o){try{if(!cvm.videoWidth)return;const e=Object.assign({k,at:Date.now(),t:hm(),cal:cal&&cal.length==4?cal.slice():null,img:"@"+(++RECN)},o||{});REC.push(e);if(REC.length>20)REC.shift();K.out({t:"_rec",n:RECN,r:e,z:ringZahl()})}catch(e){}};
+ // Kamerabild fürs Tablet: Ringe, Feldgrenzen, gelbe 20 und gemeldete Pfeile – gezeichnet wird in dart-pi.py
+ ringSnap=function(){try{const o={st:MST,rings:[],lines:[],p20:null,marks:[],msg:String(LOG[LOG.length-1]||"")};
+   if(Hi){for(const r of [170,162,107,99,15.9,6.35]){const a=[];for(let k=0;k<=60;k++){const t=k*Math.PI/30,p=ap(Hi,r*Math.sin(t),-r*Math.cos(t));a.push([+p[0].toFixed(4),+p[1].toFixed(4)])}o.rings.push(a)}
+    for(let k=0;k<20;k++){const t=(k*18+9)*Math.PI/180,a=ap(Hi,15.9*Math.sin(t),-15.9*Math.cos(t)),b=ap(Hi,170*Math.sin(t),-170*Math.cos(t));o.lines.push([+a[0].toFixed(4),+a[1].toFixed(4),+b[0].toFixed(4),+b[1].toFixed(4)])}
+    const p=ap(Hi,0,-197);o.p20=[p[0],p[1]];TURN.forEach((t,i)=>{if(isFinite(t.x)){const m=ap(Hi,t.x,t.y);o.marks.push([m[0],m[1],i+1,t.c])}})}
+   return "@"+JSON.stringify(o)}catch(e){return "@{}"}};
+ piAus=function(){};
+ global.setTimeout=(f,ms,...a)=>K.RT(()=>{try{f(...a)}catch(e){}},ms);global.clearTimeout=clearTimeout;
+ const req=()=>K.out({t:"_f",aw:AW});
+ K.onFrame=(w,h,buf)=>{LASTF=Date.now();CUR={width:w,height:h,data:new Uint8ClampedArray(buf.buffer,buf.byteOffset,buf.length),z:1,cx:.5,cy:.5};
+  const t0=performance.now();try{q('#cfl').textContent='';tick()}catch(e){K.fehler("tick",e)}const dt=performance.now()-t0;
+  let d=250;try{d=loopDelay(dt)}catch(e){}K.RT(req,Math.max(0,d-40))};
+ K.onMsg=m=>{try{if(m&&m.t=="_open"){duoSend(hello());K.RT(()=>{try{bkSend(CONN,bkMine())}catch(e){}},500);return}duoRecv(m,CONN)}catch(e){K.fehler("Nachricht",e)}};
+ K.RI(()=>{try{const h=hello();h.t="hb";h.kern=1;h.ms=LCK;duoSend(h)}catch(e){K.fehler("hb",e)}if(Date.now()-LASTF>2500)req()},1000);
+ K.RI(()=>{try{DUO.lastHb=Date.now();duoWatch()}catch(e){K.fehler("Wächter",e)}},4000);
+ LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser)");K.out(hello());K.RT(req,200);
+})();`;
+try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }
+
+// ---- Eingang von dart-pi.py: [Art 1 Byte][Länge 4 Byte LE][Inhalt]; Art F = Bild (w,h je 2 Byte + RGBA), M = Nachricht (JSON) ----
+let kopf = Buffer.alloc(5), kn = 0, ziel = null, zn = 0, art = 0;
+process.stdin.on('data', ch => {
+  let i = 0;
+  while (i < ch.length) {
+    if (!ziel) { const n = Math.min(5 - kn, ch.length - i); ch.copy(kopf, kn, i, i + n); kn += n; i += n; if (kn < 5) break; art = kopf[0]; const len = kopf.readUInt32LE(1); if (len > 40e6) { process.exit(4) } ziel = Buffer.allocUnsafeSlow(len); zn = 0; kn = 0; if (len > 0) continue }
+    const n = Math.min(ziel.length - zn, ch.length - i); ch.copy(ziel, zn, i, i + n); zn += n; i += n;
+    if (zn >= ziel.length) {
+      const b = ziel; ziel = null;
+      try {
+        if (art == 70) { const w = b.readUInt16LE(0), h = b.readUInt16LE(2); if (global.__K.onFrame && b.length == 4 + w * h * 4) global.__K.onFrame(w, h, b.subarray(4)) }
+        else if (art == 77) { global.__K.onMsg && global.__K.onMsg(JSON.parse(b.toString('utf8'))) }
+      } catch (e) { fehler("Eingang", e) }
+    }
+  }
+});
+process.stdin.on('end', () => process.exit(0));

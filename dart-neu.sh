@@ -24,6 +24,18 @@ else
   rm -f "$N/dart-pi.py.neu"; echo "FEHLER: dart-pi.py konnte nicht geladen werden (${BASE}dart-pi.py). Liegt die Datei schon bei GitHub? Nach dem Hochladen 1–2 Minuten warten."; exit 1
 fi
 python3 -c "import cv2, numpy" 2>/dev/null && echo "✓ Bildverarbeitung (OpenCV) vorhanden" || { echo "FEHLER: OpenCV fehlt. Bitte zuerst:  sudo apt install -y python3-opencv python3-numpy"; exit 1; }
+# Rechenkern: dieselbe Erkennung wie in der Dart-App, läuft unter Node (ohne Browser)
+if ! command -v node >/dev/null 2>&1 && ! command -v nodejs >/dev/null 2>&1; then
+  echo "Installiere Node für die Rechenkerne (einmalig, 1–3 Minuten) …"
+  sudo apt-get install -y nodejs < /dev/null > "$N/node-install.log" 2>&1 || { sudo apt-get update < /dev/null >> "$N/node-install.log" 2>&1; sudo apt-get install -y nodejs < /dev/null >> "$N/node-install.log" 2>&1; }
+fi
+NODE=$(command -v node || command -v nodejs)
+if [ -n "$NODE" ]; then echo "✓ Node vorhanden ($("$NODE" --version))"; else echo "FEHLER: Node ließ sich nicht installieren (siehe $N/node-install.log). Bitte von Hand:  sudo apt install -y nodejs"; exit 1; fi
+# (liegt bei GitHub als dart-kern.txt, weil sich .js-Dateien am PC oft nicht herunterladen lassen)
+if { curl -fsSL "${BASE}dart-kern.txt?$(date +%s)" -o "$N/neu-kern.js" || curl -fsSL "${BASE}dart-kern.js?$(date +%s)" -o "$N/neu-kern.js"; } && "$NODE" --check "$N/neu-kern.js" 2>/dev/null && grep -q "Rechenkern" "$N/neu-kern.js"; then mv "$N/neu-kern.js" "$N/dart-kern.js"; echo "✓ Rechenkern geladen"
+else rm -f "$N/neu-kern.js"; echo "FEHLER: Der Rechenkern konnte nicht geladen werden (${BASE}dart-kern.txt). Liegt die Datei schon bei GitHub?"; exit 1; fi
+if curl -fsSL "${BASE}index.html?$(date +%s)" -o "$N/index.html.neu" && grep -q "function findDart(" "$N/index.html.neu"; then mv "$N/index.html.neu" "$N/index.html"; echo "✓ Erkennung aus der Dart-App geladen (Version $(grep -o '· Version [0-9]*</span>' "$N/index.html" | grep -o '[0-9]*' | head -1))"
+else rm -f "$N/index.html.neu"; echo "FEHLER: Die Dart-App (${BASE}index.html) konnte nicht geladen werden."; exit 1; fi
 # Verbindungs-Bibliothek für die Brücke (liegt dann auf dem Pi; sonst wird sie aus dem Internet geladen)
 if [ ! -s "$N/peerjs.min.js" ]; then curl -fsSL "https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js" -o "$N/peerjs.min.js" 2>/dev/null || rm -f "$N/peerjs.min.js"; fi
 [ -s "$N/peerjs.min.js" ] && echo "✓ Verbindungs-Bibliothek liegt auf dem Pi"
@@ -102,7 +114,7 @@ echo "$M" > "$D/modus"
 echo "Beende die laufenden Kamera-Programme …"
 systemctl --user stop 'dart-kameras-*' 2>/dev/null
 pkill -u "$U" -f 'dart-start\.sh' 2>/dev/null; pkill -u "$U" -f 'dart-neu/start\.sh' 2>/dev/null
-pkill -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -u "$U" -f 'dart-aus\.py' 2>/dev/null
+pkill -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -u "$U" -f 'dart-neu/dart-kern\.js' 2>/dev/null; pkill -u "$U" -f 'dart-aus\.py' 2>/dev/null
 pkill -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null
 sleep 3
 pkill -9 -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -9 -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null
@@ -114,7 +126,7 @@ if ! systemd-run --user --quiet --collect --unit="dart-kameras-$(date +%s)" "${A
 fi
 if [ "$M" = "neu" ]; then
   echo "Neues Programm startet …"
-  for i in $(seq 1 25); do sleep 1; [ "$(curl -s -m 2 http://127.0.0.1:8771/status | grep -c '^Kamera [1-3]: ok')" -ge 3 ] && [ "$i" -ge 8 ] && break; done
+  for i in $(seq 1 40); do sleep 1; [ "$(curl -s -m 2 http://127.0.0.1:8771/status | grep -c 'Scheibe erkannt')" -ge 3 ] && [ "$i" -ge 10 ] && break; done
   echo; curl -s -m 4 http://127.0.0.1:8771/status || echo "⚠ Das neue Programm antwortet nicht. Zurück mit:  ~/dart-modus.sh alt"
   echo; echo "Zurück zu den drei Browser-Fenstern jederzeit mit:  ~/dart-modus.sh alt"
 else
@@ -125,6 +137,8 @@ chmod +x "$HOME/dart-modus.sh"; echo "✓ Umschalter gespeichert ($HOME/dart-mod
 # läuft das neue Programm schon (Aktualisierung)? Dann gleich mit der neuen Fassung neu starten
 if [ "$(cat "$D/modus" 2>/dev/null)" = "neu" ] && pgrep -u "$(id -u)" -f 'dart-neu/dart-pi\.py' >/dev/null; then
   pkill -u "$(id -u)" -f 'dart-neu/dart-pi\.py'; echo "✓ Neues Programm läuft schon – es startet in 3 Sekunden mit der neuen Fassung neu"
+  for i in $(seq 1 40); do sleep 1; [ "$(curl -s -m 2 http://127.0.0.1:8771/status | grep -c 'Scheibe erkannt')" -ge 3 ] && [ "$i" -ge 10 ] && break; done
+  echo; curl -s -m 4 http://127.0.0.1:8771/status
 fi
 echo
 echo "Fertig. Umschalten auf das neue Programm:   ~/dart-modus.sh neu"
