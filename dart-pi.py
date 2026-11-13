@@ -13,7 +13,7 @@
 import base64, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.3"
+VERSION = "0.4"
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -328,6 +328,8 @@ class Kern:
                     r["img"] = self.recimg.get(int(r["img"][1:] or 0), "")
             m["rec"] = [r for r in (m.get("rec") or []) if r.get("img")]
             m["neu"], m["kamera"] = VERSION, k.info
+            with LOCK:
+                m["pilog"] = LOG[-150:]                    # Protokoll dieses Programms (Brücke, Kameras, Rechenkerne)
         Z.sende(k.nr, m)
 
 

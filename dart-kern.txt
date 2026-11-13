@@ -54,6 +54,17 @@ const KLEBER = `
  K.onMsg=m=>{try{if(m&&m.t=="_open"){duoSend(hello());K.RT(()=>{try{bkSend(CONN,bkMine())}catch(e){}},500);return}duoRecv(m,CONN)}catch(e){K.fehler("Nachricht",e)}};
  K.RI(()=>{try{const h=hello();h.t="hb";h.kern=1;h.ms=LCK;duoSend(h)}catch(e){K.fehler("hb",e)}if(Date.now()-LASTF>2500)req()},1000);
  K.RI(()=>{try{DUO.lastHb=Date.now();duoWatch()}catch(e){K.fehler("Wächter",e)}},4000);
+ // Aufwärmen: Die Erkennung läuft nach dem Start und nach langer Pause sonst 2–3x langsamer (die Rechen-Maschine von Node optimiert erst beim Benutzen).
+ // Deshalb ab und zu in Ruhe einen künstlichen Pfeil in eine Kopie des Vergleichsbilds malen und erkennen lassen – nichts davon wird gemeldet.
+ let WARMN=0,LWARM=0;const WSEQ=[];
+ function warmBild(r){const W=r.width,H=r.height,o=new Uint8ClampedArray(r.data),sc=W/800,S=MASK.sub,p=S[(WARMN*7919+13)%S.length],x0=p%W,y0=(p-x0)/W;
+  const ln=(x1,y1,x2,y2,w,c)=>{const L=Math.hypot(x2-x1,y2-y1)||1;for(let t=0;t<=L;t+=.5){const x=x1+(x2-x1)*t/L,y=y1+(y2-y1)*t/L;for(let dy=-w;dy<=w;dy++)for(let dx=-w;dx<=w;dx++){const X=Math.round(x+dx),Y=Math.round(y+dy);if(X>=0&&Y>=0&&X<W&&Y<H){const k=(Y*W+X)*4;o[k]=c;o[k+1]=c;o[k+2]=c}}}};
+  ln(x0,y0,x0+4*sc,y0-45*sc,2*sc,30);ln(x0+4*sc,y0-45*sc,x0+7*sc,y0-75*sc,3*sc,190);ln(x0+7*sc,y0-75*sc,x0+10*sc,y0-100*sc,7*sc,25);return{...r,data:o}}
+ function warm(){const now=Date.now();if(!FW.warm||!HB||MST!="ok"||!ref||!MASK||!MASK.sub||!MASK.sub.length||PDART||INV||MQS.length||ref.width!=MASK.inB.length/ref.height)return;
+  if(WARMN>=FW.warmN&&(now-LWARM<FW.warm||now-LREP<15000||now-(MOVE0||0)<3000))return;
+  const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const t0=performance.now(),G=camGeo(ref),R=findDart(warmBild(ref),ref,G.toB,G.Hp,MASK,false,EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
+  LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WSEQ.push(ms);if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms)")}
+ FW.warm=+(process.env.DART_WARM||45000);FW.warmN=6;K.RI(()=>{try{warm()}catch(e){}},700);
  LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser)");K.out(hello());K.RT(req,200);
 })();`;
 try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }
