@@ -54,17 +54,23 @@ log "Start neues Programm"
 ( while true; do python3 "$N/dart-pi.py" >> "$D/pi.log" 2>&1 8>&-; log "Programm beendet (Code $?) – Neustart in 3 s"; sleep 3; done ) &
 for i in $(seq 1 40); do curl -fsS -m 2 http://127.0.0.1:8771/status >/dev/null 2>&1 && break; sleep 1; done
 if [ -z "$BROWSER" ]; then log "FEHLER: Chromium nicht gefunden – keine Brücke zum Tablet"; wait; exit 1; fi
-dir="$D/bruecke"
+dir="$D/bruecke"; OHNE="--headless=new"; KURZ=0
 while true; do
   if [ -f "$dir/Default/Preferences" ]; then
     sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[A-Za-z]*"/"exit_type":"Normal"/' "$dir/Default/Preferences"
   fi
-  "$BROWSER" --user-data-dir="$dir" --app="http://127.0.0.1:8771/" \
+  T0=$(date +%s)
+  # Die Brücke läuft ohne Fenster (kann dann nicht "einschlafen", wenn niemand auf den Pi-Bildschirm schaut).
+  "$BROWSER" $OHNE --user-data-dir="$dir" --app="http://127.0.0.1:8771/" \
     --autoplay-policy=no-user-gesture-required --disable-background-timer-throttling --disable-renderer-backgrounding \
     --disable-backgrounding-occluded-windows --noerrdialogs --disable-session-crashed-bubble --disable-infobars \
-    --no-first-run --no-default-browser-check --password-store=basic --disable-features=Translate \
+    --no-first-run --no-default-browser-check --password-store=basic --disable-features=Translate,IntensiveWakeUpThrottling \
     --window-position=0,0 --window-size=430,700 >> "$D/bruecke.log" 2>&1 8>&-
-  log "Brücken-Fenster wurde beendet (Code $?) – Neustart in 5 s"; sleep 5
+  C=$?; DT=$(( $(date +%s) - T0 ))
+  log "Brücke wurde beendet (Code $C, lief $DT s${OHNE:+, ohne Fenster}) – Neustart in 5 s"
+  # Startet sie ohne Fenster dreimal hintereinander gar nicht erst richtig, dann mit Fenster weiter
+  if [ -n "$OHNE" ] && [ "$DT" -lt 20 ]; then KURZ=$((KURZ+1)); [ "$KURZ" -ge 3 ] && { OHNE=""; log "Brücke läuft ohne Fenster nicht – ab jetzt mit Fenster"; }; else KURZ=0; fi
+  sleep 5
 done
 SH
 chmod +x "$N/start.sh"; echo "✓ Start des neuen Programms gespeichert ($N/start.sh)"
@@ -134,12 +140,8 @@ else
 fi
 SH
 chmod +x "$HOME/dart-modus.sh"; echo "✓ Umschalter gespeichert ($HOME/dart-modus.sh)"
-# läuft das neue Programm schon (Aktualisierung)? Dann gleich mit der neuen Fassung neu starten
-if [ "$(cat "$D/modus" 2>/dev/null)" = "neu" ] && pgrep -u "$(id -u)" -f 'dart-neu/dart-pi\.py' >/dev/null; then
-  pkill -u "$(id -u)" -f 'dart-neu/dart-pi\.py'; echo "✓ Neues Programm läuft schon – es startet in 3 Sekunden mit der neuen Fassung neu"
-  for i in $(seq 1 40); do sleep 1; [ "$(curl -s -m 2 http://127.0.0.1:8771/status | grep -c 'Scheibe erkannt')" -ge 3 ] && [ "$i" -ge 10 ] && break; done
-  echo; curl -s -m 4 http://127.0.0.1:8771/status
-fi
+# läuft schon der Modus "neu" (Aktualisierung)? Dann alles gleich mit der neuen Fassung neu starten
+if [ "$(cat "$D/modus" 2>/dev/null)" = "neu" ]; then echo "✓ Modus „neu“ ist aktiv – starte alles mit der neuen Fassung neu"; exec "$HOME/dart-modus.sh" neu; fi
 echo
 echo "Fertig. Umschalten auf das neue Programm:   ~/dart-modus.sh neu"
 echo "Zurück zu den drei Browser-Fenstern:        ~/dart-modus.sh alt"

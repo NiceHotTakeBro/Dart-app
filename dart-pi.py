@@ -13,7 +13,7 @@
 import base64, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.2"
+VERSION = "0.3"
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -367,8 +367,18 @@ class Zentrale:
                 "zahl": self.zahlen[k.nr - 1], "neu": VERSION}
 
     def takt(self):
+        start, letzter = time.time(), 0.0
         while True:
             time.sleep(1)
+            jetzt = time.time()
+            # Wächter: meldet sich die Brücke 25 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
+            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 25:
+                letzter = jetzt
+                log("Brücke meldet sich nicht – wird neu gestartet")
+                try:
+                    subprocess.call(["pkill", "-9", "-f", "--", "--user-data-dir=" + os.path.join(DATEN, "bruecke")])
+                except Exception:
+                    pass
             if time.time() - self.bruecke < 12 and self.verb:
                 for k in self.kams:                        # Kamera ohne laufenden Rechenkern meldet sich selbst (als "noch nicht bereit")
                     kn = self.kern(k.nr)
@@ -447,11 +457,12 @@ function start(){if(!window.Peer){MSG="Verbindungs-Bibliothek fehlt (Internet?)"
  if(!/^\d{4}$/.test(CODE)){MSG="Kein Code gefunden (dart-start.sh)";st();return}for(const k of [1,2,3])mk(k);st()}
 setInterval(()=>{const now=Date.now();for(const k of [1,2,3]){const v=V[k];if(!v||!v.p)continue;if(v.p.destroyed){mk(k);continue}if(v.p.disconnected){try{v.p.reconnect()}catch(e){}continue}
  if(v.c&&v.c.open&&v.rx&&now-v.rx>15000){try{v.c.close()}catch(e){}v.c=null;v.rx=now}dial(k)}st()},5000);
-async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const r=await fetch("/out?c="+CUR+"&v="+n,{cache:"no-store"});const o=await r.json();CUR=o.c;
+async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const ac=new AbortController(),to=setTimeout(()=>ac.abort(),20000);const r=await fetch("/out?c="+CUR+"&v="+n,{cache:"no-store",signal:ac.signal});const o=await r.json();clearTimeout(to);CUR=o.c;
+ if(o.v&&o.v!="__VERSION__"){location.reload();return}
  for(const e of o.m){const v=V[e.k];if(v&&v.c&&v.c.open){try{csend(v.c,e.m);NTX++}catch(x){}}}}catch(e){await new Promise(r=>setTimeout(r,1500))}}}
 function ladeLib(cb){if(window.Peer)return cb();const U=["/peerjs.min.js","https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js","https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];let i=0;
  const nx=()=>{if(i>=U.length)return cb();const s=document.createElement("script");s.src=U[i++];s.onload=cb;s.onerror=nx;document.head.appendChild(s)};nx()}
-setInterval(()=>{for(const k of [1,2,3])document.getElementById("b"+k).src="/bild?k="+k+"&t="+Date.now();fetch("/status").then(r=>r.text()).then(t=>{document.getElementById("lg").textContent=t+"\nBrücke: gesendet "+NTX+", empfangen "+NRX})},4000);
+if(!navigator.webdriver&&!/Headless/.test(navigator.userAgent))setInterval(()=>{for(const k of [1,2,3])document.getElementById("b"+k).src="/bild?k="+k+"&t="+Date.now();fetch("/status").then(r=>r.text()).then(t=>{document.getElementById("lg").textContent=t+"\nBrücke: gesendet "+NTX+", empfangen "+NRX})},4000);
 ladeLib(()=>{start();pump()});
 </script></body></html>"""
 
@@ -480,7 +491,7 @@ class Web(http.server.BaseHTTPRequestHandler):
             if pfad == "/out":
                 Z.bruecke, Z.verb = time.time(), int(arg.get("v", "0") or 0)
                 c, m = Z.hole(int(arg.get("c", "0") or 0))
-                return self.antwort(200, json.dumps({"c": c, "m": m}), "application/json")
+                return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION}), "application/json")
             if pfad == "/status":
                 return self.antwort(200, status_text(Z))
             if pfad == "/bild":
@@ -531,7 +542,7 @@ class Web(http.server.BaseHTTPRequestHandler):
 def status_text(Z):
     jetzt = time.time()
     z = ["Dart-Kameras neues Programm %s | %s | Code %s" % (VERSION, time.strftime("%F %T"), Z.code or "FEHLT"),
-         "Brücke (Browser-Fenster): %s | Tablet: %s" % ("läuft" if jetzt - Z.bruecke < 12 else "FEHLT",
+         "Brücke zum Tablet: %s | Tablet: %s" % ("läuft" if jetzt - Z.bruecke < 12 else "FEHLT",
                                                          ("verbunden (%d von 3 Kameras)" % Z.verb) if Z.verb and jetzt - Z.tablet < 8 else "nicht verbunden")]
     for k in Z.kams:
         alter = jetzt - k.zeit if k.zeit else -1
