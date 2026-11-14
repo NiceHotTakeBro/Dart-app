@@ -28,7 +28,10 @@ let lsT = null; const lsSave = () => { if (lsT) return; lsT = RT(() => { lsT = n
 global.localStorage = { getItem: k => (k in LS ? LS[k] : null), setItem: (k, v) => { v = String(v); if (LS[k] !== v) { LS[k] = v; lsSave() } }, removeItem: k => { if (k in LS) { delete LS[k]; lsSave() } } };
 // Beim Laden der App dürfen keine Zeitgeber starten (Kamera öffnen, Verbindung aufbauen …) – das übernimmt dieser Kern.
 global.setTimeout = () => 0; global.setInterval = () => 0; global.clearTimeout = () => {}; global.clearInterval = () => {};
-global.__K = { out, fehler, RT, RI, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0) };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
+// Angaben zum Rechner fürs Protokoll (Fehlersuche „Runde 1 langsam“): Node-Version, freier Speicher, Takt-Regler der CPU
+const sysInfo = () => { let g = "?"; try { g = fs.readFileSync("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "utf8").trim() } catch (e) {}
+  const os = require('os'); return "Node " + process.version + ", Speicher frei " + Math.round(os.freemem() / 1048576) + " von " + Math.round(os.totalmem() / 1048576) + " MB, CPU-Regler " + g };
+global.__K = { out, fehler, RT, RI, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0), sysInfo };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
 
 const KLEBER = `
 ;(()=>{const K=global.__K,q=s=>document.querySelector(s);
@@ -56,7 +59,9 @@ const KLEBER = `
  K.RI(()=>{try{DUO.lastHb=Date.now();duoWatch()}catch(e){K.fehler("Wächter",e)}},4000);
  // Aufwärmen: Die Erkennung läuft nach dem Start und nach langer Pause sonst 2–3x langsamer (die Rechen-Maschine von Node optimiert erst beim Benutzen).
  // Deshalb ab und zu in Ruhe einen künstlichen Pfeil in eine Kopie des Vergleichsbilds malen und erkennen lassen – nichts davon wird gemeldet.
- let WARMN=0,LWARM=0;const WSEQ=[];
+ let WARMN=0,LWARM=0,WLMS=0;const WSEQ=[];
+ // v51: im Pfeil-Protokoll steht, wann zuletzt aufgewärmt wurde und wie lange das gedauert hat (war der Kern vor dem Pfeil schnell?)
+ global.warmInfo=()=>WSEQ.length>=FW.warmN&&LWARM?" – zuletzt aufgewärmt vor "+Math.round((Date.now()-LWARM)/1000)+" s ("+WLMS+" ms)":"";
  // Jedes zweite Aufwärm-Bild leicht verschoben, heller und verrauscht wie ein echtes Kamerabild: sonst übt Node nur den einfachsten Fall
  // (Hintergrund deckungsgleich) und das Nachführen des Bildes bleibt kalt – auf dem Pi brauchte „Ausrichten“ bei den ersten echten Pfeilen
  // 300–580 ms statt 40–70 ms (Test 14.11. 16:56).
@@ -72,12 +77,13 @@ const KLEBER = `
  if(WARMN<FW.warmN){if(/^(search|off|lost)$/.test(MST)||now-(STILL||0)<1000)return}else if(MST!="ok"||PDART||INV||MQS.length)return;
   if(WARMN>=FW.warmN&&(now-LWARM<FW.warm||now-LREP<15000||now-(MOVE0||0)<3000))return;
   const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const t0=performance.now(),G=camGeo(ref),R=findDart(warmBild(ref),ref,G.toB,G.Hp,MASK,false,EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
-  LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WSEQ.push(ms);if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms; letzter Lauf: "+(typeof FDT=="string"&&FDT?FDT:"–")+")")}
+  LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WLMS=ms;WSEQ.push(ms);if(WARMN>FW.warmN)try{TKA.ms+=ms;TKA.w+="a"}catch(e){}if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms; letzter Lauf: "+(typeof FDT=="string"&&FDT?FDT:"–")+")")}
  // 16 statt 6 Läufe (14.11.): auf dem Pi waren die ersten echten Prüfungen nach 6 Läufen noch 1 s statt 0,3 s.
  // (Im Rechenkern vom 14.11. mittags stand dieser Hinweis versehentlich in derselben Zeile – der Rest der Zeile war dadurch abgeschaltet
  // und das Aufwärmen lief gar nicht. Prüfung: im Kamera-Protokoll muss kurz nach dem Start „aufgewärmt (…)“ stehen.)
-FW.warm=+(process.env.DART_WARM||45000);FW.warmN=+(process.env.DART_WARMN||16);K.RI(()=>{try{warm()}catch(e){}},700);
- LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser)");K.out(hello());K.RT(req,200);
+ // v51: in Ruhe alle 15 s statt alle 45 s warm halten (Test 14.11. 18:07: Runde 1 nach 3 Minuten Pause wieder 1,0–1,1 s je Prüfung)
+FW.warm=+(process.env.DART_WARM||15000);FW.warmN=+(process.env.DART_WARMN||16);K.RI(()=>{try{warm()}catch(e){}},700);
+ LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser; "+K.sysInfo()+")");K.out(hello());K.RT(req,200);
 })();`;
 try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }
 
