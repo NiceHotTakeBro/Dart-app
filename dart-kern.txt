@@ -60,11 +60,17 @@ const KLEBER = `
  function warmBild(r){const W=r.width,H=r.height,o=new Uint8ClampedArray(r.data),sc=W/800,S=MASK.sub,p=S[(WARMN*7919+13)%S.length],x0=p%W,y0=(p-x0)/W;
   const ln=(x1,y1,x2,y2,w,c)=>{const L=Math.hypot(x2-x1,y2-y1)||1;for(let t=0;t<=L;t+=.5){const x=x1+(x2-x1)*t/L,y=y1+(y2-y1)*t/L;for(let dy=-w;dy<=w;dy++)for(let dx=-w;dx<=w;dx++){const X=Math.round(x+dx),Y=Math.round(y+dy);if(X>=0&&Y>=0&&X<W&&Y<H){const k=(Y*W+X)*4;o[k]=c;o[k+1]=c;o[k+2]=c}}}};
   ln(x0,y0,x0+4*sc,y0-45*sc,2*sc,30);ln(x0+4*sc,y0-45*sc,x0+7*sc,y0-75*sc,3*sc,190);ln(x0+7*sc,y0-75*sc,x0+10*sc,y0-100*sc,7*sc,25);return{...r,data:o}}
- function warm(){const now=Date.now();if(!FW.warm||!HB||MST!="ok"||!ref||!MASK||!MASK.sub||!MASK.sub.length||PDART||INV||MQS.length||ref.width!=MASK.inB.length/ref.height)return;
+ function warm(){const now=Date.now();if(!FW.warm||!HB||!ref||!MASK||!MASK.sub||!MASK.sub.length||ref.width!=MASK.inB.length/ref.height)return;
+ // Die ersten Läufe nach dem Start auch dann, wenn noch Pfeile in der Scheibe stecken oder etwas geprüft wird (sonst kann das Aufwärmen
+ // ausfallen und Runde 1 ist langsam). Nur nicht, solange sich etwas bewegt.
+ if(WARMN<FW.warmN){if(/^(search|off|lost)$/.test(MST)||now-(STILL||0)<1000)return}else if(MST!="ok"||PDART||INV||MQS.length)return;
   if(WARMN>=FW.warmN&&(now-LWARM<FW.warm||now-LREP<15000||now-(MOVE0||0)<3000))return;
   const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const t0=performance.now(),G=camGeo(ref),R=findDart(warmBild(ref),ref,G.toB,G.Hp,MASK,false,EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
   LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WSEQ.push(ms);if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms)")}
- FW.warm=+(process.env.DART_WARM||45000);FW.warmN=+(process.env.DART_WARMN||16);// 16 statt 6 (14.11.): auf dem Pi waren die ersten echten Prüfungen nach 6 Läufen noch 1 s statt 0,3 sK.RI(()=>{try{warm()}catch(e){}},700);
+ // 16 statt 6 Läufe (14.11.): auf dem Pi waren die ersten echten Prüfungen nach 6 Läufen noch 1 s statt 0,3 s.
+ // (Im Rechenkern vom 14.11. mittags stand dieser Hinweis versehentlich in derselben Zeile – der Rest der Zeile war dadurch abgeschaltet
+ // und das Aufwärmen lief gar nicht. Prüfung: im Kamera-Protokoll muss kurz nach dem Start „aufgewärmt (…)“ stehen.)
+FW.warm=+(process.env.DART_WARM||45000);FW.warmN=+(process.env.DART_WARMN||16);K.RI(()=>{try{warm()}catch(e){}},700);
  LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser)");K.out(hello());K.RT(req,200);
 })();`;
 try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }

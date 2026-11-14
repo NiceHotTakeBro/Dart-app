@@ -13,7 +13,7 @@
 import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.6"
+VERSION = "0.7"
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -372,18 +372,22 @@ class Zentrale:
         self.bruecke, self.tablet, self.verb, self.aus_zeit = 0.0, 0.0, 0, 0.0
         self.br = {"lag": 0, "vis": "?", "q": 0, "buf": 0, "maxlag": 0}  # was die Brücke über sich meldet (zur Fehlersuche)
         self.br_in = 0.0                                   # wann zuletzt etwas von der Brücke kam (/in)
+        # Ab 0.7: Was die Brücke nicht abgeholt hat (Brücke hing) oder nicht zustellen konnte (Verbindung zu), wird nachgereicht,
+        # sobald die Verbindung dieser Kamera wieder steht – nur Pfeil- und Zieh-Meldungen der letzten 90 s, in der richtigen Reihenfolge.
+        self.br_cur = 0                                    # bis zu dieser Nummer hat die Brücke alles abgeholt
+        self.weg = {}                                      # Kamera -> ("nr", Nummer) bzw. ("zeit", Zeitpunkt): ab da nicht zugestellt
         self.kerne = [] if os.environ.get("DART_OHNE_KERN") else [Kern(self, k) for k in kams]
         threading.Thread(target=self.takt, daemon=True).start()
 
     def sende(self, knr, m):
         with self.cond:
             self.nr += 1
-            self.aus.append((self.nr, {"k": knr, "m": m}))
+            self.aus.append((self.nr, {"k": knr, "m": m}, time.monotonic()))
             if len(self.aus) > 600:                       # Brücke weg: alte Nachrichten verwerfen
                 del self.aus[:300]
             self.cond.notify_all()
 
-    def hole(self, ab, warte=8.0):
+    def hole(self, ab, warte=4.0):                     # 4 s statt 8 s: der Wächter merkt eine hängende Brücke schneller
         ende = time.monotonic() + warte
         with self.cond:
             if ab <= 0:                                    # Brücke frisch gestartet: alte Nachrichten nicht nachliefern (Tablet ist eh neu verbunden)
@@ -391,10 +395,30 @@ class Zentrale:
             elif ab > self.nr:                             # Programm wurde neu gestartet: Zählung beginnt von vorn
                 ab = 0
             while True:
-                neu = [m for n, m in self.aus if n > ab]
+                neu = [m for n, m, z in self.aus if n > ab]
                 if neu or time.monotonic() >= ende:
                     return self.nr, neu
                 self.cond.wait(max(0.05, ende - time.monotonic()))
+
+    NACH = ("dart", "pull")
+
+    def nachreichen(self, knr):
+        """Verbindung dieser Kamera steht wieder: Pfeil-/Zieh-Meldungen nachreichen, die das Tablet nicht bekommen hat."""
+        w = self.weg.pop(knr, None)
+        if not w:
+            return
+        jetzt = time.monotonic()
+        with self.cond:
+            alt = [(n, e["m"]) for n, e, z in self.aus if e["k"] == knr and jetzt - z < 90 and isinstance(e["m"], dict)
+                   and e["m"].get("t") in self.NACH and ((w[0] == "nr" and n > w[1]) or (w[0] == "zeit" and z >= w[1]))]
+        if not alt:
+            return
+        def los():
+            for n, m in alt:
+                self.sende(knr, dict(m, nach=1))
+            log("Kamera %d: %d Meldung(en) aus der Pause nachgereicht (%s)" % (knr, len(alt), ", ".join(
+                str(m.get("t")) + ("" if m.get("t") != "dart" else " " + str(m.get("p", ""))[:16]) for n, m in alt)))
+        threading.Timer(1.0, los).start()                  # kurz warten: erst meldet sich die Kamera beim Tablet an
 
     def brueckenbericht(self, arg):
         b = self.br
@@ -419,9 +443,12 @@ class Zentrale:
         while True:
             time.sleep(1)
             jetzt = time.monotonic()
-            # Wächter: meldet sich die Brücke 20 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
-            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 20:
+            # Wächter: meldet sich die Brücke 12 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
+            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 12:
                 letzter = jetzt
+                for k in self.kams:                        # alles, was die Brücke nicht mehr abgeholt hat, später nachreichen
+                    if k.nr not in self.weg:
+                        self.weg[k.nr] = ("nr", self.br_cur)
                 b = self.br
                 log("Brücke meldet sich nicht – wird neu gestartet (letzte Abfrage vor %.0f s, letzte Nachricht von ihr vor %s, "
                     "zuletzt gemeldet: %s, Stocken bis %d ms, Warteschlange %d, Puffer %d)" % (
@@ -463,8 +490,11 @@ class Zentrale:
             log("Kamera %d: Verbindung zum Tablet steht" % k.nr)
             if not (kn and kn.lebt()):
                 self.sende(k.nr, self.hallo(k, "hello"))
+            self.nachreichen(k.nr)
         if t == "_zu":
             log("Kamera %d: Verbindung zum Tablet getrennt" % k.nr)
+            if k.nr not in self.weg:
+                self.weg[k.nr] = ("zeit", time.monotonic() - 0.5)
             return
         if t == "aus":                                     # "Pi herunterfahren" (kommt je Verbindung einmal – nur einmal ausführen)
             if time.monotonic() - self.aus_zeit > 20:
@@ -548,7 +578,7 @@ function start(){if(!window.Peer){MSG="Verbindungs-Bibliothek fehlt (Internet?)"
  if(!/^\d{4}$/.test(CODE)){MSG="Kein Code gefunden (dart-start.sh)";st();return}for(const k of [1,2,3])mk(k);st()}
 setInterval(()=>{const now=Date.now();for(const k of [1,2,3]){const v=V[k];if(!v||!v.p)continue;if(v.p.destroyed){mk(k);continue}if(v.p.disconnected){try{v.p.reconnect()}catch(e){}continue}
  if(v.c&&v.c.open&&v.rx&&now-v.rx>15000){try{v.c.close()}catch(e){}v.c=null;v.rx=now}dial(k)}st()},5000);
-async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const ac=new AbortController(),to=setTimeout(()=>ac.abort(),12000);
+async function pump(){for(;;){try{const n=[1,2,3].filter(k=>V[k]&&V[k].c&&V[k].c.open).length;const ac=new AbortController(),to=setTimeout(()=>ac.abort(),7000);
  const r=await fetch("/out?c="+CUR+"&v="+n+"&lag="+LAG+"&vis="+document.visibilityState+"&q="+IQ.length+"&buf="+bufMax(),{cache:"no-store",signal:ac.signal});LAG=0;const o=await r.json();clearTimeout(to);CUR=o.c;
  if(o.v&&o.v!="__VERSION__"){location.reload();return}
  for(const e of o.m){const v=V[e.k];if(v&&v.c&&v.c.open){try{csend(v.c,e.m);NTX++}catch(x){}}}}catch(e){await new Promise(r=>setTimeout(r,1500))}}}
@@ -583,7 +613,10 @@ class Web(http.server.BaseHTTPRequestHandler):
             if pfad == "/out":
                 Z.bruecke, Z.verb = time.monotonic(), int(arg.get("v", "0") or 0)
                 Z.brueckenbericht(arg)
-                c, m = Z.hole(int(arg.get("c", "0") or 0))
+                ab = int(arg.get("c", "0") or 0)
+                if ab > 0:
+                    Z.br_cur = ab
+                c, m = Z.hole(ab)
                 return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION}), "application/json")
             if pfad == "/status":
                 return self.antwort(200, status_text(Z))
