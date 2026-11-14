@@ -39,8 +39,33 @@ else rm -f "$N/index.html.neu"; echo "FEHLER: Die Dart-App (${BASE}index.html) k
 # Verbindungs-Bibliothek für die Brücke (liegt dann auf dem Pi; sonst wird sie aus dem Internet geladen)
 if [ ! -s "$N/peerjs.min.js" ]; then curl -fsSL "https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js" -o "$N/peerjs.min.js" 2>/dev/null || rm -f "$N/peerjs.min.js"; fi
 [ -s "$N/peerjs.min.js" ] && echo "✓ Verbindungs-Bibliothek liegt auf dem Pi"
+# Brücke zum Tablet OHNE Browser (ab Programm 0.8): dart-bruecke.js unter Node + fertig übersetzte Verbindungs-Technik (libdatachannel, eine Datei).
+# Klappt hier etwas nicht, bleibt es bei der bisherigen Brücke im Browser (Chromium) – das Programm läuft in jedem Fall.
+if { curl -fsSL "${BASE}dart-bruecke.txt?$(date +%s)" -o "$N/neu-bruecke.js" || curl -fsSL "${BASE}dart-bruecke.js?$(date +%s)" -o "$N/neu-bruecke.js"; } && "$NODE" --check "$N/neu-bruecke.js" 2>/dev/null && grep -q "Brücke zum Tablet ohne Browser" "$N/neu-bruecke.js"; then mv "$N/neu-bruecke.js" "$N/dart-bruecke.js"
+else rm -f "$N/neu-bruecke.js"; echo "⚠ Die neue Brücke (${BASE}dart-bruecke.txt) konnte nicht geladen werden. Liegt die Datei schon bei GitHub?"; fi
+LIBV="0.33.6"; LIBP=""; LIBH=""
+case "$(uname -m)" in
+  aarch64|arm64) LIBP="linux-arm64-gnu"; LIBH="a613118f1f0d11f5bbd22efaf0b0900c41760ba436bed62c4b80cf5efff36dbd9c24295a5397e328541f4355c108d222d4295fa527770a5feb9ffed24bea5a4d";;
+  x86_64) LIBP="linux-x64-gnu"; LIBH="3544db9deeb8fbe671c0427dba9a400266271407c902081fee06e88a83dd86bd773f5ec64d04425209a2a58ae1d55d03e37df7c7a342059c9068dbf49f85a6a5";;
+esac
+if [ -n "$LIBP" ] && { [ ! -s "$N/node_datachannel.node" ] || [ "$(cat "$N/node_datachannel.version" 2>/dev/null)" != "$LIBV-$LIBP" ]; }; then
+  TMPD=$(mktemp -d)
+  # von der offiziellen Paket-Sammlung für Node (npm); die Prüfsumme stellt sicher, dass genau die geprüfte Datei ankommt
+  if curl -fsSL "${DART_LIBURL:-https://registry.npmjs.org/@node-datachannel/$LIBP/-/$LIBP-$LIBV.tgz}" -o "$TMPD/lib.tgz" && [ "$(sha512sum "$TMPD/lib.tgz" | cut -d' ' -f1)" = "$LIBH" ] && tar -xzf "$TMPD/lib.tgz" -C "$TMPD" package/node_datachannel.node; then
+    mv "$TMPD/package/node_datachannel.node" "$N/node_datachannel.node"; echo "$LIBV-$LIBP" > "$N/node_datachannel.version"
+  else echo "⚠ Die Verbindungs-Technik für die neue Brücke konnte nicht geladen werden (Internet?)"; fi
+  rm -rf "$TMPD"
+fi
+BRT=""; BRUECKE_OK=0
+if [ -s "$N/dart-bruecke.js" ] && [ -s "$N/node_datachannel.node" ]; then
+  BRT=$(cd "$N" && timeout 40 "$NODE" dart-bruecke.js --selbsttest 2>&1 | tail -1)
+  case "$BRT" in OK:*) BRUECKE_OK=1;; esac
+fi
+echo "$BRUECKE_OK" > "$N/bruecke-geprueft"
+if [ "$BRUECKE_OK" = "1" ]; then echo "✓ Neue Brücke ohne Browser geprüft – ${BRT#OK: }"
+else echo "⚠ Die neue Brücke läuft auf diesem Pi (noch) nicht${BRT:+ – $BRT}. Es bleibt bei der Brücke im Browser."; fi
 
-# 2) Start des neuen Programms: Programm + ein kleines Browser-Fenster (Brücke zum Tablet)
+# 2) Start des neuen Programms: Programm + Brücke zum Tablet (ohne Browser; läuft die hier nicht, ein Chromium ohne Fenster wie bisher)
 cat > "$N/start.sh" <<'SH'
 #!/bin/bash
 # Dart-Kameras, neues Programm: startet dart-pi.py und die Brücke; beides wird nach einem Absturz neu gestartet.
@@ -50,6 +75,7 @@ for f in "$LOG" "$D/pi.log" "$D/bruecke.log"; do [ -f "$f" ] && [ "$(wc -c < "$f
 exec 8>"$D/lock-neu"
 if ! flock -n 8; then log "läuft schon – zweiter Start abgebrochen"; exit 0; fi
 BROWSER=$(command -v chromium || command -v chromium-browser)
+NODE=$(command -v node || command -v nodejs)
 log "Start neues Programm"
 # Der Pi hat keine Batterie-Uhr: nach dem Einschalten stellt er die Zeit erst übers Netz – die Uhr springt dann um die
 # ausgeschaltete Zeit vor. Kurz darauf warten (höchstens 45 s), damit sie nicht mitten im Betrieb springt.
@@ -59,9 +85,29 @@ if command -v timedatectl >/dev/null 2>&1 && [ -n "$(timedatectl show -p NTPSync
 fi
 ( while true; do python3 "$N/dart-pi.py" >> "$D/pi.log" 2>&1 8>&-; log "Programm beendet (Code $?) – Neustart in 3 s"; sleep 3; done ) &
 for i in $(seq 1 40); do curl -fsS -m 2 http://127.0.0.1:8771/status >/dev/null 2>&1 && break; sleep 1; done
-if [ -z "$BROWSER" ]; then log "FEHLER: Chromium nicht gefunden – keine Brücke zum Tablet"; wait; exit 1; fi
-dir="$D/bruecke"; OHNE="--headless=new"; KURZ=0
+# Brücke ohne Browser nehmen, wenn sie beim Einrichten geprüft wurde (bruecke-geprueft = 1). Von Hand zurück zur Brücke im Browser:
+#   echo chromium > ~/.dart/bruecke-art   (und wieder zurück:  rm ~/.dart/bruecke-art), danach  ~/dart-modus.sh neu
+NEU=0
+[ -n "$NODE" ] && [ -s "$N/dart-bruecke.js" ] && [ -s "$N/node_datachannel.node" ] && [ "$(cat "$N/bruecke-geprueft" 2>/dev/null)" = "1" ] && [ "$(cat "$D/bruecke-art" 2>/dev/null)" != "chromium" ] && NEU=1
+if [ "$NEU" = "0" ] && [ -z "$BROWSER" ]; then log "FEHLER: Chromium nicht gefunden – keine Brücke zum Tablet"; wait; exit 1; fi
+if [ "$NEU" = "1" ]; then log "Brücke: ohne Browser (dart-bruecke.js)"; else log "Brücke: im Browser (Chromium)"; fi
+dir="$D/bruecke"; OHNE="--headless=new"; KURZ=0; NKURZ=0
 while true; do
+  if [ "$NEU" = "1" ]; then
+    T0=$(date +%s)
+    ( cd "$N" && exec "$NODE" dart-bruecke.js ) >> "$D/bruecke.log" 2>&1 8>&-
+    C=$?; DT=$(( $(date +%s) - T0 ))
+    log "Brücke (ohne Browser) wurde beendet (Code $C, lief $DT s) – Neustart in 1 s"
+    # Code 0 = gewollter Neustart. Code 3 = Verbindungs-Technik lässt sich nicht laden, Code 42 = das Tablet antwortet, aber es kommt
+    # nie eine Verbindung zustande (30 Versuche); dreimal hintereinander nach weniger als 60 s beendet = läuft hier nicht stabil.
+    # In diesen Fällen bis zum nächsten Start wieder die Brücke im Browser.
+    if [ "$C" = "0" ]; then NKURZ=0; elif [ "$C" = "3" ] || [ "$C" = "42" ]; then NKURZ=3; elif [ "$DT" -lt 60 ]; then NKURZ=$((NKURZ+1)); else NKURZ=0; fi
+    if [ "$NKURZ" -ge 3 ] && [ -n "$BROWSER" ]; then
+      NEU=0; log "Die Brücke ohne Browser läuft hier nicht stabil – bis zum nächsten Start wieder die Brücke im Browser"
+      curl -fsS -m 3 -X POST -H 'Content-Type: application/json' -d '{"b":[[0,{"t":"_br","e":"ohne Browser klappt nicht: Chromium","vis":"start.sh"}]]}' http://127.0.0.1:8771/in >/dev/null 2>&1
+    fi
+    sleep 1; continue
+  fi
   if [ -f "$dir/Default/Preferences" ]; then
     sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[A-Za-z]*"/"exit_type":"Normal"/' "$dir/Default/Preferences"
   fi
@@ -128,9 +174,9 @@ echo "Beende die laufenden Kamera-Programme …"
 systemctl --user stop 'dart-kameras-*' 2>/dev/null
 pkill -u "$U" -f 'dart-start\.sh' 2>/dev/null; pkill -u "$U" -f 'dart-neu/start\.sh' 2>/dev/null
 pkill -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -u "$U" -f 'dart-neu/dart-kern\.js' 2>/dev/null; pkill -u "$U" -f 'dart-aus\.py' 2>/dev/null
-pkill -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null
+pkill -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null; pkill -u "$U" -f 'dart-bruecke\.js' 2>/dev/null
 sleep 3
-pkill -9 -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -9 -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null
+pkill -9 -u "$U" -f 'dart-neu/dart-pi\.py' 2>/dev/null; pkill -9 -u "$U" -f -- "--user-data-dir=$D/" 2>/dev/null; pkill -9 -u "$U" -f 'dart-bruecke\.js' 2>/dev/null
 sleep 1
 # Start über die Benutzerdienste (unabhängig von dieser Remote shell); sonst losgelöst im Hintergrund
 A=(); for e in "${E[@]}"; do A+=(-E "$e"); done

@@ -6,14 +6,17 @@
 #           ohne Video-Anzeige. Dieses Programm gibt den Kernen die Bilder und reicht ihre
 #           Meldungen ans Tablet weiter.
 #
-#  Aufbau: Dieses Programm hört nur auf diesem Gerät (127.0.0.1:8771). Ein kleines
-#  Browser-Fenster (die "Brücke", Seite /) hält die Verbindung zum Tablet und reicht
-#  Nachrichten in beide Richtungen durch. Gerechnet wird nur hier und in den Kernen.
+#  Aufbau: Dieses Programm hört nur auf diesem Gerät (127.0.0.1:8771). Die "Brücke" hält die
+#  Verbindung zum Tablet und reicht Nachrichten in beide Richtungen durch (GET /out, POST /in).
+#  Ab 0.8 ist die Brücke ein eigenes kleines Programm ohne Browser (dart-bruecke.js unter Node);
+#  läuft sie auf diesem Pi nicht, nimmt start.sh wie bisher ein Chromium-Fenster (Seite /).
+#  Gerechnet wird nur hier und in den Kernen.
 # =============================================================================
 import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.7"
+VERSION = "0.8"
+STARTNR = int(time.time() * 1000)                       # daran erkennt die Brücke, dass dieses Programm neu gestartet wurde
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -443,8 +446,9 @@ class Zentrale:
         while True:
             time.sleep(1)
             jetzt = time.monotonic()
-            # Wächter: meldet sich die Brücke 12 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu
-            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > 12:
+            # Wächter: meldet sich die Brücke 12 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu.
+            # Die Brücke ohne Browser fragt spätestens alle 4 s neu ab und startet in 1–2 s: dort reichen 9 s.
+            if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > (9 if self.br.get("vis") == "node" else 12):
                 letzter = jetzt
                 for k in self.kams:                        # alles, was die Brücke nicht mehr abgeholt hat, später nachreichen
                     if k.nr not in self.weg:
@@ -457,6 +461,10 @@ class Zentrale:
                     log("  Brücke: " + z)
                 try:
                     subprocess.call(["pkill", "-9", "-f", "--", "--user-data-dir=" + os.path.join(DATEN, "bruecke")])
+                except Exception:
+                    pass
+                try:                                       # Brücke ohne Browser (ab 0.8)
+                    subprocess.call(["pkill", "-9", "-f", "--", "dart-bruecke.js"])
                 except Exception:
                     pass
             # Wächter für die Rechenkerne: kommt von einem 45 s lang kein Lebenszeichen, hängt er – beenden, er startet dann neu
@@ -592,6 +600,9 @@ ladeLib(()=>{start();pump()});
 class Web(http.server.BaseHTTPRequestHandler):
     Z = None
     protocol_version = "HTTP/1.1"
+    # Ohne das wartet das Betriebssystem bei jeder Antwort bis zu 40 ms, bevor es den zweiten Teil (Inhalt nach den Kopfzeilen) losschickt
+    # (Nagle-Verfahren + verzögerte Bestätigung) – jede Meldung ans Tablet kam dadurch bis zu 40 ms später an.
+    disable_nagle_algorithm = True
 
     def antwort(self, code, daten, typ="text/plain; charset=utf-8"):
         if isinstance(daten, str):
@@ -617,7 +628,9 @@ class Web(http.server.BaseHTTPRequestHandler):
                 if ab > 0:
                     Z.br_cur = ab
                 c, m = Z.hole(ab)
-                return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION}), "application/json")
+                return self.antwort(200, json.dumps({"c": c, "m": m, "v": VERSION, "s": STARTNR}), "application/json")
+            if pfad == "/konf":                             # für die Brücke ohne Browser: Code und Version
+                return self.antwort(200, json.dumps({"code": Z.code, "v": VERSION}), "application/json")
             if pfad == "/status":
                 return self.antwort(200, status_text(Z))
             if pfad == "/bild":
@@ -678,7 +691,8 @@ def status_text(Z):
     z = ["Dart-Kameras neues Programm %s | %s | Code %s" % (VERSION, time.strftime("%F %T"), Z.code or "FEHLT"),
          "Brücke zum Tablet: %s | Tablet: %s" % ("läuft" if jetzt - Z.bruecke < 12 else "FEHLT",
                                                          ("verbunden (%d von 3 Kameras)" % Z.verb) if Z.verb and jetzt - Z.tablet < 8 else "nicht verbunden"),
-         "Brücke: längstes Stocken %d ms | Seite %s | wartende Nachrichten %d | Sendepuffer %d" % (Z.br["maxlag"], Z.br["vis"], Z.br["q"], Z.br["buf"])]
+         "Brücke: %s | längstes Stocken %d ms | wartende Nachrichten %d | Sendepuffer %d" % (
+             "ohne Browser" if Z.br["vis"] == "node" else "im Browser, Seite " + str(Z.br["vis"]), Z.br["maxlag"], Z.br["q"], Z.br["buf"])]
     for k in Z.kams:
         alter = jetzt - k.zeit if k.zeit else -1
         kn = Z.kern(k.nr)
