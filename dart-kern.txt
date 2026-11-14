@@ -28,7 +28,7 @@ let lsT = null; const lsSave = () => { if (lsT) return; lsT = RT(() => { lsT = n
 global.localStorage = { getItem: k => (k in LS ? LS[k] : null), setItem: (k, v) => { v = String(v); if (LS[k] !== v) { LS[k] = v; lsSave() } }, removeItem: k => { if (k in LS) { delete LS[k]; lsSave() } } };
 // Beim Laden der App dürfen keine Zeitgeber starten (Kamera öffnen, Verbindung aufbauen …) – das übernimmt dieser Kern.
 global.setTimeout = () => 0; global.setInterval = () => 0; global.clearTimeout = () => {}; global.clearInterval = () => {};
-global.__K = { out, fehler, RT, RI, NR: +NR };
+global.__K = { out, fehler, RT, RI, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0) };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
 
 const KLEBER = `
 ;(()=>{const K=global.__K,q=s=>document.querySelector(s);
@@ -49,7 +49,7 @@ const KLEBER = `
  global.setTimeout=(f,ms,...a)=>K.RT(()=>{try{f(...a)}catch(e){}},ms);global.clearTimeout=clearTimeout;
  const req=()=>K.out({t:"_f",aw:AW});
  K.onFrame=(w,h,buf)=>{LASTF=Date.now();CUR={width:w,height:h,data:new Uint8ClampedArray(buf.buffer,buf.byteOffset,buf.length),z:1,cx:.5,cy:.5};
-  const t0=performance.now();try{q('#cfl').textContent='';tick()}catch(e){K.fehler("tick",e)}const dt=performance.now()-t0;
+  const t0=performance.now();try{q('#cfl').textContent='';tick()}catch(e){K.fehler("tick",e)}if(K.LANGSAM&&LCK>5){const e=Date.now()+K.LANGSAM;while(Date.now()<e);}const dt=performance.now()-t0;
   let d=250;try{d=loopDelay(dt)}catch(e){}K.RT(req,Math.max(0,d-40))};
  K.onMsg=m=>{try{if(m&&m.t=="_open"){duoSend(hello());K.RT(()=>{try{bkSend(CONN,bkMine())}catch(e){}},500);return}duoRecv(m,CONN)}catch(e){K.fehler("Nachricht",e)}};
  K.RI(()=>{try{const h=hello();h.t="hb";h.kern=1;h.ms=LCK;duoSend(h)}catch(e){K.fehler("hb",e)}if(Date.now()-LASTF>2500)req()},1000);
@@ -64,7 +64,7 @@ const KLEBER = `
   if(WARMN>=FW.warmN&&(now-LWARM<FW.warm||now-LREP<15000||now-(MOVE0||0)<3000))return;
   const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const t0=performance.now(),G=camGeo(ref),R=findDart(warmBild(ref),ref,G.toB,G.Hp,MASK,false,EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
   LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WSEQ.push(ms);if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms)")}
- FW.warm=+(process.env.DART_WARM||45000);FW.warmN=6;K.RI(()=>{try{warm()}catch(e){}},700);
+ FW.warm=+(process.env.DART_WARM||45000);FW.warmN=+(process.env.DART_WARMN||16);// 16 statt 6 (14.11.): auf dem Pi waren die ersten echten Prüfungen nach 6 Läufen noch 1 s statt 0,3 sK.RI(()=>{try{warm()}catch(e){}},700);
  LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser)");K.out(hello());K.RT(req,200);
 })();`;
 try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }
