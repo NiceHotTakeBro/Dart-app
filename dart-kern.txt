@@ -31,7 +31,7 @@ global.setTimeout = () => 0; global.setInterval = () => 0; global.clearTimeout =
 // Angaben zum Rechner fürs Protokoll (Fehlersuche „Runde 1 langsam“): Node-Version, freier Speicher, Takt-Regler der CPU
 const sysInfo = () => { let g = "?"; try { g = fs.readFileSync("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "utf8").trim() } catch (e) {}
   const os = require('os'); return "Node " + process.version + ", Speicher frei " + Math.round(os.freemem() / 1048576) + " von " + Math.round(os.totalmem() / 1048576) + " MB, CPU-Regler " + g };
-global.__K = { out, fehler, RT, RI, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0), sysInfo };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
+global.__K = { out, fehler, RT, RI, fs, STORE, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0), sysInfo };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
 
 const KLEBER = `
 ;(()=>{const K=global.__K,q=s=>document.querySelector(s);
@@ -59,12 +59,24 @@ const KLEBER = `
  K.RI(()=>{try{DUO.lastHb=Date.now();duoWatch()}catch(e){K.fehler("Wächter",e)}},4000);
  // Aufwärmen: Die Erkennung läuft nach dem Start und nach langer Pause sonst 2–3x langsamer (die Rechen-Maschine von Node optimiert erst beim Benutzen).
  // Deshalb ab und zu in Ruhe einen künstlichen Pfeil in eine Kopie des Vergleichsbilds malen und erkennen lassen – nichts davon wird gemeldet.
- let WARMN=0,LWARM=0,WLMS=0;const WSEQ=[];
+ let WARMN=0,LWARM=0,WLMS=0,WFERTIG=0,WEIL=0,WLANG=0;const WSEQ=[],WMIN={};
  // v51: im Pfeil-Protokoll steht, wann zuletzt aufgewärmt wurde und wie lange das gedauert hat (war der Kern vor dem Pfeil schnell?)
- global.warmInfo=()=>WSEQ.length>=FW.warmN&&LWARM?" – zuletzt aufgewärmt vor "+Math.round((Date.now()-LWARM)/1000)+" s ("+WLMS+" ms)":"";
- // Jedes zweite Aufwärm-Bild leicht verschoben, heller und verrauscht wie ein echtes Kamerabild: sonst übt Node nur den einfachsten Fall
- // (Hintergrund deckungsgleich) und das Nachführen des Bildes bleibt kalt – auf dem Pi brauchte „Ausrichten“ bei den ersten echten Pfeilen
- // 300–580 ms statt 40–70 ms (Test 14.11. 16:56).
+ global.warmInfo=()=>WFERTIG&&LWARM?" – zuletzt aufgewärmt vor "+Math.round((Date.now()-LWARM)/1000)+" s ("+WLMS+" ms)":"";
+ // Kern 0.9 (Test 15.11.): Trotz Aufwärmen mit dem künstlichen Pfeil (194 ms, 16 s vorher) brauchte der ERSTE echte Pfeil 733 ms
+ // (Kamera 1) bzw. 1159 ms (Kamera 2), der zweite 340/269 ms, ab dem dritten 170–200 ms. Ein echter Pfeil (Schaft, Flight, Schatten,
+ // leicht verschobenes Bild) läuft durch Rechenwege, die der gemalte Strich nicht trifft – Node optimiert sie erst beim ersten echten Pfeil.
+ // Deshalb: die ersten vier echten Pfeile jeder Sitzung (Bild mit Pfeil, Vergleichsbild davor, leere Scheibe) werden gespeichert und
+ // beim nächsten Start (und beim Warmhalten) als Aufwärm-Bilder benutzt. Gemeldet wird davon nichts.
+ const WS=[];let WSS=0,WSI=0;const wsPfad=i=>K.STORE+".warm"+i;
+ const wsBild=(b,o,n,h,z)=>({width:h.w,height:h.h,data:new Uint8ClampedArray(b.buffer.slice(b.byteOffset+o,b.byteOffset+o+n)),z:z.z,cx:z.cx,cy:z.cy});
+ try{for(let i=0;i<4;i++){let b=null;try{b=K.fs.readFileSync(wsPfad(i))}catch(e){continue}const hl=b.readUInt32LE(0);if(!(hl>0&&hl<2000))continue;const h=JSON.parse(b.slice(4,4+hl).toString()),n=h.w*h.h*4;
+   if(!(h.w>0&&h.h>0)||b.length<4+hl+2*n)continue;WS[i]={f:wsBild(b,4+hl,n,h,h.f),ref:wsBild(b,4+hl+n,n,h,h.r),E:h.e&&b.length>=4+hl+3*n?wsBild(b,4+hl+2*n,n,h,h.e):null}}}catch(e){K.fehler("Aufwärm-Bilder laden",e)}
+ const wsZ=o=>({z:o.z,cx:o.cx,cy:o.cy}),wsBuf=o=>Buffer.from(o.data.buffer,o.data.byteOffset,o.data.length);
+ const wsNeu=(f,r,E)=>{if(WSS>=4||!FW.warmE)return;const i=WSS++,n=f.width*f.height*4;if(f.data.length!=n||r.data.length!=n)return;const mitE=!!(E&&!E.warped&&E.width==f.width&&E.height==f.height&&E.data.length==n);
+  const kop=o=>({...o,data:new Uint8ClampedArray(o.data)});   // eigene Kopien: die App darf ihre Bilder später weiterverwenden/ändern
+  f=kop(f);r=kop(r);E=mitE?kop(E):null;WS[i]={f,ref:r,E};const h=Buffer.from(JSON.stringify({w:f.width,h:f.height,f:wsZ(f),r:wsZ(r),e:mitE?wsZ(E):null})),l=Buffer.alloc(4);l.writeUInt32LE(h.length,0);
+  const buf=Buffer.concat(E?[l,h,wsBuf(f),wsBuf(r),wsBuf(E)]:[l,h,wsBuf(f),wsBuf(r)]),p=wsPfad(i);K.fs.writeFile(p+".tmp",buf,e=>{if(e)return;K.fs.rename(p+".tmp",p,()=>{})})};
+ const dd0=dartDone;dartDone=function(f,R,G,kind){try{if(kind!="rem"&&f&&ref&&!ref.warped&&!NOISY&&ref.width==f.width&&ref.height==f.height&&sv(ref,f))wsNeu(f,ref,EMPTY)}catch(e){}return dd0(f,R,G,kind)};
  function warmVers(r){const W=r.width,H=r.height,a=r.data,o=new Uint8ClampedArray(a.length),sx=.6+(WARMN%3)*.3,sy=-.4,g=1.015;let z=WARMN*977+1;
   for(let y=0;y<H;y++){const Y=Math.min(H-2,Math.max(0,y+sy)),yi=Y|0,fy=Y-yi;for(let x=0;x<W;x++){const X=Math.min(W-2,Math.max(0,x+sx)),xi=X|0,fx=X-xi,p=(yi*W+xi)*4,k=(y*W+x)*4;z=(z*1103515245+12345)&2147483647;const n=((z>>16)&7)-3.5;
    for(let c=0;c<3;c++)o[k+c]=((a[p+c]*(1-fx)+a[p+4+c]*fx)*(1-fy)+(a[p+4*W+c]*(1-fx)+a[p+4*W+4+c]*fx)*fy)*g+n;o[k+3]=255}}return o}
@@ -74,15 +86,28 @@ const KLEBER = `
  function warm(){const now=Date.now();if(!FW.warm||!HB||!ref||!MASK||!MASK.sub||!MASK.sub.length||ref.width!=MASK.inB.length/ref.height)return;
  // Die ersten Läufe nach dem Start auch dann, wenn noch Pfeile in der Scheibe stecken oder etwas geprüft wird (sonst kann das Aufwärmen
  // ausfallen und Runde 1 ist langsam). Nur nicht, solange sich etwas bewegt.
+ // Ab Kern 0.9 geht das Aufwärmen nach diesen ersten FW.warmN Läufen weiter, bis die Läufe nicht mehr schneller werden (höchstens
+ // FW.warmMax) – diese weiteren Läufe aber nur in Ruhe (nichts wird geprüft, keine Bewegung, 5 s nach dem letzten Pfeil).
  if(WARMN<FW.warmN){if(/^(search|off|lost)$/.test(MST)||now-(STILL||0)<1000)return}else if(MST!="ok"||PDART||INV||MQS.length)return;
-  if(WARMN>=FW.warmN&&(now-LWARM<FW.warm||now-LREP<15000||now-(MOVE0||0)<3000))return;
-  const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const t0=performance.now(),G=camGeo(ref),R=findDart(warmBild(ref),ref,G.toB,G.Hp,MASK,false,EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
-  LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WLMS=ms;WSEQ.push(ms);if(WARMN>FW.warmN)try{TKA.ms+=ms;TKA.w+="a"}catch(e){}if(WSEQ.length==FW.warmN)LOG.push(hm()+" aufgewärmt ("+WSEQ.join(", ")+" ms; letzter Lauf: "+(typeof FDT=="string"&&FDT?FDT:"–")+")")}
+  if(WARMN>=FW.warmN&&!WFERTIG&&(now-LWARM<1000||now-LREP<5000||now-(MOVE0||0)<3000))return;
+  // Warmhalten: alle FW.warm ms; war der letzte Lauf noch deutlich langsamer als der beste (Node optimiert noch), schon nach 3 s wieder
+  if(WFERTIG&&(now-LWARM<(WLANG&&WEIL<10?Math.min(3000,FW.warm):FW.warm)||now-LREP<15000||now-(MOVE0||0)<3000))return;
+  const P=FW.warmE?WS.filter(s=>s&&s.f.width==ref.width&&s.f.height==ref.height&&sv(s.f,ref)):[],echt=P.length&&WARMN%3!=2?1:0,S=echt?P[(WSI++)%P.length]:null,vers=S&&FW.warmV&&(WSI>>1)%2?1:0,key=S?WS.indexOf(S)*2+vers:-1;
+  const sv0={LASTQ,LREG,LSH,FITC};let ms=0,ok=0;try{const F=S?(vers?{...S.f,data:warmVers(S.f)}:S.f):warmBild(ref),RF=S?S.ref:ref,t0=performance.now(),G=camGeo(RF),R=findDart(F,RF,G.toB,G.Hp,MASK,false,S?S.E||EMPTY:EMPTY);ms=Math.round(performance.now()-t0);ok=!R.err}catch(e){K.fehler("Aufwärmen",e)}
+  LASTQ=sv0.LASTQ;LREG=sv0.LREG;LSH=sv0.LSH;FITC=sv0.FITC;WARMN++;LWARM=now;WLMS=ms;
+  // nur bei echten Pfeilbildern vergleichbar (dasselbe Bild kostet warm immer gleich viel): deutlich langsamer als der beste Lauf dieses Bilds = noch nicht warm
+  if(S){if(!(WMIN[key]<=ms))WMIN[key]=ms;WLANG=ms>1.6*WMIN[key]+30?1:0;if(WLANG)WEIL++;else WEIL=0}else WLANG=0;
+  if(WFERTIG){try{TKA.ms+=ms;TKA.w+="a"}catch(e){}return}
+  WSEQ.push(ms+(echt?"e":""));
+  // fertig, wenn mindestens FW.warmN Läufe gemacht sind und die letzten sechs nicht mehr schneller sind als die sechs davor
+  // (Mittelwert der vier mittleren, höchstens 15 % Gewinn) – spätestens nach FW.warmMax Läufen
+  const m6=a=>{a=a.map(x=>parseInt(x)).sort((x,y)=>x-y);return(a[1]+a[2]+a[3]+a[4])/4},l4=WSEQ.length>=12&&m6(WSEQ.slice(-6))>=.85*m6(WSEQ.slice(-12,-6));
+  if(WARMN>=FW.warmMax||(WARMN>=(P.length?FW.warmNE:FW.warmN)&&l4)){WFERTIG=1;LOG.push(hm()+" aufgewärmt ("+WARMN+" Läufe"+(P.length?", e = echtes Pfeilbild vom letzten Mal":", ohne gespeicherte echte Pfeilbilder")+": "+WSEQ.join(", ")+" ms; letzter Lauf: "+(typeof FDT=="string"&&FDT?FDT:"–")+")")}}
  // 16 statt 6 Läufe (14.11.): auf dem Pi waren die ersten echten Prüfungen nach 6 Läufen noch 1 s statt 0,3 s.
  // (Im Rechenkern vom 14.11. mittags stand dieser Hinweis versehentlich in derselben Zeile – der Rest der Zeile war dadurch abgeschaltet
  // und das Aufwärmen lief gar nicht. Prüfung: im Kamera-Protokoll muss kurz nach dem Start „aufgewärmt (…)“ stehen.)
  // v51: in Ruhe alle 15 s statt alle 45 s warm halten (Test 14.11. 18:07: Runde 1 nach 3 Minuten Pause wieder 1,0–1,1 s je Prüfung)
-FW.warm=+(process.env.DART_WARM||15000);FW.warmN=+(process.env.DART_WARMN||16);K.RI(()=>{try{warm()}catch(e){}},700);
+FW.warm=+(process.env.DART_WARM||15000);FW.warmN=+(process.env.DART_WARMN||16);FW.warmNE=+(process.env.DART_WARMNE||30);FW.warmMax=+(process.env.DART_WARMMAX||48);FW.warmE=+(process.env.DART_WARME||1);FW.warmV=+(process.env.DART_WARMV||0);K.RI(()=>{try{warm()}catch(e){}},700);
  LOG.push(hm()+" Rechenkern gestartet (Kamera "+K.NR+", ohne Browser; "+K.sysInfo()+")");K.out(hello());K.RT(req,200);
 })();`;
 try { (0, eval)(fs.readFileSync(APP, 'utf8') + "\n" + KLEBER) } catch (e) { fehler("Laden der App", e); RT(() => process.exit(3), 300) }

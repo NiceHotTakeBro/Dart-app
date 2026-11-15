@@ -15,7 +15,7 @@
 import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.8"
+VERSION = "0.9"
 STARTNR = int(time.time() * 1000)                       # daran erkennt die Brücke, dass dieses Programm neu gestartet wurde
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
@@ -386,8 +386,10 @@ class Zentrale:
         with self.cond:
             self.nr += 1
             self.aus.append((self.nr, {"k": knr, "m": m}, time.monotonic()))
-            if len(self.aus) > 600:                       # Brücke weg: alte Nachrichten verwerfen
-                del self.aus[:300]
+            # Brücke weg: alte Nachrichten verwerfen. Ab 0.9 größer (3000 statt 600): die Kameras melden jetzt jede Prüfung ohne Fund
+            # („ck“, zusammen etwa 8 Meldungen je Sekunde) – mit 600 hätte der Vorrat für das Nachreichen (90 s) nur noch gut 35 s gereicht.
+            if len(self.aus) > 3000:
+                del self.aus[:1500]
             self.cond.notify_all()
 
     def hole(self, ab, warte=4.0):                     # 4 s statt 8 s: der Wächter merkt eine hängende Brücke schneller
