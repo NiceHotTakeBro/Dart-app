@@ -447,7 +447,7 @@ nav{display:none!important}
 <nav><button id="n5">Start</button><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <div id="gmh"></div><main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 70</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 71</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -483,7 +483,7 @@ let s=null,H=[],view=0;
 const today=(new Date().getDay()+6)%7;
 const avg=(p,d)=>d?(p/d*3).toFixed(1):"–";
 let DL=[];
-function start(i,cu){FIX=null;if(MCH){if(!MCH.done&&MCH.nd>0&&!confirm("Es läuft noch ein Match. Abbrechen und das Training starten?"))return;MCH=null;MCHH=[];mSave()}const k=DAYS[i],p=cu?{n:cu.n||"Eigene Übung",b:()=>cu.b.map(([t,n])=>B(t,n))}:P[k];H=[];DL=[];AUTOK=[];let stk=0;try{const n0=TURN.length;TURN=TURN.filter(t=>t.c!="0");if(TURN.length<n0)LOG.push(hm()+" vor dem Start erkanntes „Daneben“ verworfen");TURN.forEach(t=>t.tr=true);AUTOT=TURN;stk=TURN.length}catch(e){}TRMSG={t:"",at:0};if(stk&&camLive())trMsg("In der Scheibe stecken noch Pfeile – bitte zuerst ziehen, dann geht es los.");
+function start(i,cu){FIX=null;FHF="Alle";if(MCH){if(!MCH.done&&MCH.nd>0&&!confirm("Es läuft noch ein Match. Abbrechen und das Training starten?"))return;MCH=null;MCHH=[];mSave()}const k=DAYS[i],p=cu?{n:cu.n||"Eigene Übung",b:()=>cu.b.map(([t,n])=>B(t,n))}:P[k];H=[];DL=[];AUTOK=[];let stk=0;try{const n0=TURN.length;TURN=TURN.filter(t=>t.c!="0");if(TURN.length<n0)LOG.push(hm()+" vor dem Start erkanntes „Daneben“ verworfen");TURN.forEach(t=>t.tr=true);AUTOT=TURN;stk=TURN.length}catch(e){}TRMSG={t:"",at:0};if(stk&&camLive())trMsg("In der Scheibe stecken noch Pfeile – bitte zuerst ziehen, dann geht es los.");
  s={k:cu?"cu":k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};if(cu)s.cu={day:k,n:p.n};
  if(s.m=="blocks")s.bl=p.b();
  if(s.m=="501")Object.assign(s,{legs:p.legs,leg:1,rem:501,ld:0,ldone:[],dout:!!p.dout,t:0,ts:501});
@@ -618,7 +618,7 @@ function render(){const m=$("#m");document.body.classList.toggle("cmp",GCMP());g
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
  if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam,z:Date.now()};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
- if(view==1){trCamMount(m);const fc=m.querySelector("#fhc");if(fc&&DB.sessions[0])vHeatC(fc,vDl(DB.sessions[0],d=>d.x!=null),null);if(q("fvl"))q("fvl").onclick=()=>{VT=DAYS.indexOf(DB.sessions[0].k)+1;VF="Alle";go(2)}}if(view==1&&MCH)mBind(m);if(view==2)vBind(m);if(view==4)tBind(m);if(view==5)hBind(m);if(view==0||view==1)wpBind(m);gmBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1);annTick()}
+ if(view==1){trCamMount(m);const fc=m.querySelector("#fhc");if(fc&&DB.sessions[0]){vHeatC(fc,vDl(DB.sessions[0],d=>d.x!=null&&fhFl(d)),fhTg());fhBind(m)}if(q("fvl"))q("fvl").onclick=()=>{VT=DAYS.indexOf(DB.sessions[0].k)+1;VF="Alle";go(2)}}if(view==1&&MCH)mBind(m);if(view==2)vBind(m);if(view==4)tBind(m);if(view==5)hBind(m);if(view==0||view==1)wpBind(m);gmBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1);annTick()}
 
 // ===== Wochenplan (v23): gleicher Stil wie der Verlauf =====
 const WPL={mo:["T20-Treffer",r=>vHit(r,"T20",0),{u:100}],di:["Trefferquote",r=>vQ(r,()=>1),{p:1}],mi:["Doppel-Runde",r=>vRd(r,"d"),{u:"Pfeile",d:1,lb:1}],
@@ -682,7 +682,7 @@ function train(){if(MCH)return mView();if(!s)return trainOld();if(s.done)return 
  <div class="trinfo"><div class="k">${top}</div><div class="trbig${s.m=="blocks"?" z":""}">${s.m=="blocks"?"<small>Ziel</small>":s.m=="501"?"<small>Rest</small>":"<small>Pfeile</small>"}${big}</div><div class="trsub">${sub}</div>${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
  ${bust?'<div class="trmsg b">Bust – Rest zurückgesetzt</div>':fresh&&TRMSG.t?`<div class="trmsg">${TRMSG.t}</div>`:""}</div>
  <div class="trvis${V.last?" old":""}"><div class="trvh">${V.last?"Letzte Aufnahme":"Aktuelle Aufnahme"}${V.cam?" · erkannt":""}</div><div class="trboxes">${bx.map((d,i)=>`<div class="${d?"on":""}${d&&i==V.D.length-1&&!V.last?" nw":""}${FIX&&FIX.i==i?" fx":""}${ck[i]?" chk":""}"${d||!V.last?` data-fix="${i}"`:""}>${ck[i]?'<i class="chkq">?</i>':""}<small>Pfeil ${i+1}</small><b>${d?cshort(d.c):"–"}</b><span>${d?(d.b?"Bust":(d.v||0)+" P."):""}</span></div>`).join("")}<div class="sum"><small>Summe</small><b>${V.D.length?sum:"–"}</b></div></div>${fixBar(V.D.length,ck.some(Boolean))}</div>
- <div class="trst"><div><small>Pfeile</small><b>${s.darts}</b></div><div><small>Punkte</small><b>${s.pts}</b></div><div><small>Average</small><b>${avg(s.pts,s.darts)}</b></div><div><small>${s.m=="501"?"Legs":"Quote"}</small><b>${hit}</b></div></div>
+ ${trStats(hit)}
  <div class="trbtn"><button id="miss">Daneben</button><button id="fxadd">⌨ Eintippen</button><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">Block überspringen</button>':""}</div>${camLive()&&pfStuck()?'<button id="trpull" class="trpull">Pfeile gezogen (falls nicht von selbst erkannt)</button>':""}
  <div id="trcam"></div>
  <button id="fin" class="trfin">Beenden und speichern</button></div></div></div>`}
@@ -906,7 +906,7 @@ function trainDone(){if(s.cu)return cuDone();if(!s.saved||!DB.sessions.length||D
  let t=`<div class="vl wp fin"><div class="wphero"><div><div class="k">Fertig · ${DN[di]} · ${vDate(r.date)}${r.dur?" · "+r.dur+" Min.":""}</div><h1>${P[k].n}</h1><p>${r.darts} Pfeile · ${r.pts} Punkte · Average ${f1(r.avg)}${r.legs?" · "+r.legs.length+" Legs":""}</p></div>
  <div class="wpact"><div class="wplast"><small>${L[0]} heute</small><b>${vFmt(v,L[2])}</b>${vArrow(v,pv,L[2])}<small>${pv!=null?"letztes Mal: "+vFmt(pv,L[2]).replace(/<[^>]+>/g,""):"erstes Mal"}</small></div></div></div>`;
  if(news.length)t+=`<div class="finnews">${news.map(x=>`<div>${x}</div>`).join("")}</div>`;
- t+=`<div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE · ${vDl(r,d=>d.x!=null).length} MIT POSITION</div><canvas id="fhc"></canvas></div></div><div>
+ t+=`<div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE${FHF!="Alle"&&(cfg.chips||[]).includes(FHF)?" · "+esc(FHF):""} · ${vDl(r,d=>d.x!=null&&(!(cfg.chips||[]).includes(FHF)||fhFl(d))).length} MIT POSITION</div>${fhChips(cfg.chips)}<canvas id="fhc"></canvas></div></div><div>
  <div class="vpanel"><div class="vrow f4 vhd"><div></div><div>HEUTE</div><div>LETZTES MAL</div><div>BESTWERT</div></div>${rowsH.replace(/class="vrow"/g,'class="vrow f4"')}</div>
  ${cnt?`<div class="vcard fincnt"><div class="vh3">Aufnahmen heute</div><div class="trst">${cnt}</div></div>`:""}${cfg.grp?vGrpPanel([r],cfg.grp):""}
  <div class="vcard"><div class="vh3">Notiz</div><input id="note" placeholder="Wie lief es? (optional)" value="${esc(r.note||"")}" class="finin"></div>
@@ -1352,12 +1352,24 @@ function cuSave(){const bl=s.bl.map((b,i)=>({t:b.t,d:b.d,h:b.h,i})).filter(b=>b.
  const r={id:Date.now(),date:isoD(),k:"cu",g:"cu",day:s.cu.day,cx:s.cu.n,name:s.name,darts:s.darts,pts:s.pts,avg:+avg(s.pts,s.darts),bl,dl:DL.slice(0,s.dn||DL.length),
   dur:Math.max(1,Math.round((Date.now()-(s.t0||Date.now()))/60000)),solo:1,q:dd?Math.round(hd/dd*1000)/10:null,gr:(dd?Math.round(hd/dd*100):0)+" % Treffer"};
  DB.ms=DB.ms||[];DB.ms.unshift(r);s.saved=true;s.cuid=r.id;save()}
+// v71: Zahlen-Leiste im Training – bei Blöcken nur für das Feld, das gerade dran ist
+function trStats(hit){if(s&&s.m=="blocks"&&s.bl&&s.bl[s.bi]){const b=s.bl[s.bi],n=s.dn||DL.length,p=DL.slice(0,n).filter(e=>e.i===s.bi).reduce((a,e)=>a+(e.v||0),0),L=esc(lab(b.t));
+  return`<div class="trst trst1"><div><small>Pfeile · ${L}</small><b>${b.d}</b></div><div><small>Punkte · ${L}</small><b>${p}</b></div><div><small>Average · ${L}</small><b>${avg(p,b.d)}</b></div><div><small>Quote · ${L}</small><b>${b.d?Math.round(b.h/b.d*100)+"%":"–"}</b></div></div>`}
+ return`<div class="trst"><div><small>Pfeile</small><b>${s.darts}</b></div><div><small>Punkte</small><b>${s.pts}</b></div><div><small>Average</small><b>${avg(s.pts,s.darts)}</b></div><div><small>${s.m=="501"?"Legs":"Quote"}</small><b>${hit}</b></div></div>`}
+// v71: Fertig-Bildschirm – Heatmap je Feld umschalten (wie im Verlauf)
+let FHF="Alle";
+const fhFl=d=>FHF=="Alle"||(FHF=="Singles"?!!d.t&&d.t[0]=="N":FHF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(FHF=="Bull"?"B":FHF));
+const fhTg=()=>["Alle","Singles","Doppel"].includes(FHF)?null:(FHF=="Bull"?"B":FHF);
+function fhChips(L,lb){if(!L||L.length<2)return"";if(!L.includes(FHF))FHF="Alle";return`<div class="vchips fhchips">${L.map(c=>`<button data-fhf="${esc(c)}" class="${c==FHF?"on":""}">${esc(lb?lb(c):c)}</button>`).join("")}</div>`}
+function fhBind(m){m.querySelectorAll("[data-fhf]").forEach(b=>b.onclick=()=>{FHF=b.dataset.fhf;render()})}
+const cuChips=r=>{const T=[...new Set((r.bl||[]).map(b=>b.t))];return T.length>1&&T.length<=8?["Alle"].concat(T):null};
+const cuFl=d=>FHF=="Alle"||d.t==FHF;
 function cuDone(){const r=s.saved?(DB.ms||[]).find(x=>x.id==s.cuid):null;
  if(!r)return`<div class="vl"><div class="vcard"><div class="vh3">Training beendet</div><div class="mu">Es wurde kein Pfeil geworfen, deshalb ist nichts gespeichert.</div></div><button class="pri" id="new">Zurück zum Wochenplan</button></div>`;
  const pv=(DB.ms||[]).filter(x=>x.g=="cu"&&x.cx==r.cx&&x.id!=r.id)[0]||null,o={p:1};
  return`<div class="vl wp fin"><div class="wphero"><div><div class="k">Fertig · ${DN[DAYS.indexOf(r.day)]||""} · ${vDate(r.date)} · ${r.dur} Min.</div><h1>${esc(r.cx)}</h1><p>${r.darts} Pfeile · ${r.bl.reduce((a,b)=>a+b.h,0)} Treffer · ${r.pts} Punkte</p></div>
  <div class="wpact"><div class="wplast"><small>Trefferquote heute</small><b>${vFmt(r.q,o)}</b>${vArrow(r.q,pv?pv.q:null,o)}<small>${pv?"letztes Mal: "+vFmt(pv.q,o).replace(/<[^>]+>/g,""):"erstes Mal"}</small></div></div></div>
- <div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE · ${(r.dl||[]).filter(d=>d.x!=null).length} MIT POSITION</div><canvas id="chc"></canvas></div></div><div>
+ <div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE · ${(r.dl||[]).filter(d=>d.x!=null&&cuFl(d)).length} MIT POSITION</div>${fhChips(cuChips(r),c=>c=="Alle"?c:cuLab(c))}<canvas id="chc"></canvas></div></div><div>
  <div class="vpanel"><div class="vrow f4 vhd"><div>ZIEL</div><div>PFEILE</div><div>TREFFER</div><div>QUOTE</div></div>${r.bl.map(b=>`<div class="vrow f4"><div class="vl1">${cuLab(b.t)}</div><div><b>${b.d}</b></div><div><b>${b.h}</b></div><div><b>${b.d?Math.round(b.h/b.d*100)+" %":"–"}</b></div></div>`).join("")}</div>
  <div class="trbtn"><button id="cuagain">Nochmal</button><button id="cuvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">Zum Wochenplan</button></div></div></div></div>`}
 // Editor
@@ -1387,7 +1399,7 @@ function wpBind(m){const q=x=>m.querySelector(x),E=WPE;
  if(q("#wpcfg"))q("#wpcfg").onclick=()=>wpOpen(null);
  if(q("#cuagain"))q("#cuagain").onclick=()=>{const k=s&&s.cu&&s.cu.day,w=k&&wpCfg(k);if(w&&w.t=="cu"&&w.b&&w.b.length)start(DAYS.indexOf(k),w);else go(0)};
  if(q("#cuvl"))q("#cuvl").onclick=()=>{VT=11;VGF="alle";go(2)};
- const hc=q("#chc");if(hc&&s&&s.cuid){const r=(DB.ms||[]).find(x=>x.id==s.cuid);if(r)vHeatC(hc,(r.dl||[]).filter(d=>d.x!=null),null)}
+ const hc=q("#chc");if(hc&&s&&s.cuid){const r=(DB.ms||[]).find(x=>x.id==s.cuid);if(r){vHeatC(hc,(r.dl||[]).filter(d=>d.x!=null&&cuFl(d)),FHF=="Alle"?null:FHF);fhBind(document)}}
  if(!E)return;const D=E.d,R=()=>render(),sp=v=>v.split("|");
  if(q("#wpeback"))q("#wpeback").onclick=()=>{WPE=null;R()};
  if(q("#wpestd"))q("#wpestd").onclick=()=>{E.d={};E.add=null;E.msg="";R()};
@@ -2070,7 +2082,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 70 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 71 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -2580,7 +2592,7 @@ function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="
 function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;let nb=0;
  // Kameras, die nicht geantwortet haben (z. B. Pi abgestürzt): aus der laufenden Sicherung auf dem Tablet
  for(const id in (DUO.cbk||{}))if(!T.cams[id]){const b=DUO.cbk[id];if(!b.log.length&&!b.rec.length)continue;nb++;T.cams[id]={id,log:b.log.slice(),rec:b.rec.slice(),zahl:b.z,aw:800,w:1280,h:720,st:"Sicherung",cal:b.rec.length?b.rec[b.rec.length-1].cal:null,turn:[],backup:1}}const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
- try{const o={app:"dart-testdaten",v:70,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+ try{const o={app:"dart-testdaten",v:71,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
   a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
   cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert, mit "+PFL.length+" Pfeilen der Sitzung (davon "+PFL.filter(t=>t.man).length+" von Hand korrigiert)"+(nb?" ("+nb+" davon aus der Sicherung auf dem Tablet, weil die Kamera nicht geantwortet hat)":"")+" (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
