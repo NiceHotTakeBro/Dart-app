@@ -465,7 +465,7 @@ nav{display:none!important}
 <nav><button id="n5">Start</button><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <div id="gmh"></div><main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 74</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 75</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -484,7 +484,7 @@ let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
 if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
 const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.p.p1?"p1":ST.cur);
-let SAVEERR=0;const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(e){SAVEERR=1}};
+let SAVEERR=0;const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(e){try{localStorage.removeItem("dart_tr");try{TRLAST="!"}catch(_){}localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(_){SAVEERR=1}}};
 const B=(t,n,g,r)=>({t,n,g,r,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 const P={
@@ -501,6 +501,16 @@ let s=null,H=[],view=0;
 const today=(new Date().getDay()+6)%7;
 const avg=(p,d)=>d?(p/d*3).toFixed(1):"–";
 let DL=[];
+// v75: laufendes Training sichern / nach dem Neustart fortsetzen
+const TRK="dart_tr",TRH=12;let TRLAST="",TRRES=null;
+try{const o=JSON.parse(localStorage.getItem(TRK)||"null");
+ if(o&&o.v==1&&o.s&&!o.s.done&&Array.isArray(o.DL)&&ST.p[o.pid]){if(o.pid!=ST.cur)useP(o.pid);const gap=Math.max(0,Date.now()-(o.at||Date.now()));
+  s=o.s;s.pz=(s.pz||0)+gap;DL=o.DL;H=(Array.isArray(o.H)?o.H:[]).map(h=>{try{const x=JSON.parse(h);x.pz=(x.pz||0)+gap;return JSON.stringify(x)}catch(e){return h}});
+  TRRES={at:o.at||Date.now(),n:s.darts||0}}}catch(e){s=null;H=[];DL=[]}
+function trSync(){try{const live=s&&!s.done&&s.darts>0;
+ if(!live){if(TRLAST!==""){TRLAST="";localStorage.removeItem(TRK)}return}
+ const b=JSON.stringify({v:1,pid:ST.cur,s,DL:DL.slice(0,s.dn||DL.length),H:H.slice(-TRH)});if(b===TRLAST)return;TRLAST=b;
+ try{localStorage.setItem(TRK,b.slice(0,-1)+',"at":'+Date.now()+"}")}catch(e){try{localStorage.setItem(TRK,JSON.stringify({v:1,pid:ST.cur,s,DL:DL.slice(0,s.dn||DL.length),H:[],at:Date.now()}))}catch(_){}}}catch(e){}}
 function start(i,cu){FIX=null;FHF="Alle";if(MCH){if(!MCH.done&&MCH.nd>0&&!confirm("Es läuft noch ein Match. Abbrechen und das Training starten?"))return;MCH=null;MCHH=[];mSave()}const k=DAYS[i],p=cu?{n:cu.n||"Eigene Übung",b:()=>cu.b.map(([t,n])=>B(t,n))}:P[k];H=[];DL=[];AUTOK=[];let stk=0;try{const n0=TURN.length;TURN=TURN.filter(t=>t.c!="0");TURN.forEach(t=>t.pre=1);if(TURN.length<n0)LOG.push(hm()+" vor dem Start erkanntes „Daneben“ verworfen");TURN.forEach(t=>t.tr=true);AUTOT=TURN;stk=TURN.length}catch(e){}TRMSG={t:"",at:0};if(stk&&camLive())trMsg("In der Scheibe stecken noch Pfeile – bitte zuerst ziehen, dann geht es los.");
  s={k:cu?"cu":k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};if(cu)s.cu={day:k,n:p.n};
  if(s.m=="blocks")s.bl=p.b();
@@ -585,14 +595,14 @@ function vWeak(){try{const S=vSes("mi").filter(r=>r.bl);if(!S.length)return"";co
  return h+"</div>"}catch(e){return""}}
 // v74: App schließen (mit Rückfrage)
 function appClose(){let o=document.getElementById("acx");if(o)o.remove();o=document.createElement("div");o.id="acx";o.className="acx";
- o.innerHTML='<div class="acxb"><h3>App wirklich schließen?</h3><p>Deine Daten sind gespeichert.</p><div class="acxr"><button id="acxn">Nein</button><button id="acxy" class="pri">Ja, schließen</button></div></div>';document.body.appendChild(o);
+ o.innerHTML='<div class="acxb"><h3>App wirklich schließen?</h3><p>'+(s&&!s.done&&s.darts>0?'Dein Training ist gespeichert und geht beim nächsten Öffnen genau hier weiter.':'Deine Daten sind gespeichert.')+'</p><div class="acxr"><button id="acxn">Nein</button><button id="acxy" class="pri">Ja, schließen</button></div></div>';document.body.appendChild(o);
  o.onclick=e=>{if(e.target===o)o.remove()};o.querySelector("#acxn").onclick=()=>o.remove();
- o.querySelector("#acxy").onclick=()=>{try{save()}catch(e){}try{window.close()}catch(e){}setTimeout(()=>{if(document.hidden||!document.getElementById("acx"))return;o.querySelector(".acxb").innerHTML='<h3>Chrome lässt die App nicht selbst schließen</h3><p>Bitte die App-Übersicht öffnen und die Dart-App wegwischen.</p><div class="acxr"><button id="acxo" class="pri">OK</button></div>';o.querySelector("#acxo").onclick=()=>o.remove()},600)}}
+ o.querySelector("#acxy").onclick=()=>{try{save();TRLAST="?";trSync()}catch(e){}try{window.close()}catch(e){}setTimeout(()=>{if(document.hidden||!document.getElementById("acx"))return;o.querySelector(".acxb").innerHTML='<h3>Chrome lässt die App nicht selbst schließen</h3><p>Bitte die App-Übersicht öffnen und die Dart-App wegwischen.</p><div class="acxr"><button id="acxo" class="pri">OK</button></div>';o.querySelector("#acxo").onclick=()=>o.remove()},600)}}
 function skip(){if(s&&s.m=="blocks"){H.push(JSON.stringify(s));s.bi++;if(s.bi>=s.bl.length&&!wkAdd())fin();render()}}
 function fin(){if(!s||s.done)return;s.done=true;if(s.cu){if(s.darts>0)cuSave();render();return}
  if(s.darts>0){const r={id:Date.now(),date:isoD(),k:s.k,name:s.name,darts:s.darts,pts:s.pts,avg:+avg(s.pts,s.darts)};
   if(s.bl){r.bl=s.bl.map((b,i)=>Object.assign({t:b.t,d:b.d,h:b.h,g:b.g,i},b.r?{r:b.r}:{},b.w0?{w0:b.w0}:{})).filter(b=>b.d)}
-  r.dl=DL.slice(0,s.dn||DL.length);r.dur=Math.max(1,Math.round((Date.now()-(s.t0||Date.now()))/60000));
+  r.dl=DL.slice(0,s.dn||DL.length);r.dur=Math.max(1,Math.round((Date.now()-(s.t0||Date.now())-(s.pz||0))/60000));
   if(s.m=="501")r.legs=s.ldone;
   DB.sessions.unshift(r);s.saved=true;save()}
  render()}
@@ -645,7 +655,7 @@ function hBind(m){if(HSUB=="form"&&MF&&MF.g){mfBind(m);return}const gb=m.querySe
  m.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{const h=b.dataset.h;if(h=="cricket")return gSel("cr","");if(h=="spiele"){HSUB="sp";return render()}
  if(h=="run"||((h=="x01")&&MCH&&!MCH.done))return go(1);if(h=="plan"||h=="wp")return go(0);if(h=="tour"){MF=null;return go(4)}if(h=="hist")return go(2);if(h=="cam")return go(3);
  if(h=="x01"){MF={pl:[{n:ST.p[ST.cur].name,pid:ST.cur}],start:501,dout:true,ft:2,msg:""};TV={id:null,tab:"",form:null,pan:null,del:null};return go(4)}})}
-function render(){const m=$("#m");document.body.classList.toggle("cmp",GCMP());gmHost();if(view==3)return;trCamHome();if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else if(view==4)m.innerHTML=tour();else if(view==5)m.innerHTML=home();else m.innerHTML=hist();
+function render(){trSync();const m=$("#m");document.body.classList.toggle("cmp",GCMP());gmHost();if(view==3)return;trCamHome();if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else if(view==4)m.innerHTML=tour();else if(view==5)m.innerHTML=home();else m.innerHTML=hist();
  const sv=m.querySelector("svg.b");if(sv)sv.onclick=e=>{const t=e.target.closest("[data-c]");if(!t)return;let x=null,y=null;try{const p=sv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(sv.getScreenCTM().inverse());x=q.x;y=q.y}catch(_){}if(FIX){fixDart(t.dataset.c,+t.dataset.v,x,y);return}dart(t.dataset.c,+t.dataset.v,x,y)};
  m.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>wpStart(+b.dataset.start));
  const q=id=>m.querySelector("#"+id);
@@ -2121,7 +2131,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 74 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 75 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -2643,7 +2653,7 @@ function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="
 function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;let nb=0;
  // Kameras, die nicht geantwortet haben (z. B. Pi abgestürzt): aus der laufenden Sicherung auf dem Tablet
  for(const id in (DUO.cbk||{}))if(!T.cams[id]){const b=DUO.cbk[id];if(!b.log.length&&!b.rec.length)continue;nb++;T.cams[id]={id,log:b.log.slice(),rec:b.rec.slice(),zahl:b.z,aw:800,w:1280,h:720,st:"Sicherung",cal:b.rec.length?b.rec[b.rec.length-1].cal:null,turn:[],backup:1}}const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
- try{const o={app:"dart-testdaten",v:74,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+ try{const o={app:"dart-testdaten",v:75,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
   a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
   cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert, mit "+PFL.length+" Pfeilen der Sitzung (davon "+PFL.filter(t=>t.man).length+" von Hand korrigiert)"+(nb?" ("+nb+" davon aus der Sicherung auf dem Tablet, weil die Kamera nicht geantwortet hat)":"")+" (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
@@ -2934,5 +2944,7 @@ function pfBar(){const o=$("#pf"),P0=ST.p[ST.cur],ini=n=>esc((n||"?").trim().cha
   save();PFO=false;PFM="";PFE="";pfBar();go(view)}}
 document.addEventListener("click",e=>{if(PFO&&!e.target.closest(".pfw")){PFO=false;PFM="";PFE="";pfBar()}});
 stt();renderTurn();AZ=DB.cam.az!==false;setView(DB.cam.z||1,DB.cam.zc||[.5,.5],true);pfBar();try{ringInit()}catch(e){}try{duoInit()}catch(e){}
+try{document.addEventListener("visibilitychange",()=>{if(document.hidden){TRLAST="?";trSync()}});window.addEventListener("pagehide",()=>{TRLAST="?";trSync()})}catch(e){}
+if(TRRES){TRLAST="?";trSync();try{const d=new Date(TRRES.at);TRMSG={t:"Dein Training geht weiter – Stand von "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+" Uhr, "+TRRES.n+" Pfeile. "+(()=>{try{const V=trVis();return V.D.length&&!V.last?"Du warst bei Pfeil "+(V.D.length+1)+" von 3 – wirf die Aufnahme einfach zu Ende.":"Stecken noch Pfeile vom letzten Mal? Bitte erst ziehen."}catch(e){return""}})(),at:Date.now()+9000}}catch(e){}}
 go((s&&!s.done)||(MCH&&!MCH.done)?1:5);
 </script></body></html>
