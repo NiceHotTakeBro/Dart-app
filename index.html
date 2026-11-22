@@ -460,12 +460,13 @@ nav{display:none!important}
 .acx{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:999}
 .acxb{background:#2a2d36;color:#f3f3f3;border-radius:18px;padding:22px 26px;max-width:440px;width:calc(100% - 32px)}.acxb h3{margin:0 0 8px}
 .acxr{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.acxr button{min-height:50px;padding:0 22px;font-size:18px;border-radius:12px}
+.trst.trst3{grid-template-columns:repeat(3,1fr)!important}.trst.trst4{grid-template-columns:repeat(4,1fr)!important}
 </style></head><body>
 <div id="pf" class="row" style="padding:10px 10px 0;justify-content:flex-start"></div>
 <nav><button id="n5">Start</button><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <div id="gmh"></div><main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 77</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 78</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -483,7 +484,7 @@ if(KNR){try{const P="cam"+KNR+":",S=Storage.prototype,g=S.getItem,s=S.setItem,r=
 let ST,DB;try{ST=JSON.parse(localStorage.getItem("dart_v2"))}catch(e){}
 if(!ST){let old=null;try{old=JSON.parse(localStorage.getItem(K))}catch(e){}
  ST={cur:"p1",cam:(old&&old.cam)||{},p:{p1:{name:"Lukas",db:old||{sessions:[]}},p2:{name:"Profil 2",db:{sessions:[]}}}}}
-const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.p.p1?"p1":ST.cur);
+const useP=id=>{ST.cur=id;DB=ST.p[id].db;DB.sessions=DB.sessions||[];DB.cam=ST.cam};useP(ST.p.p1?"p1":ST.cur);if(!ST.p.pa){ST.p.pa={name:"Lukas Advanced",db:{sessions:[],notes:{}}};try{localStorage.setItem("dart_v2",JSON.stringify(ST))}catch(e){}}
 let SAVEERR=0;const save=()=>{try{localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(e){try{localStorage.removeItem("dart_tr");try{TRLAST="!"}catch(_){}localStorage.setItem("dart_v2",JSON.stringify(ST));SAVEERR=0}catch(_){SAVEERR=1}}};
 const B=(t,n,g,r)=>({t,n,g,r,d:0,h:0}),NUM=[...Array(20)].map((_,i)=>i+1);
 const DAYS=["mo","di","mi","do","fr","sa","so"],DN=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
@@ -495,6 +496,121 @@ do:{n:"Scoring",x:"5 Legs 501. Pfeile zählen, Average ausrechnen. (Vereinfacht:
 fr:{n:"Doppel",x:"Je 21 Pfeile auf D20, D16, D8, D10, D12, D6, D5, D4, D2.",b:()=>["D20","D16","D8","D10","D12","D6","D5","D4","D2"].map(t=>B(t,21))},
 sa:{n:"Spieltag (Wochentest)",x:"10 Legs 501 mit Double-Out. Dein Average hier zählt für den Verlauf.",m:"501",legs:10,dout:true},
 so:{n:"Locker",x:"15 bis 20 Minuten frei werfen, ohne Druck.",m:"free"}};
+// ===== v78: Profil „Lukas Advanced“ – 8 Trainingspläne (letsplaydarts.de), gezählt in Prozent =====
+const ADVID="pa",AK=["a1","a2","a3","a4","a5","a6","a7","a8"],COG=["co","c40","c120"];
+const isAdv=()=>ST.cur===ADVID;
+const BA=(t,n,sx,o)=>Object.assign({t,n,g:sx,sx,d:0,h:0},o||{});
+const AWU=[["D20","D10","D5"],["D16","D8","D4"],["D12","D6","D3"]];
+const aWU=()=>[BA("DB",9,"wu",{wl:"3 × 3 auf Bullseye"})].concat(...AWU.map(T=>Array.from({length:3},()=>T.map(t=>BA(t,1,"wu",{wl:T.join(" / ")}))).flat()));
+const aRTB=()=>NUM.map(i=>BA("N"+i,3,"rtb")),aBASE=()=>[BA("N20",33,"b20"),BA("N19",33,"b19"),BA("B",33,"bul")];
+const aX=(z,set)=>BA("N"+z,51,"x"+z,{set});
+const aCOL=(L,sx,n)=>L.map(v=>BA("C"+v,n,sx,{v,rem:v,vs:v,dd:0}));
+const aC120=()=>Array.from({length:25},(_,i)=>BA("C120",9,"c120",i?{v:null,rem:null,vs:null,dd:0}:{v:120,rem:120,vs:120,dd:0}));
+const aSH=()=>NUM.map(i=>BA("N"+i,3,"sh")),aCR=()=>[15,16,17,18,19,20].map(i=>BA("N"+i,3,"cr")).concat([BA("B",3,"cr")]);
+const aBOB=()=>NUM.map(i=>BA("D"+i,3,"bob")).concat([BA("DB",3,"bob")]),aRD=()=>NUM.map(i=>BA("D"+i,3,"rd"));
+const aDR=()=>AWU.map((T,j)=>Array.from({length:10},(_,a)=>T.map(t=>BA(t,1,"dr",{set:j+1,av:a+1,wl:T.join(" / ")}))).flat()).flat();
+const ACO1=Array.from({length:20},(_,i)=>3+2*i).concat(Array.from({length:20},(_,i)=>42+i)),AC40=Array.from({length:40},(_,i)=>61+i),
+ ACO6=[40,60,68,72,76,80,84,88,90,92,96,98,100,108,112,116,120,140,160,170],ACO7=[38,59,69,73,79,89,93,99,107,119,126,129,133,134,137,139,149,154,157,167],
+ ACO8=[36,58,62,66,68,70,74,78,86,90,94,102,104,108,118,122,134,144,154,164];
+const PA={
+a1:{nr:1,n:"Checkouts",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 3-Dart-Checkouts von 3 bis 61, Catch 40 (61 bis 100, je höchstens 6 Pfeile).",b:()=>[...aWU(),...aRTB(),...aBASE(),...aCOL(ACO1,"co",3),...aCOL(AC40,"c40",6)]},
+a2:{nr:2,n:"Scoring",x:"Aufwärmen, Round the Board, je 51 Pfeile auf 20 und 19, 33 auf Bull, Shanghai, Cricket-Scoring, danach noch einmal 51 auf 20, 51 auf 19 und 33 auf Bull.",b:()=>[...aWU(),...aRTB(),aX(20,1),aX(19,1),BA("B",33,"bul",{set:1}),...aSH(),...aCR(),aX(20,2),aX(19,2),BA("B",33,"bul",{set:2})]},
+a3:{nr:3,n:"Doppel",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, Bob's 27 (alle Doppel), Doppel-Routine (je 10 Aufnahmen D20/D10/D5, D16/D8/D4, D12/D6/D3), Round the Board auf die Doppel.",b:()=>[...aWU(),...aRTB(),...aBASE(),...aBOB(),...aDR(),...aRD()]},
+a4:{nr:4,n:"Power-Scoring",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 300 Darts Highscore.",b:()=>[...aWU(),...aRTB(),...aBASE(),BA("T20",300,"hs")]},
+a5:{nr:5,n:"Checkouts 120",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 120 Checkout (25 Runden mit je 9 Pfeilen: geschafft +10, verpasst −1), 3-Dart-Checkouts von 3 bis 61.",b:()=>[...aWU(),...aRTB(),...aBASE(),...aC120(),...aCOL(ACO1,"co",3)]},
+a6:{nr:6,n:"Schwerpunkt 20",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 51 auf 20, 20 Checkouts von 40 bis 170 (je 3 Pfeile), noch einmal 51 auf 20.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(20,1),...aCOL(ACO6,"co",3),aX(20,2)]},
+a7:{nr:7,n:"Schwerpunkt 19",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 51 auf 19, 20 Checkouts von 38 bis 167 (je 3 Pfeile), noch einmal 51 auf 19.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(19,1),...aCOL(ACO7,"co",3),aX(19,2)]},
+a8:{nr:8,n:"Schwerpunkt 18",x:"Aufwärmen, Round the Board, je 33 Pfeile auf 20, 19 und Bull, 51 auf 18, 20 Checkouts von 36 bis 164 (je 3 Pfeile), noch einmal 51 auf 18.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(18,1),...aCOL(ACO8,"co",3),aX(18,2)]}};
+const AXN={wu:"Aufwärmen",rtb:"Round the Board · Singles",b20:"33 Pfeile auf die 20",b19:"33 Pfeile auf die 19",bul:"33 Pfeile auf Bull",x20:"51 Pfeile auf die 20",x19:"51 Pfeile auf die 19",x18:"51 Pfeile auf die 18",
+ co:"3-Dart-Checkouts",c40:"Catch 40",c120:"120 Checkout",sh:"Shanghai",cr:"Cricket-Scoring",bob:"Bob's 27",dr:"Doppel-Routine",rd:"Round the Board · Doppel",hs:"300 Darts Highscore"};
+const ACH={"20":["b20","x20"],"19":["b19","x19"],"18":["x18"],"Bull":["bul"],"Singles":["rtb"],"Checkouts":["co","c40","c120"],"Shanghai":["sh"],"Cricket":["cr"],"Doppel":["bob","dr","rd"],"Highscore":["hs"]};
+const aChipF=(ch,d)=>{const L=ACH[ch];return L?L.includes(d.sx):ch=="Alle"?d.sx!="wu":false};
+const pName=k=>(PA[k]||P[k]||{}).n||k,pDay=k=>PA[k]?"Plan "+PA[k].nr:DN[DAYS.indexOf(k)];
+const aCo=()=>!!(s&&s.vk!=null&&s.bl&&s.bl[s.bi]&&COG.includes(s.bl[s.bi].sx));
+// ein Pfeil im Advanced-Training (Abschnitte, Checkout-Versuche, Aufnahmen)
+function aDart(b,c,v,e){let end=false;
+ if(COG.includes(b.sx)){const r0=b.rem,one=(r0<=40&&r0%2==0)||r0==50;if(one)b.dd=(b.dd||0)+1;if(e)e.r=r0;
+  const nr=r0-v,dbl=c[0]=="D",bust=nr<0||nr==1||(nr==0&&!dbl);b.d++;
+  if(bust){if(e)e.b=1;b.d=Math.min(b.n,b.d+(2-(s.vd||0)));b.rem=b.vs}
+  else if(nr==0){if(e)e.f=1;b.h=1;b.rem=0}
+  else{b.rem=nr;if((s.vd||0)==2)b.vs=nr}
+  end=!!b.h||b.d>=b.n;
+  if(end&&b.sx=="c120"){const nx=s.bl[s.bi+1];if(nx&&nx.sx=="c120"){const nv=b.h?b.v+10:Math.max(2,b.v-1);Object.assign(nx,{v:nv,rem:nv,vs:nv,t:"C"+nv})}}}
+ else{b.d++;if(match(b.t,c))b.h++;end=b.d>=b.n}
+ s.vd=(s.vd||0)+1;if(s.vd>=3||(e&&(e.f||e.b))||(end&&COG.includes(b.sx))){s.vk++;s.vd=0}
+ if(end){s.bi++;if(s.bi>=s.bl.length)fin()}}
+const aMark=d=>!d.t||!match(d.t,d.c)?0:d.c=="DB"?2:d.c=="SB"?1:d.c[0]=="T"?3:d.c[0]=="D"?2:1;
+const aShang=D=>{const M={};D.forEach(d=>{if(d.t&&match(d.t,d.c))(M[d.i]=M[d.i]||new Set()).add(d.c[0])});return Object.values(M).filter(S=>S.has("S")&&S.has("D")&&S.has("T")).length};
+function aView(){const b=s.bl[s.bi]||s.bl[s.bl.length-1],sx=b.sx,L=s.bl.filter(x=>x.sx==sx&&(x.set||0)==(b.set||0)),j=s.bl.slice(0,s.bi+1).filter(x=>x.sx==sx&&(x.set||0)==(b.set||0)).length,
+ tl=t=>t[0]=="N"?t.slice(1):t=="B"?"Bull":t=="DB"?"Bullseye":t,nm=(AXN[sx]||sx)+(b.set==2&&sx!="dr"?" · 2. Satz":""),dn=vSum(L.map(x=>x.d)),tn=vSum(L.map(x=>x.n)),pc=(h,d)=>d?" ("+Math.round(h/d*100)+" %)":"";
+ let top=nm,big=tl(b.t),sub="",bar=tn?dn/tn:null;
+ if(sx=="wu"){top="Aufwärmen · ohne Wertung · "+b.wl;sub=`Pfeil ${Math.min(dn+1,tn)} von ${tn} · zählt nicht in die Statistik`}
+ else if(COG.includes(sx)){big=String(b.rem);top=nm+" · "+(sx=="c120"?"Runde "+j+" von 25":j+" von "+L.length);sub=`Checkout ${b.v} · Pfeil ${Math.min(b.d+1,b.n)} von ${b.n}`;bar=(j-1)/L.length}
+ else if(sx=="dr"){const S=s.bl.filter(x=>x.sx=="dr"&&x.set==b.set),h=vSum(S.map(x=>x.h)),d=vSum(S.map(x=>x.d));top=nm+" · "+b.wl+" · Aufnahme "+b.av+" von 10";sub=`Treffer in diesem Satz ${h} von ${d}${pc(h,d)}`;bar=d/30}
+ else if(sx=="hs"){big="Highscore";const D=DL.slice(0,s.dn||DL.length).filter(d=>d.sx=="hs"),p=vSum(D.map(d=>d.v||0));sub=`Pfeil ${Math.min(b.d+1,b.n)} von ${b.n} · Average ${D.length?f1(p/D.length*3):"–"}`}
+ else if(L.length>1){top=nm+" · "+j+" von "+L.length;const h=vSum(L.map(x=>x.h));sub=`Pfeil ${Math.min(b.d+1,b.n)} von ${b.n} · Treffer im Abschnitt ${h}${pc(h,dn)}`}
+ else sub=`Pfeil ${Math.min(b.d+1,b.n)} von ${b.n} · Treffer ${b.h}${pc(b.h,b.d)}`;
+ return{top,big,sub,bar}}
+function aStats(){const b=s.bl[s.bi]||s.bl[s.bl.length-1],sx=b.sx,L=s.bl.filter(x=>x.sx==sx),D=DL.slice(0,s.dn||DL.length).filter(d=>d.sx==sx),
+ p=(a,n)=>n?Math.round(a/n*100)+" %":"–",tile=(l,v)=>`<div><small>${l}</small><b>${v}</b></div>`;let T=[];
+ if(sx=="wu")T=[tile("Aufwärmen","zählt nicht"),tile("Pfeile",D.length)];
+ else if(COG.includes(sx)){const done=L.filter(x=>x.d>0&&(x.h||x.d>=x.n)),ok=done.filter(x=>x.h);T=[tile("Checkouts",ok.length+" / "+done.length),tile("Checkout-Quote",p(ok.length,done.length)),tile("Doppel-Quote",p(ok.length,vSum(L.map(x=>x.dd||0)))),tile("Ø Pfeile",ok.length?f1(vMean(ok.map(x=>x.d))):"–")]}
+ else if(sx=="hs"){const pts=vSum(D.map(d=>d.v||0));T=[tile("Pfeile",D.length+" / 300"),tile("Average",D.length?f1(pts/D.length*3):"–"),tile("Triple-Quote",p(D.filter(d=>d.c[0]=="T").length,D.length))]}
+ else{const d=vSum(L.map(x=>x.d)),h=vSum(L.map(x=>x.h));T=[tile("Pfeile",d),tile("Trefferquote",p(h,d))];
+  if(/^[bx](20|19|18)$/.test(sx))T.push(tile("Triple-Quote",p(D.filter(e=>e.c=="T"+sx.slice(1)).length,D.length)));
+  if(sx=="bul")T.push(tile("Bullseye",p(D.filter(e=>e.c=="DB").length,D.length)));
+  if(sx=="sh")T.push(tile("Shanghais",aShang(D)));
+  if(sx=="cr")T.push(tile("Marks-Quote",p(vSum(D.map(aMark)),L.filter(x=>x.d).length*9)))}
+ return`<div class="trst trst${T.length}">${T.join("")}</div>`}
+// Auswertung gespeicherter Advanced-Einheiten (Verlauf, Fertig-Bildschirm, Plan-Karten)
+const aAr=x=>Array.isArray(x)?x:[x],aBl=(r,sx)=>(r.bl||[]).filter(b=>aAr(sx).includes(b.sx)),aDl2=(r,sx)=>(r.dl||[]).filter(d=>aAr(sx).includes(d.sx));
+const aHQ=(r,sx)=>{const B=aBl(r,sx),d=vSum(B.map(b=>b.d));return d?vSum(B.map(b=>b.h))/d*100:null};
+const aCQ=(r,sx,c)=>{const D=aDl2(r,sx);return D.length?D.filter(typeof c=="function"?c:d=>d.c==c).length/D.length*100:null};
+const aCO=(r,sx)=>{const B=aBl(r,sx).filter(b=>b.h||b.d>=(b.n||3));return B.length?B.filter(b=>b.h).length/B.length*100:null};
+const aCOD=(r,sx)=>{const B=aBl(r,sx),n=vSum(B.map(b=>b.dd||0));return n?B.filter(b=>b.h).length/n*100:null};
+const aCOA=(r,sx)=>{const B=aBl(r,sx).filter(b=>b.h);return B.length?vMean(B.map(b=>b.d)):null};
+const aHSA=r=>{const D=aDl2(r,"hs");return D.length?vSum(D.map(d=>d.v||0))/D.length*3:null};
+const AR={rtb:["Round the Board · Singles",r=>aHQ(r,"rtb"),{p:1}],
+ t20:["33 auf 20 · Treffer",r=>aHQ(r,"b20"),{p:1}],tt20:["33 auf 20 · Triple",r=>aCQ(r,"b20","T20"),{p:1}],
+ t19:["33 auf 19 · Treffer",r=>aHQ(r,"b19"),{p:1}],tt19:["33 auf 19 · Triple",r=>aCQ(r,"b19","T19"),{p:1}],
+ bul:["Bull · Treffer",r=>aHQ(r,"bul"),{p:1}],bue:["Bull · Bullseye",r=>aCQ(r,"bul","DB"),{p:1}],
+ x20:["51 auf 20 · Treffer",r=>aHQ(r,"x20"),{p:1}],xt20:["51 auf 20 · Triple",r=>aCQ(r,"x20","T20"),{p:1}],
+ x19:["51 auf 19 · Treffer",r=>aHQ(r,"x19"),{p:1}],xt19:["51 auf 19 · Triple",r=>aCQ(r,"x19","T19"),{p:1}],
+ x18:["51 auf 18 · Treffer",r=>aHQ(r,"x18"),{p:1}],xt18:["51 auf 18 · Triple",r=>aCQ(r,"x18","T18"),{p:1}],
+ co:["Checkouts · Quote",r=>aCO(r,"co"),{p:1}],cod:["Checkouts · Doppel-Quote",r=>aCOD(r,"co"),{p:1}],coa:["Checkouts · Ø Pfeile",r=>aCOA(r,"co"),{d:1,lb:1}],
+ c40:["Catch 40 · Quote",r=>aCO(r,"c40"),{p:1}],c40d:["Catch 40 · Doppel-Quote",r=>aCOD(r,"c40"),{p:1}],c40a:["Catch 40 · Ø Pfeile",r=>aCOA(r,"c40"),{d:1,lb:1}],
+ c120:["120 Checkout · Quote",r=>aCO(r,"c120"),{p:1}],c120d:["120 Checkout · Doppel-Quote",r=>aCOD(r,"c120"),{p:1}],c120a:["120 Checkout · Ø Pfeile",r=>aCOA(r,"c120"),{d:1,lb:1}],c120e:["120 Checkout · erreicht",r=>r.c120||null,{d:0}],
+ sh:["Shanghai · Trefferquote",r=>aHQ(r,"sh"),{p:1}],shn:["Shanghai · Shanghais",r=>aBl(r,"sh").length?aShang(aDl2(r,"sh")):null,{d:0}],
+ cr:["Cricket · Trefferquote",r=>aHQ(r,"cr"),{p:1}],crm:["Cricket · Marks-Quote",r=>{const B=aBl(r,"cr");return B.length?vSum(aDl2(r,"cr").map(aMark))/(B.length*9)*100:null},{p:1}],
+ bob:["Bob's 27 · Doppelquote",r=>aHQ(r,"bob"),{p:1}],dr:["Doppel-Routine · Quote",r=>aHQ(r,"dr"),{p:1}],rd:["Round the Board · Doppel",r=>aHQ(r,"rd"),{p:1}],
+ hsa:["300 Darts · Average",aHSA,{d:2}],hst:["300 Darts · Triple-Quote",r=>aCQ(r,"hs",d=>d.c[0]=="T"),{p:1}]};
+const aRows=a=>a.map(k=>AR[k]),aBase=["rtb","t20","tt20","t19","tt19","bul","bue"],aCnt=(S,sx)=>vSum(S.map(r=>aBl(r,sx).filter(b=>b.h).length));
+const VSA={
+a1:{kpi:["Checkouts",S=>aCnt(S,["co","c40"])],chips:["Checkouts","20","19","Bull","Singles"],tr:["Checkout-Quote",r=>aCO(r,["co","c40"]),{p:1}],rows:aRows(["co","cod","coa","c40","c40d","c40a",...aBase])},
+a2:{kpi:["Shanghais",S=>vSum(S.map(r=>aShang(aDl2(r,"sh"))))],chips:["20","19","Bull","Shanghai","Cricket","Singles"],tr:["51 auf 20 · Treffer",r=>aHQ(r,"x20"),{p:1}],rows:aRows(["x20","xt20","x19","xt19","bul","bue","sh","shn","cr","crm","rtb"])},
+a3:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>vSum(aBl(r,["bob","dr","rd"]).map(b=>b.h))))],chips:["Doppel","20","19","Bull","Singles"],tr:["Doppelquote",r=>aHQ(r,["bob","dr","rd"]),{p:1}],rows:aRows(["bob","dr","rd",...aBase]),abars:["bob","dr","rd"]},
+a4:{kpi:["Bester Average",S=>{const a=S.map(aHSA).filter(v=>v!=null);return a.length?f1(Math.max(...a)):"–"}],chips:["Highscore","20","19","Bull","Singles"],tr:["Average (300 Darts)",aHSA,{d:2}],rows:aRows(["hsa","hst",...aBase])},
+a5:{kpi:["Checkouts",S=>aCnt(S,["c120","co"])],chips:["Checkouts","20","19","Bull","Singles"],tr:["120 Checkout · Quote",r=>aCO(r,"c120"),{p:1}],rows:aRows(["c120","c120d","c120a","c120e","co","cod","coa",...aBase])},
+a6:{kpi:["Checkouts",S=>aCnt(S,"co")],chips:["20","Checkouts","19","Bull","Singles"],tr:["51 auf 20 · Treffer",r=>aHQ(r,"x20"),{p:1}],rows:aRows(["x20","xt20","co","cod","coa",...aBase])},
+a7:{kpi:["Checkouts",S=>aCnt(S,"co")],chips:["19","Checkouts","20","Bull","Singles"],tr:["51 auf 19 · Treffer",r=>aHQ(r,"x19"),{p:1}],rows:aRows(["x19","xt19","co","cod","coa",...aBase])},
+a8:{kpi:["Checkouts",S=>aCnt(S,"co")],chips:["18","Checkouts","20","19","Bull","Singles"],tr:["51 auf 18 · Treffer",r=>aHQ(r,"x18"),{p:1}],rows:aRows(["x18","xt18","co","cod","coa",...aBase])}};
+const WPLA={a1:["Checkout-Quote",r=>aCO(r,["co","c40"]),{p:1}],a2:["51 auf 20",r=>aHQ(r,"x20"),{p:1}],a3:["Doppelquote",r=>aHQ(r,["bob","dr","rd"]),{p:1}],a4:["Average",aHSA,{d:1}],
+ a5:["Checkout-Quote",r=>aCO(r,["c120","co"]),{p:1}],a6:["51 auf 20",r=>aHQ(r,"x20"),{p:1}],a7:["51 auf 19",r=>aHQ(r,"x19"),{p:1}],a8:["51 auf 18",r=>aHQ(r,"x18"),{p:1}]};
+function aChips(k){const B=PA[k].b(),o=[];let last=null;B.forEach(b=>{const key=b.sx+"|"+(b.set||0);if(key===last&&b.sx!="dr")return;if(b.sx=="dr"&&last&&last.startsWith("dr|"))return;last=key;
+ const L=B.filter(x=>x.sx==b.sx&&(x.set||0)==(b.set||0)||b.sx=="dr"&&x.sx=="dr");o.push((AXN[b.sx]||b.sx).replace(/^\d+ Pfeile auf (die )?/,"").replace(" · Singles","")+" · "+(COG.includes(b.sx)?L.length+(b.sx=="c120"?" Runden":" Checkouts"):vSum(L.map(x=>x.n))+" Pfeile"))});return o}
+function aPlan(){const run=(s&&!s.done&&s.darts>0)||(MCH&&!MCH.done);
+ let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Lukas Advanced · Trainingspläne</div><h1>Such dir einen Plan aus</h1><p>8 Pläne – jeder mit Aufwärmen, Round the Board und einem Schwerpunkt. Gezählt wird in Prozent, damit du siehst, wie du dich steigerst. Du kannst jederzeit unterbrechen – die App macht beim nächsten Öffnen an derselben Stelle weiter.</p></div>
+ <div class="wpact">${(()=>{const r=DB.sessions.find(x=>PA[x.k]);if(!r)return`<div class="wplast"><small>Zuletzt</small><b>–</b><small>noch kein Plan gemacht</small></div>`;const w=WPLA[r.k];return`<div class="wplast"><small>Zuletzt · Plan ${PA[r.k].nr} · ${vDate(r.date)}</small><b>${vFmt(w[1](r),w[2])}</b><small>${esc(PA[r.k].n)} · ${w[0]}</small></div>`})()}${run?`<button class="wpgo" id="wpgo">Training fortsetzen</button><div class="wpsub">läuft: ${esc(MCH&&!MCH.done?MCH.lab:s.name)}</div>`:""}</div></div>`;
+ t+=`<div class="wpgrid">${AK.map(k=>{const p=PA[k],l=wpLast(k);return`<div class="wpcard"><div class="wptop"><span class="wpday">${p.nr}</span><span class="wpdn">Plan ${p.nr}</span></div>
+  <h3>${esc(p.n)}</h3><p>${esc(p.x)}</p><div class="wpchips l">${aChips(k).map(c=>`<span>${esc(c)}</span>`).join("")}</div>
+  <div class="wpft"><div class="wpl"><small>${l.l||"Zuletzt"}${l.d&&l.l?" · "+l.d:""}</small><b>${l.h}</b>${l.a}</div><button data-starta="${k}">Starten</button></div></div>`}).join("")}</div></div>`;return t}
+function aOver(){const S=DB.sessions.filter(r=>r.adv||PA[r.k]),f=k=>vSes(k);
+ let t=`<div class="vcard vkpi v4k"><div class="vttl">Lukas Advanced · Übersicht</div><div><small>Einheiten</small><b>${S.length}</b></div><div><small>Pfeile</small><b>${vSum(S.map(r=>r.darts))}</b></div><div><small>Pläne gemacht</small><b>${AK.filter(k=>f(k).length).length} von 8</b></div><div><small>Zuletzt</small><b>${S.length?vDate(S[0].date):"–"}</b></div></div>`;
+ t+=`<div class="vcard"><div class="vh3">Deine Pläne</div><div style="overflow-x:auto"><table class="vtab"><tr><th>Plan</th><th>Mal</th><th>Zuletzt</th><th>Wert</th><th>Vorher</th></tr>${AK.map(k=>{const L=f(k),w=WPLA[k],v=L[0]?w[1](L[0]):null,pv=L[1]?w[1](L[1]):null;
+  return`<tr><td><b>${PA[k].nr}</b> · ${esc(PA[k].n)}</td><td>${L.length}</td><td>${L[0]?vDate(L[0].date):"–"}</td><td>${w[0]}: ${vFmt(v,w[2])} ${vArrow(v,pv,w[2])}</td><td>${pv!=null?vFmt(pv,w[2]):"–"}</td></tr>`}).join("")}</table></div></div>`;
+ t+=`<div class="vcard"><div class="vh3">Alle Einheiten (${S.length})</div>${S.length?`<div style="overflow-x:auto"><table class="vtab"><tr><th>Datum</th><th>Plan</th><th>Pfeile</th><th>Dauer</th><th>Wert</th></tr>${S.slice(0,40).map(r=>{const w=WPLA[r.k];return`<tr><td>${vDate(r.date)}</td><td>${esc(r.name)}</td><td>${r.darts}</td><td>${r.dur||"–"} min</td><td>${w?w[0]+": "+vFmt(w[1](r),w[2]):""}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table></div>`:'<div class="mu">Noch keine Advanced-Einheit gespeichert. Starte einen Plan unter „Training“.</div>'}</div>`;
+ t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" id="bks" style="margin-bottom:8px;font-size:15px"></div><div class="mu" style="margin-bottom:8px">Deine Daten liegen in diesem Browser und – sobald die Ring-Kameras verbunden sind – zusätzlich auf dem Raspberry Pi. Fehlt dem Tablet etwas, holt es sich die Daten beim nächsten Verbinden automatisch zurück. Für ganz sicher: ab und zu eine Sicherung herunterladen.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
+ return t}
 const lab=t=>t[0]=="N"?"Feld "+t.slice(1)+" (beliebig)":t=="B"?"Bull":t=="DB"?"Doppel-Bull":t;
 const match=(t,c)=>t=="B"?(c=="SB"||c=="DB"):t[0]=="N"?(c.slice(1)==t.slice(1)):t==c;
 let s=null,H=[],view=0;
@@ -511,9 +627,10 @@ function trSync(){try{const live=s&&!s.done&&s.darts>0;
  if(!live){if(TRLAST!==""){TRLAST="";localStorage.removeItem(TRK)}return}
  const b=JSON.stringify({v:1,pid:ST.cur,s,DL:DL.slice(0,s.dn||DL.length),H:H.slice(-TRH)});if(b===TRLAST)return;TRLAST=b;
  try{localStorage.setItem(TRK,b.slice(0,-1)+',"at":'+Date.now()+"}")}catch(e){try{localStorage.setItem(TRK,JSON.stringify({v:1,pid:ST.cur,s,DL:DL.slice(0,s.dn||DL.length),H:[],at:Date.now()}))}catch(_){}}}catch(e){}}
-function start(i,cu){FIX=null;FHF="Alle";if(MCH){if(!MCH.done&&MCH.nd>0&&!confirm("Es läuft noch ein Match. Abbrechen und das Training starten?"))return;MCH=null;MCHH=[];mSave()}const k=DAYS[i],p=cu?{n:cu.n||"Eigene Übung",b:()=>cu.b.map(([t,n])=>B(t,n))}:P[k];H=[];DL=[];AUTOK=[];let stk=0;try{const n0=TURN.length;TURN=TURN.filter(t=>t.c!="0");TURN.forEach(t=>t.pre=1);if(TURN.length<n0)LOG.push(hm()+" vor dem Start erkanntes „Daneben“ verworfen");TURN.forEach(t=>t.tr=true);AUTOT=TURN;stk=TURN.length}catch(e){}TRMSG={t:"",at:0};if(stk&&camLive())trMsg("In der Scheibe stecken noch Pfeile – bitte zuerst ziehen, dann geht es los.");
- s={k:cu?"cu":k,name:DN[i]+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};if(cu)s.cu={day:k,n:p.n};
+function start(i,cu){FIX=null;FHF="Alle";if(MCH){if(!MCH.done&&MCH.nd>0&&!confirm("Es läuft noch ein Match. Abbrechen und das Training starten?"))return;MCH=null;MCHH=[];mSave()}const k=typeof i=="string"?i:DAYS[i],p=cu?{n:cu.n||"Eigene Übung",b:()=>cu.b.map(([t,n])=>B(t,n))}:(PA[k]||P[k]);H=[];DL=[];AUTOK=[];let stk=0;try{const n0=TURN.length;TURN=TURN.filter(t=>t.c!="0");TURN.forEach(t=>t.pre=1);if(TURN.length<n0)LOG.push(hm()+" vor dem Start erkanntes „Daneben“ verworfen");TURN.forEach(t=>t.tr=true);AUTOT=TURN;stk=TURN.length}catch(e){}TRMSG={t:"",at:0};if(stk&&camLive())trMsg("In der Scheibe stecken noch Pfeile – bitte zuerst ziehen, dann geht es los.");
+ s={k:cu?"cu":k,name:(PA[k]?"Plan "+PA[k].nr:DN[i])+" · "+p.n,m:p.m||"blocks",darts:0,pts:0,log:[],bi:0,done:false,t0:Date.now(),dn:0,vn:0};if(cu)s.cu={day:k,n:p.n};
  if(s.m=="blocks")s.bl=p.b();
+ if(PA[k]&&!cu){s.vk=0;s.vd=0;s.adv=1}
  if(s.m=="501")Object.assign(s,{legs:p.legs,leg:1,rem:501,ld:0,ldone:[],dout:!!p.dout,t:0,ts:501});
  go(1)}
 function d501(c,v){const nr=s.rem-v,bust=nr<0||nr==1||(nr==0&&c[0]!="D");
@@ -526,11 +643,11 @@ function dart(c,v,x,y){if(MCH&&!MCH.done){mDart(c,v,x,y);return}if(!s||s.done)re
  if(s.m=="501"){const sc=s.dout?v:Math.min(v,s.rem),nr=s.rem-sc,bust=s.dout&&(nr<0||nr==1||(nr==0&&c[0]!="D")),done=!bust&&nr<=0,t=s.dout?s.t:(s.t||0);
   Object.assign(e,{v:bust?0:sc,l:s.leg,n:s.vn||0,r:s.rem});if(bust)e.b=1;if(done)e.f=1;DL.push(e);s.dn=DL.length;
   if(done)s.vn=0;else if(bust||t>=2)s.vn=(s.vn||0)+1;if(!s.dout)s.t=done?0:(t+1)%3}
- else if(s.m=="blocks"){const b=s.bl[s.bi];Object.assign(e,{v,t:b.t,i:s.bi,n:Math.floor(b.d/3)});DL.push(e);s.dn=DL.length}
+ else if(s.m=="blocks"){const b=s.bl[s.bi];Object.assign(e,{v,t:b.t,i:s.bi,n:Math.floor(b.d/3)});if(s.vk!=null){e.w=s.vk;if(b.sx)e.sx=b.sx}DL.push(e);s.dn=DL.length}
  else{Object.assign(e,{v,n:Math.floor(s.darts/3)});DL.push(e);s.dn=DL.length}
  if(s.m=="501"&&s.dout){d501(c,v);render();return}
  const sc=s.m=="501"?Math.min(v,s.rem):v;s.darts++;s.pts+=sc;s.log.push(c=="0"?"0":c);
- if(s.m=="blocks"){const b=s.bl[s.bi];b.d++;if(match(b.t,c))b.h++;
+ if(s.m=="blocks"){const b=s.bl[s.bi];if(s.vk!=null){aDart(b,c,v,DL[(s.dn||DL.length)-1]);render();return}b.d++;if(match(b.t,c))b.h++;
   if(b.n=="h"?b.h>=1:b.d>=b.n){s.bi++;if(s.bi>=s.bl.length&&!wkAdd())fin()}}
  if(s.m=="501"){s.rem-=sc;s.ld++;if(s.rem<=0){s.ldone.push(s.ld);s.leg++;s.rem=501;s.ld=0;if(s.leg>s.legs)fin()}}
  render()}
@@ -598,10 +715,11 @@ function appClose(){let o=document.getElementById("acx");if(o)o.remove();o=docum
  o.innerHTML='<div class="acxb"><h3>App wirklich schließen?</h3><p>'+(s&&!s.done&&s.darts>0?'Dein Training ist gespeichert und geht beim nächsten Öffnen genau hier weiter.':'Deine Daten sind gespeichert.')+'</p><div class="acxr"><button id="acxn">Nein</button><button id="acxy" class="pri">Ja, schließen</button></div></div>';document.body.appendChild(o);
  o.onclick=e=>{if(e.target===o)o.remove()};o.querySelector("#acxn").onclick=()=>o.remove();
  o.querySelector("#acxy").onclick=()=>{try{save();TRLAST="?";trSync()}catch(e){}try{window.close()}catch(e){}setTimeout(()=>{if(document.hidden||!document.getElementById("acx"))return;o.querySelector(".acxb").innerHTML='<h3>Chrome lässt die App nicht selbst schließen</h3><p>Bitte die App-Übersicht öffnen und die Dart-App wegwischen.</p><div class="acxr"><button id="acxo" class="pri">OK</button></div>';o.querySelector("#acxo").onclick=()=>o.remove()},600)}}
-function skip(){if(s&&s.m=="blocks"){H.push(JSON.stringify(s));s.bi++;if(s.bi>=s.bl.length&&!wkAdd())fin();render()}}
+function skip(){if(s&&s.m=="blocks"&&s.vk!=null&&!s.done){H.push(JSON.stringify(s));const sx=s.bl[s.bi].sx,st=s.bl[s.bi].set||0;while(s.bi<s.bl.length&&s.bl[s.bi].sx==sx&&(sx=="dr"||(s.bl[s.bi].set||0)==st))s.bi++;if(s.vd){s.vk++;s.vd=0}if(s.bi>=s.bl.length)fin();render();return}if(s&&s.m=="blocks"){H.push(JSON.stringify(s));s.bi++;if(s.bi>=s.bl.length&&!wkAdd())fin();render()}}
 function fin(){if(!s||s.done)return;s.done=true;if(s.cu){if(s.darts>0)cuSave();render();return}
  if(s.darts>0){const r={id:Date.now(),date:isoD(),k:s.k,name:s.name,darts:s.darts,pts:s.pts,avg:+avg(s.pts,s.darts)};
-  if(s.bl){r.bl=s.bl.map((b,i)=>Object.assign({t:b.t,d:b.d,h:b.h,g:b.g,i},b.r?{r:b.r}:{},b.w0?{w0:b.w0}:{})).filter(b=>b.d)}
+  if(s.bl){r.bl=s.bl.map((b,i)=>Object.assign({t:b.t,d:b.d,h:b.h,g:b.g,i},b.r?{r:b.r}:{},b.w0?{w0:b.w0}:{},b.sx?{sx:b.sx,n:b.n}:{},b.v!=null?{v:b.v,dd:b.dd||0}:{},b.set?{set:b.set}:{})).filter(b=>b.d)}
+  if(s.vk!=null){r.adv=1;const C=s.bl.filter(b=>b.sx=="c120"&&b.d>0),lb=C[C.length-1];if(lb)r.c120=lb.h?lb.v+10:Math.max(2,lb.v-1)}
   r.dl=DL.slice(0,s.dn||DL.length);r.dur=Math.max(1,Math.round((Date.now()-(s.t0||Date.now())-(s.pz||0))/60000));
   if(s.m=="501")r.legs=s.ldone;
   DB.sessions.unshift(r);s.saved=true;save()}
@@ -638,13 +756,13 @@ function camCount(){try{const now=Date.now();return ROLE=="main"&&DUO.on?Object.
 function home(){if(HSUB=="form"&&MF&&MF.g)return mForm();if(HSUB=="sp")return gPick();const tk=DAYS[today],p=P[tk]||{},run=s&&!s.done,mr=MCH&&!MCH.done,n=(DB.sessions||[]).length,nc=camCount(),soon='<i class="hsoon">kommt als Nächstes</i>';
  return`<div class="vl hm">${run||mr?`<button class="hrun" data-h="run">▶ ${mr?esc(MCH.lab)+" läuft":"Training läuft"} – fortsetzen</button>`:""}
  <div class="hmg">
-  <button class="ht t-tr" data-h="plan"><small>Heute · ${DN[today]}</small><b>Training</b><span>${esc(wpN(tk))}</span></button>
+  <button class="ht t-tr" data-h="plan">${isAdv()?`<small>Lukas Advanced</small><b>Training</b><span>8 Pläne – selbst wählen</span>`:`<small>Heute · ${DN[today]}</small><b>Training</b><span>${esc(wpN(tk))}</span>`}</button>
   <button class="ht t-x" data-h="x01"><small>301 · 501</small><b>X01</b><span>allein oder gegeneinander</span></button>
   <button class="ht t-cr" data-h="cricket"><small>20 bis 15 und Bull</small><b>Cricket</b><span>allein oder gegeneinander</span></button>
   <button class="ht t-sp" data-h="spiele"><small>Training und Party</small><b>Spiele</b><span>Around the Clock, Bob's 27, Shanghai, Killer, Halve-It, High Score</span></button>
  </div>
  <div class="hml">
-  <button class="hc" data-h="wp"><b>Wochenplan</b><span>Dein Plan für die Woche · heute ${esc(wpN(tk))}</span></button>
+  <button class="hc" data-h="wp">${isAdv()?"<b>Trainingspläne</b><span>Plan 1 bis 8 · selbst wählen</span>":`<b>Wochenplan</b><span>Dein Plan für die Woche · heute ${esc(wpN(tk))}</span>`}</button>
   <button class="hc" data-h="tour"><b>Turnier</b><span>Turnier mit Gruppen und K.-o.-Runde anlegen</span></button>
   <button class="hc" data-h="hist"><b>Verlauf & Statistik</b><span>${n} Training${n==1?"":"s"} gespeichert</span></button>
   <button class="hc" data-h="cam"><b>Kameras & Einrichtung</b><span>${nc?nc+(nc==1?" Kamera":" Kameras")+" verbunden":"keine Kamera verbunden"}</span></button>
@@ -657,25 +775,25 @@ function hBind(m){if(HSUB=="form"&&MF&&MF.g){mfBind(m);return}const gb=m.querySe
  if(h=="x01"){MF={pl:[{n:ST.p[ST.cur].name,pid:ST.cur}],start:501,dout:true,ft:2,msg:""};TV={id:null,tab:"",form:null,pan:null,del:null};return go(4)}})}
 function render(){trSync();const m=$("#m");try{document.body.classList.toggle("cmp",GCMP())}catch(e){}gmHost();if(view==3)return;trCamHome();if(view==0)m.innerHTML=plan();else if(view==1)m.innerHTML=train();else if(view==4)m.innerHTML=tour();else if(view==5)m.innerHTML=home();else m.innerHTML=hist();
  const sv=m.querySelector("svg.b");if(sv)sv.onclick=e=>{const t=e.target.closest("[data-c]");if(!t)return;let x=null,y=null;try{const p=sv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(sv.getScreenCTM().inverse());x=q.x;y=q.y}catch(_){}if(FIX){fixDart(t.dataset.c,+t.dataset.v,x,y);return}dart(t.dataset.c,+t.dataset.v,x,y)};
- m.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>wpStart(+b.dataset.start));
+ m.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>wpStart(+b.dataset.start));m.querySelectorAll("[data-starta]").forEach(b=>b.onclick=()=>start(b.dataset.starta));
  const q=id=>m.querySelector("#"+id);
  if(q("miss"))q("miss").onclick=()=>FIX?fixDart("0",0):dart("0",0);m.querySelectorAll("[data-fix]").forEach(b=>b.onclick=()=>fixStart(+b.dataset.fix));m.querySelectorAll("[data-fxk]").forEach(b=>b.onclick=e=>{e.stopPropagation();const c=b.dataset.fxk;if(c=="DEL")fixDart(null);else fixDart(c,cval(c))});if(q("fxkov"))q("fxkov").onclick=e=>{if(e.target&&e.target.id=="fxkov"){FIX=null;render()}};if(q("fxdel"))q("fxdel").onclick=()=>fixDart(null);if(q("fxno"))q("fxno").onclick=()=>{FIX=null;render()};if(q("trpull"))q("trpull").onclick=()=>{try{duoPullReset("von Hand")}catch(e){}};if(q("fxadd"))q("fxadd").onclick=()=>{if(FIX&&FIX.add){FIX=null;render();return}FIX=null;fxAdd()};if(q("undo"))q("undo").onclick=()=>{if(FIX){FIX=null;render();return}undo()};if(q("skip"))q("skip").onclick=skip;
  if(q("fin"))q("fin").onclick=function(){if(!s||s.done||this.dataset.a||this.id!="fin"||!this.classList.contains("trfin"))return fin();this.dataset.a=1;this.textContent="Wirklich beenden? Nochmal tippen";this.classList.add("warn");setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent="Beenden und speichern";this.classList.remove("warn")}},4000)};if(q("note"))q("note").onchange=function(){if(s&&s.saved&&DB.sessions[0]){DB.sessions[0].note=this.value;save()}};
  m.querySelectorAll("[data-wn]").forEach(i=>i.onchange=()=>{(DB.notes=DB.notes||{})[i.dataset.wn]=i.value;save()});
  if(q("exp"))q("exp").onclick=()=>{const t=q("ex");t.hidden=false;t.value=csv();t.select()};if(q("new"))q("new").onclick=()=>{s=null;go(0)};
  if(q("reset"))q("reset").onclick=function(){if(this.dataset.a){ST.p[ST.cur].db=DB={sessions:[],cam:ST.cam,z:Date.now()};save();render()}else{this.dataset.a=1;this.textContent="Wirklich alles löschen? Nochmal tippen"}};
- if(view==1){trCamMount(m);const fc=m.querySelector("#fhc");if(fc&&DB.sessions[0]){vHeatC(fc,vDl(DB.sessions[0],d=>d.x!=null&&fhFl(d)),fhTg());fhBind(m)}if(q("fvl"))q("fvl").onclick=()=>{VT=DAYS.indexOf(DB.sessions[0].k)+1;VF="Alle";go(2)}}if(view==1&&MCH)mBind(m);if(view==2)vBind(m);if(view==4)tBind(m);if(view==5)hBind(m);if(view==0||view==1)wpBind(m);gmBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1);annTick()}
+ if(view==1){trCamMount(m);const fc=m.querySelector("#fhc");if(fc&&DB.sessions[0]){vHeatC(fc,vDl(DB.sessions[0],d=>d.x!=null&&fhFl(d)),fhTg());fhBind(m)}if(q("fvl"))q("fvl").onclick=()=>{VT=AK.includes(DB.sessions[0].k)?21+AK.indexOf(DB.sessions[0].k):DAYS.indexOf(DB.sessions[0].k)+1;VF="Alle";go(2)}}if(view==1&&MCH)mBind(m);if(view==2)vBind(m);if(view==4)tBind(m);if(view==5)hBind(m);if(view==0||view==1)wpBind(m);gmBind(m);if(q("wpgo"))q("wpgo").onclick=()=>go(1);annTick()}
 
 // ===== Wochenplan (v23): gleicher Stil wie der Verlauf =====
 const WPL={mo:["Trefferquote",r=>vQ(r,()=>1),{p:1}],di:["Trefferquote",r=>vQ(r,()=>1),{p:1}],mi:["Doppel-Runde",r=>vRd(r,"d"),{u:"Pfeile",d:1,lb:1}],
- do:["Average",r=>r.avg,{d:1}],fr:["Doppelquote",r=>vQ(r,()=>1),{p:1}],sa:["Average",r=>r.avg,{d:1}],so:["Average",r=>r.avg,{d:1}]};
+ do:["Average",r=>r.avg,{d:1}],fr:["Doppelquote",r=>vQ(r,()=>1),{p:1}],sa:["Average",r=>r.avg,{d:1}],so:["Average",r=>r.avg,{d:1}]};Object.assign(WPL,WPLA);
 // Kurzüberblick der Übungen aus dem Plan (z. B. "T20 ×100")
 function wpChips(k){const p=P[k];if(p.m=="501")return[p.legs+" Legs 501",p.dout?"mit Double-Out":"ohne Double-Out"];if(p.m=="free")return["Frei werfen","15–20 Minuten"];
  const L=p.b();if(L.some(b=>b.n=="h")){const c={};L.forEach(b=>{const g=b.g;(c[g]=c[g]||new Set()).add(b.r||1)});const o=[];if(c.s)o.push(c.s.size+(c.s.size>1?" Runden":" Runde")+" Singles 1–20");if(c.d)o.push(c.d.size+(c.d.size>1?" Runden":" Runde")+" Doppel 1–20 + Bull");return o}
  const o=[];L.forEach(b=>{const l=b.t=="B"?"Bull":b.t,x=o[o.length-1];if(x&&x.l==l)x.n+=b.n;else o.push({l,n:b.n})});return o.map(x=>x.l+" ×"+x.n).concat([L.reduce((a,b)=>a+b.n,0)+" Pfeile"])}
 const isoD=()=>{const x=new Date(),p=v=>String(v).padStart(2,"0");return x.getFullYear()+"-"+p(x.getMonth()+1)+"-"+p(x.getDate())};
 function wpLast(k){const S=vSes(k),f=WPL[k];if(!S.length)return{h:"–",d:"noch nie",a:""};const r=S[0],v=f[1](r),pv=S[1]?f[1](S[1]):null;return{h:vFmt(v,f[2]),d:vDate(r.date),a:vArrow(v,pv,f[2]),l:f[0]}}
-function plan(){if(WPE)return wpEd();const tk=DAYS[today],m0=+mon(isoD()),S=DB.sessions,done=new Set(S.filter(r=>+mon(r.date)==m0).map(r=>r.k)),first=S.length?+mon(S[S.length-1].date):m0,wk=Math.floor(Math.round((m0-first)/864e5)/7)+1,run=(s&&!s.done&&s.darts>0)||(MCH&&!MCH.done);
+function plan(){if(WPE)return wpEd();if(isAdv())return aPlan();const tk=DAYS[today],m0=+mon(isoD()),S=DB.sessions,done=new Set(S.filter(r=>+mon(r.date)==m0).map(r=>r.k)),first=S.length?+mon(S[S.length-1].date):m0,wk=Math.floor(Math.round((m0-first)/864e5)/7)+1,run=(s&&!s.done&&s.darts>0)||(MCH&&!MCH.done);
  const L=wpL(tk),td=wpD(tk,done);
  let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Heute · ${DN[today]}${td?' · <span style="color:#45d38f">✓ erledigt</span>':""}</div><h1>${wpN(tk)}</h1><p>${wpX(tk)}</p><div class="wpchips">${wpCh(tk).map(c=>`<span>${c}</span>`).join("")}</div></div>
  <div class="wpact"><div class="wplast"><small>Zuletzt${L.l?" · "+L.l:""}</small><b>${L.h}</b>${L.a}<small>${L.d}</small></div>${run?`<button class="wpgo" id="wpgo">Training fortsetzen</button><div class="wpsub">läuft: ${esc(MCH&&!MCH.done?MCH.lab:s.name)}</div>`:`${wpEff(tk).t=="rest"?`<div class="wpsub">Heute ist Ruhetag.</div>`:`<button class="wpgo" data-start="${today}">${td?"Nochmal starten":"Training starten"}</button>`}`}</div></div>`;
@@ -698,7 +816,7 @@ function trainOld(){if(!s)return'<div class="card"><h2>Kein Training aktiv</h2><
  else info='<div class="big">Freies Werfen</div><div class="mu">Tippe die Treffer auf der Scheibe.</div>';
  return`<div class="grid"><div class="card">${board()}</div><div><div class="card">${info}</div>
  <div class="card"><div class="st"><div><b>${s.darts}</b>Pfeile</div><div><b>${s.pts}</b>Punkte</div><div><b>${avg(s.pts,s.darts)}</b>Average</div><div><b>${s.log.slice(-3).join(" ")||"–"}</b>Letzte</div></div></div>
- <div class="row"><button id="miss">Daneben</button><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">Block überspringen</button>':""}<button class="pri" id="fin">Beenden und speichern</button></div></div></div>`}
+ <div class="row"><button id="miss">Daneben</button><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">'+(s.vk!=null?"Abschnitt überspringen":"Block überspringen")+'</button>':""}<button class="pri" id="fin">Beenden und speichern</button></div></div></div>`}
 
 // ===== Training-Anzeige (v23): groß lesbar, 3 Pfeil-Kästchen, Kamera-Status, Pfeile kommen automatisch =====
 let TRMSG={t:"",at:0};const trMsg=t=>{TRMSG={t,at:Date.now()}};
@@ -708,7 +826,7 @@ const cshort=c=>c=="0"?"Daneben":c=="SB"?"25":c=="DB"?"Bull":c;
 function trVis(){const n=s.dn||DL.length,TV=(typeof TURN!="undefined"?TURN:[]).filter(t=>t.tr&&t.sid===s.t0).map(t=>t.dl||(t.dn===DL.length-1?DL[t.dn]:null)).filter(d=>{const i=d?DL.indexOf(d):-1;return i>=0&&i<n});if(TV.length){const i0=Math.min(...TV.map(d=>DL.indexOf(d))),D2=DL.slice(i0,n);return{D:D2.length<=3&&TV.every(d=>D2.includes(d))?D2:TV,cam:1,last:DW.VEND&&TURN.some(t=>t.end&&t.tr&&t.sid===s.t0)?1:0}}
  const D=DL.slice(0,s.dn||DL.length);if(!D.length)return{D:[],last:0};
  if(s.m=="501"){const cur=D.filter(d=>d.l==s.leg&&d.n==(s.vn||0));if(cur.length)return{D:cur,last:0};const e=D[D.length-1];return{D:D.filter(d=>d.l==e.l&&d.n==e.n),last:1}}
- const k=D.length%3;return k?{D:D.slice(-k),last:0}:{D:D.slice(-3),last:1}}
+ if(s.vk!=null){const e=D[D.length-1],V=D.filter(d=>d.w===e.w);return{D:V.slice(-3),last:e.w<s.vk?1:0}}const k=D.length%3;return k?{D:D.slice(-k),last:0}:{D:D.slice(-3),last:1}}
 function trCams(){const L=[],now=Date.now();
  if(typeof cv!="undefined"&&cv&&cv.srcObject)L.push(["Tablet",MST=="ok"?"g":MST=="lost"||MST=="off"?"r":"o"]);
  if(ROLE=="main"&&DUO.on)Object.keys(DUO.src).sort().forEach(id=>{const x=DUO.src[id];if(!x)return;const live=x.conn&&x.conn.open&&now-x.hb<8000;L.push([srcName(id),live?(x.cal?"g":"o"):"r"])});
@@ -717,7 +835,7 @@ function trCams(){const L=[],now=Date.now();
 function train(){if(MCH)return mView();if(!s)return trainOld();if(s.done)return trainDone();
  const V=trVis(),bx=[0,1,2].map(i=>V.D[i]||null),ck=bx.map((d,i)=>!!d&&chkBx(d,i)),sum=V.D.some(d=>d.b)?"Bust":V.D.reduce((a,d)=>a+(d.v||0),0),fresh=Date.now()-TRMSG.at<6000;
  let top="",big="",sub="",bar=null,hit="";const atc=s.m=="blocks"&&s.bl[s.bi]&&s.bl[s.bi].n=="h";
- if(s.m=="blocks"){const b=s.bl[s.bi];top=(b.r?(b.g=="s"?"Singles":b.g=="w"?"Schwache Doppel":"Doppel")+(b.g=="w"?" · ":" · Runde "+b.r+" von "+rdN(b.g)+" · "):"")+"Block "+(s.bi+1)+" von "+s.bl.length;big=b.t[0]=="N"?b.t.slice(1):b.t=="B"?"Bull":b.t=="DB"?"D-Bull":b.t;
+ if(s.m=="blocks"&&s.vk!=null){const A=aView();top=A.top;big=A.big;sub=A.sub;bar=A.bar}else if(s.m=="blocks"){const b=s.bl[s.bi];top=(b.r?(b.g=="s"?"Singles":b.g=="w"?"Schwache Doppel":"Doppel")+(b.g=="w"?" · ":" · Runde "+b.r+" von "+rdN(b.g)+" · "):"")+"Block "+(s.bi+1)+" von "+s.bl.length;big=b.t[0]=="N"?b.t.slice(1):b.t=="B"?"Bull":b.t=="DB"?"D-Bull":b.t;
   sub=b.n=="h"?`Bis zum Treffer · ${b.d} ${b.d==1?"Pfeil":"Pfeile"}`:`Pfeil ${Math.min(b.d+1,b.n)} von ${b.n} · Treffer ${b.h}${b.d?" ("+Math.round(b.h/b.d*100)+"%)":""}`;bar=b.n=="h"?null:b.d/b.n;
   const H=s.bl.reduce((a,x)=>a+x.h,0),D=s.bl.reduce((a,x)=>a+x.d,0);hit=D?Math.round(H/D*100)+"%":"–"}
  else if(s.m=="501"){top="Leg "+s.leg+" von "+s.legs+(s.dout?" · Double-Out":" · ohne Double-Out");big=String(s.rem);sub=(s.dout?"Pfeil "+(s.t+1)+" von 3 · ":"")+"Pfeile im Leg: "+s.ld;bar=(501-s.rem)/501;hit=s.ldone.length+" / "+s.legs}
@@ -725,11 +843,11 @@ function train(){if(MCH)return mView();if(!s)return trainOld();if(s.done)return 
  const bust=s.m=="501"&&s.log[s.log.length-1]=="Bust";
  const mk=V.D.filter(d=>d.x!=null).map((d,i)=>`<g pointer-events="none"><circle cx="${d.x}" cy="${d.y}" r="9" fill="#f2c46d" stroke="#111" stroke-width="2.5"/><text x="${d.x}" y="${d.y+4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="#111" font-family="Arial">${V.D.indexOf(d)+1}</text></g>`).join("");
  return`<div class="vl tr">${gBar(esc(s.name||"Training"))}<div class="trgrid"><div class="vcard trb">${board().replace("</svg>",mk+"</svg>")}</div><div>
- <div class="trinfo${atc?" atc":""}"><div class="k">${top}</div>${atc?atcHead(big,hit,V):`<div class="trbig${s.m=="blocks"?" z":""}">${s.m=="blocks"?"<small>Ziel</small>":s.m=="501"?"<small>Rest</small>":"<small>Pfeile</small>"}${big}</div><div class="trsub">${sub}</div>`}${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
+ <div class="trinfo${atc?" atc":""}"><div class="k">${top}</div>${atc?atcHead(big,hit,V):`<div class="trbig${s.m=="blocks"?" z":""}">${s.m=="blocks"?"<small>"+(aCo()?"Rest":"Ziel")+"</small>":s.m=="501"?"<small>Rest</small>":"<small>Pfeile</small>"}${big}</div><div class="trsub">${sub}</div>`}${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
  ${bust?'<div class="trmsg b">Bust – Rest zurückgesetzt</div>':fresh&&TRMSG.t?`<div class="trmsg">${TRMSG.t}</div>`:""}</div>
  <div class="trvis${V.last?" old":""}"><div class="trvh">${V.last?"Letzte Aufnahme":"Aktuelle Aufnahme"}${V.cam?" · erkannt":""}</div><div class="trboxes${s.m=="blocks"?" nosum":""}">${bx.map((d,i)=>`<div class="${d?"on":""}${d&&i==V.D.length-1&&!V.last?" nw":""}${FIX&&FIX.i==i?" fx":""}${ck[i]?" chk":""}"${d||!V.last?` data-fix="${i}"`:""}>${ck[i]?'<i class="chkq">?</i>':""}<small>Pfeil ${i+1}</small><b>${d?cshort(d.c):"–"}</b><span>${d&&s.m!="blocks"?(d.b?"Bust":(d.v||0)+" P."):""}</span></div>`).join("")}${s.m=="blocks"?"":`<div class="sum"><small>Summe</small><b>${V.D.length?sum:"–"}</b></div>`}</div>${fixBar(V.D.length,ck.some(Boolean))}</div>
  ${trStats(hit)}
- <div class="trbtn"><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">Block überspringen</button>':""}</div>${camLive()&&pfStuck()?'<button id="trpull" class="trpull">Pfeile gezogen (falls nicht von selbst erkannt)</button>':""}
+ <div class="trbtn"><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">'+(s.vk!=null?"Abschnitt überspringen":"Block überspringen")+'</button>':""}</div>${camLive()&&pfStuck()?'<button id="trpull" class="trpull">Pfeile gezogen (falls nicht von selbst erkannt)</button>':""}
  <div id="trcam"></div>
  <button id="fin" class="trfin">Beenden und speichern</button></div></div></div>`}
 const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
@@ -765,7 +883,7 @@ function vCOP(r){const V=vVis(r);if(!V)return null;const f=V.filter(v=>v.f);retu
 function vRd(r,g,k){if(!r.bl)return null;if(!k)return vMean([1,2,3].map(j=>vRd(r,g,j)));const B=r.bl.filter(b=>b.g==g&&(b.r||1)==k),n=g=="s"?20:21;return B.length==n&&B.every(b=>b.h>=1)?vSum(B.map(b=>b.d)):null}
 // Ø Pfeile bis zum Treffer je Feld über alle Runden
 const vAvgD=(C,t,g)=>vMean([].concat(...C.map(r=>(r.bl||[]).filter(b=>b.t==t&&b.g==g&&b.h>=1).map(b=>b.d))));
-const vFl=d=>VF=="Alle"||(VF=="Singles"?!!d.t&&d.t[0]=="N":VF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(VF=="Bull"?"B":VF));
+const vFl=d=>d.sx?aChipF(VF,d):VF=="Alle"||(VF=="Singles"?!!d.t&&d.t[0]=="N":VF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(VF=="Bull"?"B":VF));
 const vHit=(r,t,i,k)=>{const b=vBl(r,t,i,k);return b?b.h:null};
 const vQ=(r,g)=>{if(!r.bl)return null;const B=r.bl.filter(g),d=vSum(B.map(b=>b.d));return d?vSum(B.map(b=>b.h))/d*100:null};
 // Gruppierung: Ø Abstand der Pfeile einer Aufnahme zu ihrer Mitte (mm) und Ø Abweichung vom Ziel
@@ -794,7 +912,7 @@ fr:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))]
 sa:{kpi:["Legs",S=>vSum(S.map(r=>(r.legs||[]).length))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO LEG",leg:1},
  rows:[["Average",r=>r.avg,{d:2}],["First 9",vF9,{d:2}],["Checkout-Quote",vCO,{p:1}],["Checkout-Punkte",vCOP,{d:0}],["Pfeile pro Leg",r=>r.legs&&r.legs.length?vMean(r.legs):null,{d:1,lb:1}],["Bestes Leg",r=>r.legs&&r.legs.length?Math.min(...r.legs):null,{lb:1,best:1,u:"Pfeile"}]]},
 so:{kpi:["Minuten",S=>vSum(S.map(r=>r.dur))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO EINHEIT"},
- rows:[["Average",r=>r.avg,{d:2}],["Pfeile",r=>r.darts,{d:0}],["Dauer",r=>r.dur,{d:0,u:"min"}]]}};
+ rows:[["Average",r=>r.avg,{d:2}],["Pfeile",r=>r.darts,{d:0}],["Dauer",r=>r.dur,{d:0,u:"min"}]]}};Object.assign(VS,VSA);
 function vFmt(v,o){if(v==null||!isFinite(v))return"–";o=o||{};if(o.p)return v.toFixed(1)+"<i>%</i>";if(o.mm)return v.toFixed(0)+"<i> mm</i>";
  const d=o.d!=null?o.d:(Math.abs(v-Math.round(v))<1e-9?0:1),s=v.toFixed(d);return o.u?s+"<i> "+(typeof o.u=="number"?"/ "+o.u:o.u)+"</i>":s}
 const vDate=d=>d?d.split("-").reverse().slice(0,2).join(".")+".":"";
@@ -814,11 +932,11 @@ function vTrend(S,tr){const o=tr[2]||{},P=S.slice().reverse().map(r=>({d:r.date,
  return`<svg viewBox="0 0 ${W} ${Hh}" class="vtr">${g}<polyline points="${l},${Hh-b} ${pts} ${W-rr},${Hh-b}" fill="#f2c46d" opacity=".18"/><polyline points="${pts}" fill="none" stroke="#e0a83a" stroke-width="3.5" stroke-linejoin="round"/>${P.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.v)}" r="5" fill="#2c2d2f" stroke="#f2c46d" stroke-width="2.5"/>`).join("")}<text x="${X(P.length-1)}" y="${Y(last.v)-14}" text-anchor="end" font-size="18" font-weight="700" fill="currentColor">${o.p?last.v.toFixed(1)+"%":last.v.toFixed(o.d!=null?o.d:Math.abs(last.v-Math.round(last.v))<1e-9?0:1)}</text></svg><div class="vcap">${tr[0]}${o.lb?" · kleiner ist besser":""}</div>`}
 function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP,2*VP):[],di=DAYS.indexOf(k);if(cfg&&cfg.chips&&cfg.chips.length&&!cfg.chips.includes(VF))VF=cfg.chips[0];
  if(!cfg.chips.includes(VF))VF="Alle";
- let t=`<div class="vgrid"><div><div class="vcard vkpi"><div class="vttl">${DN[di]} · ${P[k].n}</div><div><small>Einheiten</small><b>${C.length}</b></div><div><small>Pfeile</small><b>${vSum(C.map(r=>r.darts))}</b></div><div><small>${cfg.kpi[0]}</small><b>${C.length?cfg.kpi[1](C):"–"}</b></div></div>
+ let t=`<div class="vgrid"><div><div class="vcard vkpi"><div class="vttl">${pDay(k)} · ${esc(pName(k))}</div><div><small>Einheiten</small><b>${C.length}</b></div><div><small>Pfeile</small><b>${vSum(C.map(r=>r.darts))}</b></div><div><small>${cfg.kpi[0]}</small><b>${C.length?cfg.kpi[1](C):"–"}</b></div></div>
  <div class="vbar2"><div class="vseg"><button data-vm="heat" class="${VM=="heat"?"on":""}">Heatmap</button><button data-vm="trend" class="${VM=="trend"?"on":""}">Trend</button></div>${VM=="heat"&&cfg.chips.length>1?`<div class="vchips">${cfg.chips.map(c=>`<button data-vf="${c}" class="${c==VF?"on":""}">${c}</button>`).join("")}</div>`:""}</div>
  <div class="vcard vheat">${VM=="heat"?vHeatBox(C,k):vTrend(VP&&VP>=5?C:S.slice(0,10),cfg.tr)}</div></div>
  <div><div class="vseg vper">${[[1,"Letzte 1"],[5,"Letzte 5"],[10,"Letzte 10"],[0,"Alle"]].map(([v,l])=>`<button data-vp="${v}" class="${VP==v?"on":""}">${l}</button>`).join("")}</div>`;
- if(!S.length)return t+`<div class="vpanel"><div class="vempty d">Noch keine ${P[k].n}-Einheit gespeichert. Starte sie im Wochenplan – danach erscheinen hier deine Werte.</div></div></div></div>`;
+ if(!S.length)return t+`<div class="vpanel"><div class="vempty d">Noch keine Einheit „${esc(pName(k))}“ gespeichert. Starte sie ${PA[k]?"unter Training":"im Wochenplan"} – danach erscheinen hier deine Werte.</div></div></div></div>`;
  t+=`<div class="vpanel"><div class="vrow vhd"><div>AUS ${C.length} ${C.length==1?"EINHEIT":"EINHEITEN"}</div><div>${C.length==1?"WERT":"DURCHSCHNITT"}</div><div>BESTWERT</div></div>${vRows(cfg.rows,C,Pv)}${cfg.cnt?vCnt(cfg.cnt,C):""}</div>`;
  if(cfg.grp)t+=vGrpPanel(C,cfg.grp);
  if(cfg.fbars){const L=DBL.map(d=>{const h=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.h:null})),n=vSum(C.map(r=>{const b=r.bl&&r.bl.find(b=>b.t==d);return b?b.d:null}));return[d,n?h/n*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
@@ -827,11 +945,13 @@ function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP
  if(cfg.sbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Single (Ø)</div>${vBars(hard(NUM.map(i=>[String(i),vAvgD(C,"N"+i,"s")])))}<div class="vnote l">Rot = deine 3 schwierigsten Felder.</div></div>`;
  if(cfg.dbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Doppel (Ø)</div>${vBars(NUM.map(i=>"D"+i).concat(["DB"]).map(d=>{const v=vAvgD(C,d,"d");return[d=="DB"?"Bull":d,v,v!=null&&v>=DW.WKD?"b":""]}))}<div class="vnote l">Rot = ${DW.WKD} oder mehr Pfeile bis zum Treffer – diese Doppel übst du nach der Doppel-Runde noch einmal.</div></div>`;
  if(cfg.wk)t+=vWeak();
+ if(cfg.abars){const L=NUM.map(i=>"D"+i).concat(["DB"]).map(tg=>{const B=[].concat(...C.map(r=>aBl(r,cfg.abars).filter(b=>b.t==tg))),d=vSum(B.map(b=>b.d));return[tg=="DB"?"Bull":tg,d?vSum(B.map(b=>b.h))/d*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
+  t+=`<div class="vcard"><div class="vh3">Quote je Doppel (Bob's 27, Routine, Round the Board)</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}<div class="vnote l">Grün = dein bestes Doppel, Rot = dein schwächstes.</div></div>`}
  return t+"</div></div>"}
 function vHeatBox(C,k){const fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
  return`<div class="vhl">PFEILE MIT POSITION: ${pos}<br>AUS ${withDl} ${withDl==1?"EINHEIT":"EINHEITEN"}${miss?" · "+miss+" OHNE POSITION":""}</div><canvas id="vhc" data-k="${k}"></canvas>${pos?"":`<div class="vempty">${C.length&&!withDl?"Diese Einheiten sind älter als Version 23 – da wurden die Positionen noch nicht gespeichert. Ab jetzt schon.":"Noch keine Pfeile mit Position."}</div>`}`}
 // Heatmap zeichnen
-function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,D=[].concat(...C.map(r=>vDl(r,vFl))).filter(d=>d.x!=null);vHeatC(cv,D,["Alle","Singles","Doppel"].includes(VF)?null:(VF=="Bull"?"B":VF))}
+function vHeat(cv,k){const S=vSes(k),C=VP?S.slice(0,VP):S,D=[].concat(...C.map(r=>vDl(r,vFl))).filter(d=>d.x!=null);vHeatC(cv,D,isAdv()&&ACH[VF]||["Alle","Singles","Doppel"].includes(VF)?null:(VF=="Bull"?"B":VF))}
 function vHeatC(cv,D,tg){
  const w=cv.clientWidth;if(!w)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=cv.height=Math.round(w*dpr);const g=cv.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
  const R=250,Sc=w/(2*R),cx=w/2,cy=w/2,dark=getComputedStyle(cv).color;
@@ -874,7 +994,7 @@ function vOver(){const R=rows(),S=DB.sessions,sa=S.filter(x=>x.k=="sa"),last=sa.
   return`<tr><td>${r.date.split("-").reverse().join(".")}</td><td>${r.name}</td><td>${r.darts}</td><td>${r.avg}</td><td>${e}${r.note?" · "+esc(r.note):""}</td></tr>`}).join("")}</table></div>`:'<div class="mu">Noch keine Einheiten gespeichert.</div>'}</div>`;
  t+=`<div class="vcard"><div class="vh3">Sicherung</div><div class="mu" id="bks" style="margin-bottom:8px;font-size:15px"></div><div class="mu" style="margin-bottom:8px">Deine Daten liegen in diesem Browser und – sobald die Ring-Kameras verbunden sind – zusätzlich auf dem Raspberry Pi. Fehlt dem Tablet etwas, holt es sich die Daten beim nächsten Verbinden automatisch zurück. Für ganz sicher: ab und zu eine Sicherung herunterladen.</div><div class="row" style="justify-content:flex-start"><button id="bk1">Sicherung herunterladen</button><button id="bk2">Sicherung laden</button><input id="bkf" type="file" accept=".json,application/json" hidden><button id="reset">Alle Daten dieses Profils löschen</button></div><div class="mu" id="bkm" style="margin-top:6px"></div></div>`;
  return t}
-function hist(){return`<div class="vl">${SAVEERR?'<div class="vcard" style="background:#d64545;color:#fff"><b>Der Speicher im Browser ist voll – die letzten Änderungen wurden nicht gespeichert.</b> Bitte unter Übersicht eine Sicherung herunterladen und Bescheid geben.</div>':""}<div class="vtabs">${VTO.map(i=>`<button data-vt="${i}" class="${VT==i?"on":""}">${VD[i]}</button>`).join("")}</div>${VT==0?vOver():VT==8?vRecs():VT==9?vWeek():VT==10?vMatch():VT==11?vGames():vDay(DAYS[VT-1])}</div>`}
+function hist(){if(isAdv()&&VT>=1&&VT<=9)VT=0;if(!isAdv()&&VT>=21)VT=0;return`<div class="vl">${SAVEERR?'<div class="vcard" style="background:#d64545;color:#fff"><b>Der Speicher im Browser ist voll – die letzten Änderungen wurden nicht gespeichert.</b> Bitte unter Übersicht eine Sicherung herunterladen und Bescheid geben.</div>':""}<div class="vtabs">${(isAdv()?[0,21,22,23,24,25,26,27,28,10,11]:VTO).map(i=>`<button data-vt="${i}" class="${VT==i?"on":""}">${i>=21?"Plan "+(i-20):VD[i]}</button>`).join("")}</div>${VT>=21&&VT<=28?vDay(AK[VT-21]):VT==0?(isAdv()?aOver():vOver()):VT==8?vRecs():VT==9?vWeek():VT==10?vMatch():VT==11?vGames():vDay(DAYS[VT-1])}</div>`}
 function vBind(m){const q=s=>m.querySelector(s);
  m.querySelectorAll("[data-vt]").forEach(b=>b.onclick=()=>{VT=+b.dataset.vt;VF="Alle";if(VT==9)VWK=null;lss("dart_vt",String(VT));render()});
  m.querySelectorAll("[data-vw]").forEach(b=>b.onclick=()=>{VWK=Math.min(0,(VWK||0)+ +b.dataset.vw);render()});
@@ -950,7 +1070,7 @@ function trainDone(){if(s.cu)return cuDone();if(!s.saved||!DB.sessions.length||D
  const rowsH=cfg.rows.map(([lab,f,o])=>{o=o||{};const a=f(r),b=pr?f(pr):null,all=S.map(f).filter(x=>x!=null&&isFinite(x)),bs=all.length?(o.lb?Math.min(...all):Math.max(...all)):null,rec=a!=null&&S.length>1&&a===bs&&all.filter(x=>x===bs).length==1;
   return`<div class="vrow"><div class="vl1">${lab}</div><div><b>${vFmt(a,o)}</b>${vArrow(a,b,o)}${rec?'<span class="vpill o">Rekord</span>':""}</div><div><b>${vFmt(b,o)}</b></div><div><b>${vFmt(bs,o)}</b></div></div>`}).join("");
  const cnt=cfg.cnt?[[60,100,"60+"],[100,140,"100+"],[140,180,"140+"],[180,999,"180"]].map(([lo,hi,l])=>`<div><small>${l}</small><b>${vBand(r,lo,hi,cfg.cnt.f)||0}</b></div>`).join(""):"";
- let t=`<div class="vl wp fin"><div class="wphero"><div><div class="k">Fertig · ${DN[di]} · ${vDate(r.date)}${r.dur?" · "+r.dur+" Min.":""}</div><h1>${P[k].n}</h1><p>${r.darts} Pfeile · ${r.bl?"Trefferquote "+vFmt(vQ(r,()=>1),{p:1}).replace(/<[^>]+>/g,""):r.pts+" Punkte · Average "+f1(r.avg)}${r.legs?" · "+r.legs.length+" Legs":""}</p></div>
+ let t=`<div class="vl wp fin"><div class="wphero"><div><div class="k">Fertig · ${pDay(k)} · ${vDate(r.date)}${r.dur?" · "+r.dur+" Min.":""}</div><h1>${esc(pName(k))}</h1><p>${r.darts} Pfeile${r.adv?"":" · "+(r.bl?"Trefferquote "+vFmt(vQ(r,()=>1),{p:1}).replace(/<[^>]+>/g,""):r.pts+" Punkte · Average "+f1(r.avg))}${r.legs?" · "+r.legs.length+" Legs":""}</p></div>
  <div class="wpact"><div class="wplast"><small>${L[0]} heute</small><b>${vFmt(v,L[2])}</b>${vArrow(v,pv,L[2])}<small>${pv!=null?"letztes Mal: "+vFmt(pv,L[2]).replace(/<[^>]+>/g,""):"erstes Mal"}</small></div></div></div>`;
  if(news.length)t+=`<div class="finnews">${news.map(x=>`<div>${x}</div>`).join("")}</div>`;
  if(cfg.chips&&cfg.chips.length&&!cfg.chips.includes(FHF))FHF=cfg.chips[0];
@@ -958,7 +1078,7 @@ function trainDone(){if(s.cu)return cuDone();if(!s.saved||!DB.sessions.length||D
  <div class="vpanel"><div class="vrow f4 vhd"><div></div><div>HEUTE</div><div>LETZTES MAL</div><div>BESTWERT</div></div>${rowsH.replace(/class="vrow"/g,'class="vrow f4"')}</div>
  ${cnt?`<div class="vcard fincnt"><div class="vh3">Aufnahmen heute</div><div class="trst">${cnt}</div></div>`:""}${cfg.grp?vGrpPanel([r],cfg.grp):""}${cfg.wk?vWeak():""}
  <div class="vcard"><div class="vh3">Notiz</div><input id="note" placeholder="Wie lief es? (optional)" value="${esc(r.note||"")}" class="finin"></div>
- <div class="trbtn"><button id="fvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">Zum Wochenplan</button></div></div></div></div>`;
+ <div class="trbtn"><button id="fvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">${isAdv()?"Zu den Plänen":"Zum Wochenplan"}</button></div></div></div></div>`;
  return t}
 // ===== Turniere (v23): selbst zusammenstellen – Gruppen (Hin/Rück), K.-o. oder Doppel-K.-o. (Higher/Lower Bracket) =====
 // Gespeichert in ST.tours (für alle Profile gemeinsam), wird mit dem Raspberry Pi abgeglichen (neuester Stand gewinnt).
@@ -1401,14 +1521,14 @@ function cuSave(){const bl=s.bl.map((b,i)=>({t:b.t,d:b.d,h:b.h,i})).filter(b=>b.
   dur:Math.max(1,Math.round((Date.now()-(s.t0||Date.now()))/60000)),solo:1,q:dd?Math.round(hd/dd*1000)/10:null,gr:(dd?Math.round(hd/dd*100):0)+" % Treffer"};
  DB.ms=DB.ms||[];DB.ms.unshift(r);s.saved=true;s.cuid=r.id;save()}
 // v71: Zahlen-Leiste im Training – bei Blöcken nur für das Feld, das gerade dran ist
-function trStats(hit){if(s&&s.m=="blocks"&&s.bl&&s.bl[s.bi]){const b=s.bl[s.bi],L=esc(lab(b.t));
+function trStats(hit){if(s&&s.vk!=null&&s.bl&&!s.done)return aStats();if(s&&s.m=="blocks"&&s.bl&&s.bl[s.bi]){const b=s.bl[s.bi],L=esc(lab(b.t));
   if(b.n=="h")return`<div class="trst trst2"><div><small>Pfeile auf diesem Feld</small><b>${b.d}</b></div><div><small>Trefferquote gesamt</small><b>${hit}</b></div></div>`;
   return`<div class="trst trst2"><div><small>Pfeile · ${L}</small><b>${b.d}</b></div><div><small>Quote · ${L}</small><b>${b.d?Math.round(b.h/b.d*100)+"%":"–"}</b></div></div>`}
  return`<div class="trst"><div><small>Pfeile</small><b>${s.darts}</b></div><div><small>Punkte</small><b>${s.pts}</b></div><div><small>Average</small><b>${avg(s.pts,s.darts)}</b></div><div><small>${s.m=="501"?"Legs":"Quote"}</small><b>${hit}</b></div></div>`}
 // v71: Fertig-Bildschirm – Heatmap je Feld umschalten (wie im Verlauf)
 let FHF="Alle";
-const fhFl=d=>FHF=="Alle"||(FHF=="Singles"?!!d.t&&d.t[0]=="N":FHF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(FHF=="Bull"?"B":FHF));
-const fhTg=()=>["Alle","Singles","Doppel"].includes(FHF)?null:(FHF=="Bull"?"B":FHF);
+const fhFl=d=>d.sx?aChipF(FHF,d):FHF=="Alle"||(FHF=="Singles"?!!d.t&&d.t[0]=="N":FHF=="Doppel"?!!d.t&&d.t[0]=="D":d.t==(FHF=="Bull"?"B":FHF));
+const fhTg=()=>isAdv()&&ACH[FHF]||["Alle","Singles","Doppel"].includes(FHF)?null:(FHF=="Bull"?"B":FHF);
 function fhChips(L,lb){if(!L||L.length<2)return"";if(!L.includes(FHF))FHF=L[0];return`<div class="vchips fhchips">${L.map(c=>`<button data-fhf="${esc(c)}" class="${c==FHF?"on":""}">${esc(lb?lb(c):c)}</button>`).join("")}</div>`}
 function fhBind(m){m.querySelectorAll("[data-fhf]").forEach(b=>b.onclick=()=>{FHF=b.dataset.fhf;render()})}
 const cuChips=r=>{const T=[...new Set((r.bl||[]).map(b=>b.t))];return T.length>1&&T.length<=8?["Alle"].concat(T):null};
@@ -1420,7 +1540,7 @@ function cuDone(){const r=s.saved?(DB.ms||[]).find(x=>x.id==s.cuid):null;
  <div class="wpact"><div class="wplast"><small>Trefferquote heute</small><b>${vFmt(r.q,o)}</b>${vArrow(r.q,pv?pv.q:null,o)}<small>${pv?"letztes Mal: "+vFmt(pv.q,o).replace(/<[^>]+>/g,""):"erstes Mal"}</small></div></div></div>
  <div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE · ${(r.dl||[]).filter(d=>d.x!=null&&cuFl(d)).length} MIT POSITION</div>${fhChips(cuChips(r),c=>c=="Alle"?c:cuLab(c))}<canvas id="chc"></canvas></div></div><div>
  <div class="vpanel"><div class="vrow f4 vhd"><div>ZIEL</div><div>PFEILE</div><div>TREFFER</div><div>QUOTE</div></div>${r.bl.map(b=>`<div class="vrow f4"><div class="vl1">${cuLab(b.t)}</div><div><b>${b.d}</b></div><div><b>${b.h}</b></div><div><b>${b.d?Math.round(b.h/b.d*100)+" %":"–"}</b></div></div>`).join("")}</div>
- <div class="trbtn"><button id="cuagain">Nochmal</button><button id="cuvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">Zum Wochenplan</button></div></div></div></div>`}
+ <div class="trbtn"><button id="cuagain">Nochmal</button><button id="cuvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">${isAdv()?"Zu den Plänen":"Zum Wochenplan"}</button></div></div></div></div>`}
 // Editor
 function wpEd(){const E=WPE,D=E.d,nm=esc(ST.p[ST.cur].name);
  const day=(k,i)=>{const w=D[k]&&D[k].t?D[k]:{t:"std"},t=w.t,open=E.k==k;
@@ -2131,7 +2251,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 77 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 78 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -2397,7 +2517,7 @@ function pull1(G){try{if(!DW.P1||ownLive()||TURN.length<3||!G||G.R.length<2||G.R
  const x=G.R.reduce((a,r)=>a+r.V.p[0],0)/G.R.length,y=G.R.reduce((a,r)=>a+r.V.p[1],0)/G.R.length;
  return TURN.every(t=>!isFinite(t.x)||Math.hypot(t.x-x,t.y-y)>=DW.P1D)}catch(e){return false}}
 // v73: Ist die Aufnahme laut Spiel schon zu Ende (Leg-Ende, Bust, Check-out, Block-Ende, Match wartet)?
-function visitOver(){try{if(MCH&&!MCH.done)return!!MCH.wait;if(s&&!s.done){const e=DL[(s.dn||DL.length)-1];if(!e)return true;if(s.m=="501")return!!(e.f||e.b);if(s.m=="blocks")return e.i!==s.bi;return true}return true}catch(e){return true}}
+function visitOver(){try{if(MCH&&!MCH.done)return!!MCH.wait;if(s&&!s.done){const e=DL[(s.dn||DL.length)-1];if(!e)return true;if(s.m=="501")return!!(e.f||e.b);if(s.m=="blocks")return s.vk!=null?e.w<s.vk:e.i!==s.bi;return true}return true}catch(e){return true}}
 function pullEarly(now){try{if(!DW.PEG||window.__NOPEG||TURN.length<1||TURN.length>=3)return 0;if(trOn())for(const T of TURN){if(T.tr||T.r=="bad")continue;autoOne(T);if(!trOn())break}if(visitOver())return 0;const last=Math.max(...TURN.map(t=>t.at||0));return now-last<DW.PEGW?now-last:0}catch(e){return 0}}
 function duoPullReset(why){DUO.pulled={at:Date.now(),man:/Hand/.test(why)?1:0,T:TURN.filter(t=>isFinite(t.x)).map(t=>({x:t.x,y:t.y,R:(t.R||[]).map(r=>({id:r.id,p:r.V.p}))}))};PULLSEQ++;TURN=[];DVEC=[];DUO.groups=[];det=null;DPX=null;LOG.push(hm()+" gezogen ("+why+")");renderTurn();ov();flash("Pfeile gezogen – neue Aufnahme");cm("Pfeile gezogen. Neue Aufnahme – wirf einfach weiter.");duoSend({t:"turn",pull:/Hand/.test(why)?0:1})}
 function duoRecv(m,conn){if(!m||typeof m!="object")return;if(m.t=="pt"&&typeof m.k=="string"&&m.n>0&&m.n<8000){const now=Date.now();for(const x in PTB)if(now-PTB[x].at>90000)delete PTB[x];const B=PTB[m.k]||(PTB[m.k]={p:[],c:0,at:now});if(B.p[m.i]==null){B.p[m.i]=String(m.d);B.c++;B.at=now}if(DUO.td&&m.n>50&&B.c%50==0)cm("Testdaten werden empfangen … "+Math.round(100*B.c/m.n)+" %");if(B.c>=m.n){delete PTB[m.k];let o=null;try{o=JSON.parse(B.p.join(""))}catch(e){}if(o)duoRecv(o,conn)}return}if(typeof m.t=="string"&&m.t.slice(0,2)=="bk"){bkRecv(m,conn);return}const now=Date.now();DUO.lastHb=now;
@@ -2607,7 +2727,7 @@ function bkUI(){const e=document.querySelector("#bks");if(!e)return;let o=null;t
 // Beim Ziehen: Wurden nur 1–2 Pfeile erkannt, zählen die fehlenden als "Daneben" (FW.autoMiss).
 const AUTOW=2000;let AUTOT=null,PULLSEQ=0,PSEEN=0,AUTOK=[];
 const trOn=()=>ROLE!="side"&&((MCH&&!MCH.done)||(s&&!s.done));
-function autoOne(T){if(T.tr||T.r=="bad")return;if(DW.VEND){const ie=TURN.findIndex(U=>U.end&&U.tr),it=TURN.indexOf(T);if(ie>=0&&it>ie){T.r="bad";LOG.push(hm()+" verworfen (Aufnahme schon zu Ende – erst ziehen): "+(T.src||""));return}}try{T.mo=MCH&&!MCH.done?(isG()?MCH.g:"match"):(s&&s.m)||"";PFL.push(T);if(PFL.length>3000)PFL.shift()}catch(e){}if(MCH&&!MCH.done){T.tr=true;T.sid=MCH.id;T.mi=MCH.nd;mDart(T.c,T.v,T.x,T.y);try{const e=MCH&&!isG()&&MCH.vis[MCH.vis.length-1];if(e&&MCH.wait&&(e.f||e.b))T.end=e.f?"f":"b"}catch(_){}return}T.tr=true;T.sid=s.t0;T.hi=H.length;T.dn=DL.length;T.dl=null;dart(T.c,T.v,T.x,T.y);T.dl=DL.length>T.dn?DL[T.dn]:null;if(T.dl&&s&&s.m=="501"&&(T.dl.f||T.dl.b)){T.end=T.dl.f?"f":"b";try{render()}catch(_){}}}
+function autoOne(T){if(T.tr||T.r=="bad")return;if(DW.VEND){const ie=TURN.findIndex(U=>U.end&&U.tr),it=TURN.indexOf(T);if(ie>=0&&it>ie){T.r="bad";LOG.push(hm()+" verworfen (Aufnahme schon zu Ende – erst ziehen): "+(T.src||""));return}}try{T.mo=MCH&&!MCH.done?(isG()?MCH.g:"match"):(s&&s.m)||"";PFL.push(T);if(PFL.length>3000)PFL.shift()}catch(e){}if(MCH&&!MCH.done){T.tr=true;T.sid=MCH.id;T.mi=MCH.nd;mDart(T.c,T.v,T.x,T.y);try{const e=MCH&&!isG()&&MCH.vis[MCH.vis.length-1];if(e&&MCH.wait&&(e.f||e.b))T.end=e.f?"f":"b"}catch(_){}return}T.tr=true;T.sid=s.t0;T.hi=H.length;T.dn=DL.length;T.dl=null;dart(T.c,T.v,T.x,T.y);T.dl=DL.length>T.dn?DL[T.dn]:null;if(T.dl&&s&&(s.m=="501"||s.vk!=null)&&(T.dl.f||T.dl.b)){T.end=T.dl.f?"f":"b";try{render()}catch(_){}}}
 function autoTr(){if(!trOn()||typeof TURN=="undefined")return;const now=Date.now(),L=Math.max(1,liveN());
  for(const T of TURN){if(T.tr||T.r=="bad")continue;const ok=!T.R||T.R.length>=L||now-T.at>=AUTOW;if(!ok)break;autoOne(T);if(!trOn())break}}
 // v77: späte Kamera-Änderung an einer schon beendeten Aufnahme (Checkout/Bust) oder an einem von Hand korrigierten Pfeil: nicht übernehmen
@@ -2628,7 +2748,7 @@ function autoFix(T,old){if(T.man)return;const warn=()=>{trMsg("Achtung: Ein frü
  else warn()}
 function autoPull(old,pz){if(MCH&&!MCH.done&&ROLE!="side"){old.forEach(T=>{if(!T.tr&&T.r!="bad"&&MCH&&!MCH.done)autoOne(T)});mPull(pz);if(view==1)render();return}if(!trOn())return;old.forEach(T=>{if(!T.tr&&T.r!="bad"&&trOn())autoOne(T)});if(!trOn())return;
  const k=old.filter(T=>T.tr&&T.sid===s.t0).length;if(!FW.autoMiss||k>=3||(k<1&&!pz)){if(view==1)render();return}
- let miss=k<1?3:s.m=="501"?(s.t>0?3-s.t:0):(()=>{const r=s.darts%3;return r?3-r:0})();if(miss>0){for(let i=0;i<miss&&trOn();i++)dart("0",0);trMsg(miss+(miss==1?" Pfeil wurde":" Pfeile wurden")+" nicht erkannt und als Daneben gezählt. Falls doch getroffen: Rückgängig und auf der Scheibe antippen.")}
+ let miss=k<1?3:s.m=="501"?(s.t>0?3-s.t:0):(()=>{if(s.vk!=null)return s.vd?3-s.vd:0;const r=s.darts%3;return r?3-r:0})();if(miss>0){for(let i=0;i<miss&&trOn();i++)dart("0",0);trMsg(miss+(miss==1?" Pfeil wurde":" Pfeile wurden")+" nicht erkannt und als Daneben gezählt. Falls doch getroffen: Rückgängig und auf der Scheibe antippen.")}
  if(view==1)render()}
 // Liste wurde ohne Ziehen geleert (Kamera neu gestartet, neue Referenz): noch nicht übernommene Pfeile zählen und für das echte Ziehen merken (damit fehlende Pfeile richtig ergänzt werden)
 const pfStuck=()=>TURN.length+AUTOK.length>0;
@@ -2663,7 +2783,7 @@ function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="
 function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;let nb=0;
  // Kameras, die nicht geantwortet haben (z. B. Pi abgestürzt): aus der laufenden Sicherung auf dem Tablet
  for(const id in (DUO.cbk||{}))if(!T.cams[id]){const b=DUO.cbk[id];if(!b.log.length&&!b.rec.length)continue;nb++;T.cams[id]={id,log:b.log.slice(),rec:b.rec.slice(),zahl:b.z,aw:800,w:1280,h:720,st:"Sicherung",cal:b.rec.length?b.rec[b.rec.length-1].cal:null,turn:[],backup:1}}const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
- try{const o={app:"dart-testdaten",v:77,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+ try{const o={app:"dart-testdaten",v:78,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
   a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
   cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert, mit "+PFL.length+" Pfeilen der Sitzung (davon "+PFL.filter(t=>t.man).length+" von Hand korrigiert)"+(nb?" ("+nb+" davon aus der Sicherung auf dem Tablet, weil die Kamera nicht geantwortet hat)":"")+" (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
