@@ -15,13 +15,18 @@
 import base64, collections, glob, http.server, json, os, re, shutil, struct, subprocess, sys, threading, time
 import cv2, numpy as np
 
-VERSION = "0.9"
+VERSION = "0.10"
 STARTNR = int(time.time() * 1000)                       # daran erkennt die Brücke, dass dieses Programm neu gestartet wurde
 PORT = int(os.environ.get("DART_PORT", "8771"))
 HOME = os.path.expanduser("~")
 DIR = os.path.dirname(os.path.abspath(__file__))
 DATEN = os.environ.get("DART_DATEN", os.path.join(HOME, ".dart"))
-FAKE = os.environ.get("DART_FAKE", "")          # Test ohne Kameras: Ordner mit K1*.jpg/png, K2*, K3*
+FAKE = os.environ.get("DART_FAKE", "")
+# 0.10: Bewegungs-Wecker (wie Autodarts: erst billig auf Bewegung prüfen, dann genau auswerten). Wartet ein Rechenkern auf seine
+# nächste Ruhe-Prüfung (alle ~0,38 s), schaut dieses Programm alle 0,1 s in ein Mini-Bild (160x90 grau). Ändert sich dort etwas,
+# bekommt der Kern sein nächstes Bild sofort ("_wake"). Die Auswertung im Kern ist unverändert; die 0,38-s-Prüfung bleibt als Netz.
+MOT = os.environ.get("DART_MOT", "1") != "0" and not os.path.exists(os.path.join(DATEN, "wecker-aus"))   # abschalten: touch ~/.dart/wecker-aus
+MOT_DT, MOT_T, MOT_N, MOT_GAP, MOT_FG = 0.1, 14, 4, 0.2, 0.12          # Test ohne Kameras: Ordner mit K1*.jpg/png, K2*, K3*
 APPDIR = os.environ.get("DART_APPDIR", "")      # Test: Tablet-App unter /app/ ausliefern
 TEST_INVERZ = float(os.environ.get("DART_TEST_INVERZ", "0") or 0)   # Test: Annahme vom Tablet künstlich verzögern (s)
 
@@ -74,6 +79,7 @@ class Kamera(threading.Thread):
         self.status, self.info, self.fps, self.fehler, self.offen = "aus", "", 0.0, 0, 0
         self.takt = 0.5                                   # ohne Anforderung: so oft wird ein Bild ausgepackt (Vorschau, s)
         self.wunsch = None                                # (Breite, Funktion): nächstes Bild verkleinert an den Rechenkern
+        self.wecker, self.klein, self.lm, self.lw, self.lf, self.nweck, self.nmot = None, None, 0.0, 0.0, 0.0, 0, 0
 
     def anfordern(self, aw, fn):
         self.wunsch = (aw, fn)
@@ -83,6 +89,7 @@ class Kamera(threading.Thread):
         if not w:
             return
         self.wunsch = None
+        self.lf = time.monotonic()
         try:
             aw = max(320, min(1280, int(w[0])))
             ah = int(round(aw * f.shape[0] / f.shape[1]))
@@ -90,6 +97,26 @@ class Kamera(threading.Thread):
             w[1](aw, ah, cv2.cvtColor(g, cv2.COLOR_BGR2RGBA).tobytes())
         except Exception as e:
             log("Kamera %d: Bild für den Rechenkern: %s" % (self.nr, e))
+
+    def bewegung(self, f, jetzt):
+        """Mini-Bild (160x90 grau) mit dem vorigen vergleichen; bei Bewegung den wartenden Rechenkern wecken."""
+        try:
+            g = cv2.cvtColor(cv2.resize(f, (160, 90), interpolation=cv2.INTER_AREA), cv2.COLOR_BGR2GRAY)
+        except Exception:
+            return
+        p, self.klein, self.lm = self.klein, g, jetzt
+        if p is None or p.shape != g.shape:
+            return
+        if int(np.count_nonzero(cv2.absdiff(g, p) > MOT_T)) < MOT_N:
+            return
+        self.nmot += 1
+        if self.wecker and not self.wunsch and jetzt - self.lw >= MOT_GAP:
+            self.lw = jetzt
+            self.nweck += 1
+            try:
+                self.wecker()
+            except Exception:
+                pass
 
     def oeffnen(self):
         dev = os.path.realpath(self.pfad)
@@ -138,11 +165,14 @@ class Kamera(threading.Thread):
                     self.fehler = 0
                     n += 1
                     jetzt = time.monotonic()
-                    if self.wunsch or jetzt - letzt >= self.takt:   # nur auspacken, wenn ein Bild gebraucht wird (spart Rechenzeit)
+                    mot = MOT and self.wecker is not None and not self.wunsch and jetzt - self.lm >= MOT_DT
+                    if self.wunsch or mot or jetzt - letzt >= self.takt:   # nur auspacken, wenn ein Bild gebraucht wird (spart Rechenzeit)
                         ok, f = cap.retrieve()
                         if ok and f is not None and f.ndim == 3:
                             with self.lock:
                                 self.bild, self.zeit = f, jetzt
+                            if MOT and self.wecker is not None:
+                                self.bewegung(f, jetzt)
                             self.liefern(f)
                             if self.status != "ok":
                                 self.status = "ok"
@@ -173,9 +203,14 @@ class Kamera(threading.Thread):
             t = time.monotonic() - t0
             i = 0 if t < erst else min(len(bilder) - 1, int((t - erst) / dauer)) if os.environ.get("DART_FAKE_T0") else int(t / dauer) % len(bilder)
             f = bilder[i]
+            if i != getattr(self, "fi", -1):
+                self.fi, self.wechsel = i, time.monotonic()
             with self.lock:
                 self.bild, self.zeit = f, time.monotonic()
             self.status, self.fps = "ok", 10.0
+            jetzt = time.monotonic()
+            if MOT and self.wecker is not None and not self.wunsch and jetzt - self.lm >= MOT_DT:
+                self.bewegung(f, jetzt)
             self.liefern(f)
             time.sleep(0.05)
 
@@ -236,6 +271,7 @@ class Kern:
         self.q, self.fr, self.ev, self.t_start = collections.deque(maxlen=400), None, threading.Event(), time.monotonic()
         threading.Thread(target=self.schreiber, daemon=True).start()
         threading.Thread(target=self.lauf, daemon=True).start()
+        k.wecker = lambda: self.nachricht({"t": "_wake"}) if self.lebt() else None
 
     def lebt(self):
         return self.p is not None and self.p.poll() is None and time.monotonic() - self.hb < 6
@@ -338,6 +374,8 @@ class Kern:
                 r.update(img=jpeg_url(cv2.resize(f, (800, 450), interpolation=cv2.INTER_AREA), 70), w=800, h=450)
                 Z.sende(k.nr, {"t": "rb", "id": k.id, "r": r, "z": m.get("z", 0)})
             return
+        if t == "dart" and FAKE and getattr(k, "wechsel", 0):
+            log("Kamera %d: Meldung %d ms nach Bildwechsel (Testbilder)" % (k.nr, round(1000 * (time.monotonic() - k.wechsel))))
         if t in ("hb", "hello"):
             self.hb, self.cal, self.st = time.monotonic(), bool(m.get("cal")), m.get("st", "")
             self.ms = m.get("ms", self.ms)
@@ -444,10 +482,21 @@ class Zentrale:
                 "zahl": self.zahlen[k.nr - 1], "neu": VERSION}
 
     def takt(self):
-        start, letzter = time.monotonic(), 0.0
+        start, letzter, lastlog = time.monotonic(), 0.0, time.monotonic()
         while True:
             time.sleep(1)
             jetzt = time.monotonic()
+            if jetzt - lastlog >= 300:
+                lastlog = jetzt
+                try:
+                    la = open("/proc/loadavg").read().split()[0]
+                except Exception:
+                    la = "?"
+                try:
+                    te = subprocess.run(["vcgencmd", "measure_temp"], capture_output=True, text=True, timeout=2).stdout.strip().replace("temp=", "") or "?"
+                except Exception:
+                    te = "?"
+                log("Last %s | Temperatur %s | Bewegungs-Wecker %s" % (la, te, " ".join("K%d %d/%d" % (k.nr, k.nweck, k.nmot) for k in self.kams)))
             # Wächter: meldet sich die Brücke 12 s lang nicht (Browser eingefroren oder abgestürzt), wird sie beendet – der Start-Wächter öffnet sie neu.
             # Die Brücke ohne Browser fragt spätestens alle 4 s neu ab und startet in 1–2 s: dort reichen 9 s.
             if jetzt - start > 45 and jetzt - max(self.bruecke, letzter) > (9 if self.br.get("vis") == "node" else 12):

@@ -7,7 +7,7 @@
 // =============================================================================
 const fs = require('fs');
 const [APP, NR, ZAHL, CODE, STORE] = process.argv.slice(2);
-const RT = setTimeout, RI = setInterval;
+const RT = setTimeout, RI = setInterval, RCT = clearTimeout;
 const out = o => { try { process.stdout.write(JSON.stringify(o) + "\n") } catch (e) {} };
 const fehler = (wo, e) => out({ t: "_err", wo, e: String(e && e.stack || e).slice(0, 500) });
 process.on('uncaughtException', e => fehler("unerwartet", e));
@@ -31,7 +31,7 @@ global.setTimeout = () => 0; global.setInterval = () => 0; global.clearTimeout =
 // Angaben zum Rechner fürs Protokoll (Fehlersuche „Runde 1 langsam“): Node-Version, freier Speicher, Takt-Regler der CPU
 const sysInfo = () => { let g = "?"; try { g = fs.readFileSync("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "utf8").trim() } catch (e) {}
   const os = require('os'); return "Node " + process.version + ", Speicher frei " + Math.round(os.freemem() / 1048576) + " von " + Math.round(os.totalmem() / 1048576) + " MB, CPU-Regler " + g };
-global.__K = { out, fehler, RT, RI, fs, STORE, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0), sysInfo };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
+global.__K = { out, fehler, RT, RI, RCT, fs, STORE, NR: +NR, LANGSAM: +(process.env.DART_LANGSAM || 0), sysInfo };   // LANGSAM: nur für Tests (Pi-Rechenzeit nachstellen)
 
 const KLEBER = `
 ;(()=>{const K=global.__K,q=s=>document.querySelector(s);
@@ -50,11 +50,12 @@ const KLEBER = `
    return "@"+JSON.stringify(o)}catch(e){return "@{}"}};
  piAus=function(){};
  global.setTimeout=(f,ms,...a)=>K.RT(()=>{try{f(...a)}catch(e){}},ms);global.clearTimeout=clearTimeout;
- const req=()=>K.out({t:"_f",aw:AW});
- K.onFrame=(w,h,buf)=>{LASTF=Date.now();CUR={width:w,height:h,data:new Uint8ClampedArray(buf.buffer,buf.byteOffset,buf.length),z:1,cx:.5,cy:.5};
+ // Kern 0.10: "_wake" vom Pi-Programm (Bewegung im Mini-Bild) – wartet der Kern gerade auf seine nächste Ruhe-Prüfung, holt er das Bild sofort
+ let RQ=null,RQW=0,NWAKE=0,WAKEP=0;const req=()=>{if(RQ){K.RCT(RQ);RQ=null}RQW=1;K.out({t:"_f",aw:AW})};
+ K.onFrame=(w,h,buf)=>{LASTF=Date.now();RQW=0;CUR={width:w,height:h,data:new Uint8ClampedArray(buf.buffer,buf.byteOffset,buf.length),z:1,cx:.5,cy:.5};
   const t0=performance.now();try{q('#cfl').textContent='';tick()}catch(e){K.fehler("tick",e)}if(K.LANGSAM&&LCK>5){const e=Date.now()+K.LANGSAM;while(Date.now()<e);}const dt=performance.now()-t0;
-  let d=250;try{d=loopDelay(dt)}catch(e){}K.RT(req,Math.max(0,d-40))};
- K.onMsg=m=>{try{if(m&&m.t=="_open"){duoSend(hello());K.RT(()=>{try{bkSend(CONN,bkMine())}catch(e){}},500);return}duoRecv(m,CONN)}catch(e){K.fehler("Nachricht",e)}};
+  let d=250;try{d=loopDelay(dt)}catch(e){}if(WAKEP){WAKEP=0;d=0}if(RQ)K.RCT(RQ);RQ=K.RT(req,Math.max(0,d-40))};
+ K.onMsg=m=>{try{if(m&&m.t=="_wake"){if(RQ&&!RQW){NWAKE++;req()}else if(!RQW)WAKEP=1;return}if(m&&m.t=="_open"){duoSend(hello());K.RT(()=>{try{bkSend(CONN,bkMine())}catch(e){}},500);return}duoRecv(m,CONN)}catch(e){K.fehler("Nachricht",e)}};
  K.RI(()=>{try{const h=hello();h.t="hb";h.kern=1;h.ms=LCK;duoSend(h)}catch(e){K.fehler("hb",e)}if(Date.now()-LASTF>2500)req()},1000);
  K.RI(()=>{try{DUO.lastHb=Date.now();duoWatch()}catch(e){K.fehler("Wächter",e)}},4000);
  // Aufwärmen: Die Erkennung läuft nach dem Start und nach langer Pause sonst 2–3x langsamer (die Rechen-Maschine von Node optimiert erst beim Benutzen).
