@@ -151,6 +151,31 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
 .tr .trinfo .k{color:var(--gold);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .tr .trbig{font-size:96px;line-height:1;font-weight:700;margin:4px 0 2px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:14px}
 .tr .trbig .awr{display:flex;align-items:baseline;gap:.3em}.trbig .awr i{font-style:normal;font-size:.5em;opacity:.38}.trbig .awr i.on{font-size:1em;opacity:1}
+.trinfo.ov .ovh{display:flex;justify-content:space-between;font-size:12px;opacity:.6;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.ovd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;padding-bottom:12px;border-bottom:2px dashed rgba(127,127,127,.45)}
+.ovd.sm{grid-template-columns:repeat(3,1fr) .85fr}
+.ovs{position:relative;border-radius:12px;padding:6px 4px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:92px;background:rgba(255,255,255,.04)}
+.ovs[data-fix]{cursor:pointer}
+.ovs small{font-size:12px;opacity:.6;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.ovs .ovi{display:block;font-style:normal;margin:4px 0 2px}.ovs .ovi svg{width:118px;max-width:100%;height:24px;display:block}
+.ovs b{font-size:30px;line-height:1.1;font-weight:700}.ovs b.e{opacity:.3}.ovs b.dn{font-size:23px;line-height:1.43}
+.ovs span{font-size:13px;opacity:.75;min-height:15px}
+.ovs.on{background:rgba(255,255,255,.1)}.ovs.on .ovi{opacity:.22}
+.ovs.nw{animation:trpop 1.2s ease-out}
+.ovs.chk{background:#8a5a0c;box-shadow:inset 0 0 0 3px #e0a020}.ovs.chk .ovi{opacity:.35}
+.ovs .chkq{position:absolute;top:-8px;right:-6px;width:24px;height:24px;z-index:1;border-radius:50%;background:#e0a020;color:#111;font:700 16px/24px Arial,sans-serif;font-style:normal}
+.ovs.fx{outline:4px solid #e0a020;outline-offset:2px}
+.ovd.old .ovs.on b,.ovd.old .ovs.on span{opacity:.5}
+.ovs.sum{background:var(--gold);color:#222;justify-content:center}.ovs.sum small{opacity:.75}
+.ovrow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:12px}
+.ovl{justify-self:end;font-size:14px;opacity:.6;text-transform:uppercase;letter-spacing:.06em}
+.ovz{border:5px solid currentColor;border-radius:28px;min-width:112px;height:112px;padding:0 16px;display:flex;align-items:center;justify-content:center;font-size:70px;font-weight:700;line-height:1;white-space:nowrap}
+.ovz.m{font-size:56px}.ovz.s{font-size:42px}.ovz.w3{font-size:62px;padding:0 14px}
+.ovz .awr{display:flex;align-items:baseline;gap:.25em}.ovz .awr i{font-style:normal;font-size:.5em;opacity:.38}.ovz .awr i.on{font-size:1em;opacity:1}
+.ovq{justify-self:end;text-align:right}.ovq small{display:block;opacity:.6;font-size:14px;letter-spacing:.06em;text-transform:uppercase}.ovq b{font-size:40px;line-height:1.1}
+.trinfo.ov .trsub{text-align:center;margin-top:10px}
+.trhint{margin:-4px 4px 10px}
+@media (max-width:560px){.ovs .ovi svg{width:84px}.ovs b{font-size:24px}.ovs b.dn{font-size:18px}.ovz{min-width:92px;height:92px;font-size:56px}.ovz.m{font-size:44px}.ovz.s{font-size:32px}.ovz.w3{font-size:46px}.ovq b{font-size:30px}}
 .trbig small{font-size:20px;font-weight:700;opacity:.55;text-transform:uppercase;letter-spacing:.05em}
 .tr .trsub{font-size:20px;opacity:.85}
 .tr .trbar{height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden;margin-top:10px}.tr .trbar i{display:block;height:100%;background:var(--gold)}
@@ -467,7 +492,7 @@ nav{display:none!important}
 <nav><button id="n5">Start</button><button id="n0" class="on">Wochenplan</button><button id="n1">Training</button><button id="n2">Verlauf</button><button id="n4">Turnier</button><button id="n3" hidden>Einrichtung</button></nav>
 <div id="gmh"></div><main id="m"></main>
 <section id="cam" hidden style="padding:0 10px 24px;max-width:1100px;margin:auto">
-<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 81</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
+<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:center"><h2 style="margin:0">⚙ Einrichtung · Kameras <span class="mu" style="font-weight:400">· Version 82</span></h2><button id="cback">← Zurück</button></div><div class="mu" id="cmsg">Starte die Kamera mit leerer Scheibe. Danach einfach werfen – die App erkennt jeden Pfeil von selbst.</div></div>
 <div class="card"><div style="position:relative;line-height:0;overflow:hidden;border-radius:8px"><video id="cv" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000"></video><canvas id="ov" style="position:absolute;left:0;top:0;width:100%;height:100%"></canvas><div id="cst2" style="position:absolute;left:8px;top:8px;z-index:3;background:#000b;color:#fff;padding:6px 10px;border-radius:8px;font:700 14px/1.2 Arial">● Kamera aus</div><div id="cfl" style="position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:4;background:#1a7f4b;color:#fff;padding:10px 16px;border-radius:10px;font:700 17px/1.3 Arial;text-align:center;display:none;box-shadow:0 2px 12px #0006"></div><div style="position:absolute;right:8px;bottom:8px;display:flex;gap:6px;align-items:center;z-index:3"><button id="zm" style="min-width:48px;opacity:.9">−</button><b id="zl" title="Antippen: Auto-Zoom an/aus" style="color:#fff;background:#0009;padding:4px 8px;border-radius:8px;line-height:1.2;cursor:pointer">1.0×</b><button id="zp" style="min-width:48px;opacity:.9">+</button></div></div></div>
 <div class="row" style="margin-bottom:10px"><button id="c9" class="pri" style="flex:1;min-height:56px">Standbild speichern (Foto zum Hochladen im Chat)</button></div>
 <div class="row"><button id="c1" class="pri">Kamera starten</button><button id="c8">Scheibe automatisch suchen</button><button id="c2">Scheibe markieren</button><button id="c3">Referenz neu setzen (Scheibe leer)</button><button id="c4">Jetzt prüfen</button><button id="c7">Aufnahme ins Training übernehmen</button><button id="c11">Kamera wechseln</button></div>
@@ -503,27 +528,27 @@ const isAdv=()=>ST.cur===ADVID;
 const BA=(t,n,sx,o)=>Object.assign({t,n,g:sx,sx,d:0,h:0},o||{});
 const AWU=[["D20","D10","D5"],["D16","D8","D4"],["D12","D6","D3"]];
 const aWU=()=>[BA("DB",9,"wu",{wl:"3 × 3 auf Bullseye"})].concat(...AWU.map(T=>Array.from({length:3},()=>T.map(t=>BA(t,1,"wu",{wl:T.join(" / ")}))).flat()));
-const aRTB=()=>NUM.map(i=>BA("N"+i,"h","rtb")),aBASE=()=>[BA("N20",33,"b20"),BA("N19",33,"b19"),BA("B",33,"bul")];
+const aRTB=()=>NUM.map(i=>BA("N"+i,3,"rtb")),aBASE=()=>[BA("N20",33,"b20"),BA("N19",33,"b19"),BA("B",33,"bul")];
 const aX=(z,set)=>BA("N"+z,51,"x"+z,{set});
 const aCOL=(L,sx,n)=>L.map(v=>BA("C"+v,n,sx,{v,rem:v,vs:v,dd:0}));
 const aC120=()=>Array.from({length:25},(_,i)=>BA("C120",9,"c120",i?{v:null,rem:null,vs:null,dd:0}:{v:120,rem:120,vs:120,dd:0}));
 const aSH=()=>NUM.map(i=>BA("N"+i,3,"sh")),aCR=()=>[15,16,17,18,19,20].map(i=>BA("N"+i,3,"cr")).concat([BA("B",3,"cr")]);
-const aBOB=()=>NUM.map(i=>BA("D"+i,3,"bob")).concat([BA("DB",3,"bob")]),aRD=()=>NUM.map(i=>BA("D"+i,"h","rd"));
+const aBOB=()=>NUM.map(i=>BA("D"+i,3,"bob")).concat([BA("DB",3,"bob")]),aRD=()=>NUM.map(i=>BA("D"+i,3,"rd"));
 const aDR=()=>AWU.map((T,j)=>Array.from({length:10},(_,a)=>T.map(t=>BA(t,1,"dr",{set:j+1,av:a+1,wl:T.join(" / ")}))).flat()).flat();
 const ACO1=Array.from({length:20},(_,i)=>3+2*i).concat(Array.from({length:20},(_,i)=>42+i)),AC40=Array.from({length:40},(_,i)=>61+i),
  ACO6=[40,60,68,72,76,80,84,88,90,92,96,98,100,108,112,116,120,140,160,170],ACO7=[38,59,69,73,79,89,93,99,107,119,126,129,133,134,137,139,149,154,157,167],
  ACO8=[36,58,62,66,68,70,74,78,86,90,94,102,104,108,118,122,134,144,154,164];
 const PA={
-a1:{nr:7,n:"Checkouts",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 3-Dart-Checkouts von 3 bis 61, Catch 40 (61 bis 100, je höchstens 6 Pfeile).",b:()=>[...aWU(),...aRTB(),...aBASE(),...aCOL(ACO1,"co",3),...aCOL(AC40,"c40",6)]},
-a2:{nr:5,n:"Scoring",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 51 Pfeile auf 20 und 19, 33 auf Bull, Shanghai, Cricket-Scoring, danach noch einmal 51 auf 20, 51 auf 19 und 33 auf Bull.",b:()=>[...aWU(),...aRTB(),aX(20,1),aX(19,1),BA("B",33,"bul",{set:1}),...aSH(),...aCR(),aX(20,2),aX(19,2),BA("B",33,"bul",{set:2})]},
-a3:{nr:4,n:"Doppel",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, Bob's 27 (alle Doppel), Doppel-Routine (je 10 Aufnahmen D20/D10/D5, D16/D8/D4, D12/D6/D3), Around the Clock auf die Doppel (bis zum Treffer).",b:()=>[...aWU(),...aRTB(),...aBASE(),...aBOB(),...aDR(),...aRD()]},
-a4:{nr:6,n:"Power-Scoring",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 300 Darts Highscore.",b:()=>[...aWU(),...aRTB(),...aBASE(),BA("T20",300,"hs")]},
-a5:{nr:8,n:"Checkouts 120",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 120 Checkout (25 Runden mit je 9 Pfeilen: geschafft +10, verpasst −1), 3-Dart-Checkouts von 3 bis 61.",b:()=>[...aWU(),...aRTB(),...aBASE(),...aC120(),...aCOL(ACO1,"co",3)]},
-a6:{nr:1,n:"Schwerpunkt 20",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 51 auf 20, 20 Checkouts von 40 bis 170 (je 3 Pfeile), noch einmal 51 auf 20.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(20,1),...aCOL(ACO6,"co",3),aX(20,2)]},
-a7:{nr:2,n:"Schwerpunkt 19",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 51 auf 19, 20 Checkouts von 38 bis 167 (je 3 Pfeile), noch einmal 51 auf 19.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(19,1),...aCOL(ACO7,"co",3),aX(19,2)]},
-a8:{nr:3,n:"Schwerpunkt 18",x:"Aufwärmen, Around the Clock (jede Zahl bis zum Treffer), je 33 Pfeile auf 20, 19 und Bull, 51 auf 18, 20 Checkouts von 36 bis 164 (je 3 Pfeile), noch einmal 51 auf 18.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(18,1),...aCOL(ACO8,"co",3),aX(18,2)]}};
-const AXN={wu:"Aufwärmen",rtb:"Around the Clock · Singles",b20:"33 Pfeile auf die 20",b19:"33 Pfeile auf die 19",bul:"33 Pfeile auf Bull",x20:"51 Pfeile auf die 20",x19:"51 Pfeile auf die 19",x18:"51 Pfeile auf die 18",
- co:"3-Dart-Checkouts",c40:"Catch 40",c120:"120 Checkout",sh:"Shanghai",cr:"Cricket-Scoring",bob:"Bob's 27",dr:"Doppel-Routine",rd:"Around the Clock · Doppel",hs:"300 Darts Highscore"};
+a1:{nr:7,n:"Checkouts",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 3-Dart-Checkouts von 3 bis 61, Catch 40 (61 bis 100, je höchstens 6 Pfeile).",b:()=>[...aWU(),...aRTB(),...aBASE(),...aCOL(ACO1,"co",3),...aCOL(AC40,"c40",6)]},
+a2:{nr:5,n:"Scoring",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 51 Pfeile auf 20 und 19, 33 auf Bull, Shanghai, Cricket-Scoring, danach noch einmal 51 auf 20, 51 auf 19 und 33 auf Bull.",b:()=>[...aWU(),...aRTB(),aX(20,1),aX(19,1),BA("B",33,"bul",{set:1}),...aSH(),...aCR(),aX(20,2),aX(19,2),BA("B",33,"bul",{set:2})]},
+a3:{nr:4,n:"Doppel",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, Bob's 27 (alle Doppel), Doppel-Routine (je 10 Aufnahmen D20/D10/D5, D16/D8/D4, D12/D6/D3), Round the Board auf die Doppel (3 Pfeile je Doppel).",b:()=>[...aWU(),...aRTB(),...aBASE(),...aBOB(),...aDR(),...aRD()]},
+a4:{nr:6,n:"Power-Scoring",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 300 Darts Highscore.",b:()=>[...aWU(),...aRTB(),...aBASE(),BA("T20",300,"hs")]},
+a5:{nr:8,n:"Checkouts 120",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 120 Checkout (25 Runden mit je 9 Pfeilen: geschafft +10, verpasst −1), 3-Dart-Checkouts von 3 bis 61.",b:()=>[...aWU(),...aRTB(),...aBASE(),...aC120(),...aCOL(ACO1,"co",3)]},
+a6:{nr:1,n:"Schwerpunkt 20",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 51 auf 20, 20 Checkouts von 40 bis 170 (je 3 Pfeile), noch einmal 51 auf 20.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(20,1),...aCOL(ACO6,"co",3),aX(20,2)]},
+a7:{nr:2,n:"Schwerpunkt 19",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 51 auf 19, 20 Checkouts von 38 bis 167 (je 3 Pfeile), noch einmal 51 auf 19.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(19,1),...aCOL(ACO7,"co",3),aX(19,2)]},
+a8:{nr:3,n:"Schwerpunkt 18",x:"Aufwärmen, Round the Board (3 Pfeile je Zahl), je 33 Pfeile auf 20, 19 und Bull, 51 auf 18, 20 Checkouts von 36 bis 164 (je 3 Pfeile), noch einmal 51 auf 18.",b:()=>[...aWU(),...aRTB(),...aBASE(),aX(18,1),...aCOL(ACO8,"co",3),aX(18,2)]}};
+const AXN={wu:"Aufwärmen",rtb:"Round the Board · Singles",b20:"33 Pfeile auf die 20",b19:"33 Pfeile auf die 19",bul:"33 Pfeile auf Bull",x20:"51 Pfeile auf die 20",x19:"51 Pfeile auf die 19",x18:"51 Pfeile auf die 18",
+ co:"3-Dart-Checkouts",c40:"Catch 40",c120:"120 Checkout",sh:"Shanghai",cr:"Cricket-Scoring",bob:"Bob's 27",dr:"Doppel-Routine",rd:"Round the Board · Doppel",hs:"300 Darts Highscore"};
 const ACH={"20":["b20","x20"],"19":["b19","x19"],"18":["x18"],"Bull":["bul"],"Singles":["rtb"],"Checkouts":["co","c40","c120"],"Shanghai":["sh"],"Cricket":["cr"],"Doppel":["bob","dr","rd"],"Highscore":["hs"]};
 const aChipF=(ch,d)=>{const L=ACH[ch];return L?L.includes(d.sx):ch=="Alle"?d.sx!="wu":false};
 const pName=k=>(PA[k]||P[k]||{}).n||k,pDay=k=>PA[k]?"Plan "+PA[k].nr:DN[DAYS.indexOf(k)];
@@ -576,7 +601,7 @@ const aCO=(r,sx)=>{const B=aBl(r,sx).filter(b=>b.h||b.d>=(b.n||3));return B.leng
 const aCOD=(r,sx)=>{const B=aBl(r,sx),n=vSum(B.map(b=>b.dd||0));return n?B.filter(b=>b.h).length/n*100:null};
 const aCOA=(r,sx)=>{const B=aBl(r,sx).filter(b=>b.h);return B.length?vMean(B.map(b=>b.d)):null};
 const aHSA=r=>{const D=aDl2(r,"hs");return D.length?vSum(D.map(d=>d.v||0))/D.length*3:null};
-const AR={rtb:["Around the Clock · Singles",r=>aHQ(r,"rtb"),{p:1}],
+const AR={rtb:["Round the Board · Singles",r=>aHQ(r,"rtb"),{p:1}],
  t20:["33 auf 20 · Treffer",r=>aHQ(r,"b20"),{p:1}],tt20:["33 auf 20 · Triple",r=>aCQ(r,"b20","T20"),{p:1}],
  t19:["33 auf 19 · Treffer",r=>aHQ(r,"b19"),{p:1}],tt19:["33 auf 19 · Triple",r=>aCQ(r,"b19","T19"),{p:1}],
  bul:["Bull · Treffer",r=>aHQ(r,"bul"),{p:1}],bue:["Bull · Bullseye",r=>aCQ(r,"bul","DB"),{p:1}],
@@ -588,7 +613,7 @@ const AR={rtb:["Around the Clock · Singles",r=>aHQ(r,"rtb"),{p:1}],
  c120:["120 Checkout · Quote",r=>aCO(r,"c120"),{p:1}],c120d:["120 Checkout · Doppel-Quote",r=>aCOD(r,"c120"),{p:1}],c120a:["120 Checkout · Ø Pfeile",r=>aCOA(r,"c120"),{d:1,lb:1}],c120e:["120 Checkout · erreicht",r=>r.c120||null,{d:0}],
  sh:["Shanghai · Trefferquote",r=>aHQ(r,"sh"),{p:1}],shn:["Shanghai · Shanghais",r=>aBl(r,"sh").length?aShang(aDl2(r,"sh")):null,{d:0}],
  cr:["Cricket · Trefferquote",r=>aHQ(r,"cr"),{p:1}],crm:["Cricket · Marks-Quote",r=>{const B=aBl(r,"cr");return B.length?vSum(aDl2(r,"cr").map(aMark))/(B.length*9)*100:null},{p:1}],
- bob:["Bob's 27 · Doppelquote",r=>aHQ(r,"bob"),{p:1}],dr:["Doppel-Routine · Quote",r=>aHQ(r,"dr"),{p:1}],rd:["Around the Clock · Doppel",r=>aHQ(r,"rd"),{p:1}],
+ bob:["Bob's 27 · Doppelquote",r=>aHQ(r,"bob"),{p:1}],dr:["Doppel-Routine · Quote",r=>aHQ(r,"dr"),{p:1}],rd:["Round the Board · Doppel",r=>aHQ(r,"rd"),{p:1}],
  hsa:["300 Darts · Average",aHSA,{d:2}],hst:["300 Darts · Triple-Quote",r=>aCQ(r,"hs",d=>d.c[0]=="T"),{p:1}]};
 const aRows=a=>a.map(k=>AR[k]),aBase=["rtb","t20","tt20","t19","tt19","bul","bue"],aCnt=(S,sx)=>vSum(S.map(r=>aBl(r,sx).filter(b=>b.h).length));
 const VSA={
@@ -605,7 +630,7 @@ const WPLA={a1:["Checkout-Quote",r=>aCO(r,["co","c40"]),{p:1}],a2:["51 auf 20",r
 function aChips(k){const B=PA[k].b(),o=[];let last=null;B.forEach(b=>{const key=b.sx+"|"+(b.set||0);if(key===last&&b.sx!="dr")return;if(b.sx=="dr"&&last&&last.startsWith("dr|"))return;last=key;
  const L=B.filter(x=>x.sx==b.sx&&(x.set||0)==(b.set||0)||b.sx=="dr"&&x.sx=="dr");o.push((AXN[b.sx]||b.sx).replace(/^\d+ Pfeile auf (die )?/,"").replace(" · Singles","")+" · "+(COG.includes(b.sx)?L.length+(b.sx=="c120"?" Runden":" Checkouts"):vSum(L.map(x=>x.n))+" Pfeile"))});return o}
 function aPlan(){const run=(s&&!s.done&&s.darts>0)||(MCH&&!MCH.done);
- let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Lukas Advanced · Trainingspläne</div><h1>Such dir einen Plan aus</h1><p>8 Pläne – jeder mit Aufwärmen, Around the Clock und einem Schwerpunkt. Gezählt wird in Prozent, damit du siehst, wie du dich steigerst. Du kannst jederzeit unterbrechen – die App macht beim nächsten Öffnen an derselben Stelle weiter.</p></div>
+ let t=`<div class="vl wp"><div class="wphero"><div><div class="k">Lukas Advanced · Trainingspläne</div><h1>Such dir einen Plan aus</h1><p>8 Pläne – jeder mit Aufwärmen, Round the Board und einem Schwerpunkt. Gezählt wird in Prozent, damit du siehst, wie du dich steigerst. Du kannst jederzeit unterbrechen – die App macht beim nächsten Öffnen an derselben Stelle weiter.</p></div>
  <div class="wpact">${(()=>{const r=DB.sessions.find(x=>PA[x.k]);if(!r)return`<div class="wplast"><small>Zuletzt</small><b>–</b><small>noch kein Plan gemacht</small></div>`;const w=WPLA[r.k];return`<div class="wplast"><small>Zuletzt · Plan ${PA[r.k].nr} · ${vDate(r.date)}</small><b>${vFmt(w[1](r),w[2])}</b><small>${esc(PA[r.k].n)} · ${w[0]}</small></div>`})()}${run?`<button class="wpgo" id="wpgo">Training fortsetzen</button><div class="wpsub">läuft: ${esc(MCH&&!MCH.done?MCH.lab:s.name)}</div>`:""}</div></div>`;
  t+=`<div class="wpgrid">${AK.map(k=>{const p=PA[k],l=wpLast(k);return`<div class="wpcard"><div class="wptop"><span class="wpday">${p.nr}</span><span class="wpdn">Plan ${p.nr}</span></div>
   <h3>${esc(p.n)}</h3><p>${esc(p.x)}</p><div class="wpchips l">${aChips(k).map(c=>`<span>${esc(c)}</span>`).join("")}</div>
@@ -848,14 +873,28 @@ function train(){if(MCH)return mView();if(!s)return trainOld();if(s.done)return 
  else{top="Locker";big=String(s.darts);sub="Pfeile geworfen – einfach frei werfen";hit="–"}
  const bust=s.m=="501"&&s.log[s.log.length-1]=="Bust";
  const mk=V.D.filter(d=>d.x!=null).map((d,i)=>`<g pointer-events="none"><circle cx="${d.x}" cy="${d.y}" r="9" fill="#f2c46d" stroke="#111" stroke-width="2.5"/><text x="${d.x}" y="${d.y+4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="#111" font-family="Arial">${V.D.indexOf(d)+1}</text></g>`).join("");
+ const side=s.m=="blocks"&&s.vk!=null?aSide():s.m=="blocks"?{l:"Trefferquote",v:hit}:s.m=="501"?{l:"Legs",v:hit}:{l:"Average",v:avg(s.pts,s.darts)};
+ const lbl=s.m=="blocks"?(aCo()?"Rest":"Ziel"):s.m=="501"?"Rest":"Pfeile",bt=String(big).replace(/<[^>]+>/g,""),zc=/class="awr"/.test(big)?" w3":bt.length>=6?" s":bt.length>=4?" m":"",sm=s.m!="blocks";
  return`<div class="vl tr">${gBar(esc(s.name||"Training"))}<div class="trgrid"><div class="vcard trb">${board().replace("</svg>",mk+"</svg>")}</div><div>
- <div class="trinfo${atc?" atc":""}"><div class="k">${top}</div>${atc?atcHead(big,hit,V):`<div class="trbig${s.m=="blocks"?" z":""}">${s.m=="blocks"?"<small>"+(aCo()?"Rest":"Ziel")+"</small>":s.m=="501"?"<small>Rest</small>":"<small>Pfeile</small>"}${big}</div><div class="trsub">${sub}</div>`}${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
+ <div class="trinfo ov"><div class="k">${top}</div>
+ <div class="ovh"><span>${V.last?"Letzte Aufnahme":"Aktuelle Aufnahme"}${V.cam?" · erkannt":""}</span></div>
+ <div class="ovd${V.last?" old":""}${sm?" sm":""}">${bx.map((d,i)=>{const c=d?cshort(d.c):"–";return`<div class="ovs${d?" on":""}${d&&i==V.D.length-1&&!V.last?" nw":""}${FIX&&FIX.i==i?" fx":""}${ck[i]?" chk":""}"${d||!V.last?` data-fix="${i}"`:""}>${ck[i]?'<i class="chkq">?</i>':""}<small>Pfeil ${i+1}${ABT&&!V.last?" · "+ABT[i]:""}</small><i class="ovi">${DSVG}</i><b class="${d?"":"e"}${c.length>4?" dn":""}">${c}</b>${sm?`<span>${d?(d.b?"Bust":(d.v||0)+" P."):""}</span>`:""}</div>`}).join("")}${sm?`<div class="ovs sum"><small>Summe</small><b>${V.D.length?sum:"–"}</b></div>`:""}</div>
+ <div class="ovrow"><div class="ovl">${lbl}</div><div class="ovz${zc}">${big}</div>${side?`<div class="ovq"><small>${side.l}</small><b>${side.v}</b></div>`:"<div></div>"}</div>
+ ${sub?`<div class="trsub">${sub}</div>`:""}${bar!=null?`<div class="trbar"><i style="width:${Math.min(100,bar*100)}%"></i></div>`:""}
  ${bust?'<div class="trmsg b">Bust – Rest zurückgesetzt</div>':fresh&&TRMSG.t?`<div class="trmsg">${TRMSG.t}</div>`:""}</div>
- <div class="trvis${V.last?" old":""}"><div class="trvh">${V.last?"Letzte Aufnahme":"Aktuelle Aufnahme"}${V.cam?" · erkannt":""}</div><div class="trboxes${s.m=="blocks"?" nosum":""}">${bx.map((d,i)=>`<div class="${d?"on":""}${d&&i==V.D.length-1&&!V.last?" nw":""}${FIX&&FIX.i==i?" fx":""}${ck[i]?" chk":""}"${d||!V.last?` data-fix="${i}"`:""}>${ck[i]?'<i class="chkq">?</i>':""}<small>Pfeil ${i+1}${ABT&&!V.last?" · "+ABT[i]:""}</small><b>${d?cshort(d.c):"–"}</b><span>${d&&s.m!="blocks"?(d.b?"Bust":(d.v||0)+" P."):""}</span></div>`).join("")}${s.m=="blocks"?"":`<div class="sum"><small>Summe</small><b>${V.D.length?sum:"–"}</b></div>`}</div>${fixBar(V.D.length,ck.some(Boolean))}</div>
+ <div class="trhint">${trHint(V.D.length,ck.some(Boolean))}</div>
  ${trStats(hit)}
  <div class="trbtn"><button id="undo">Rückgängig</button>${s.m=="blocks"?'<button id="skip">'+(s.vk!=null?"Abschnitt überspringen":"Block überspringen")+'</button>':""}</div>${camLive()&&pfStuck()?'<button id="trpull" class="trpull">Pfeile gezogen (falls nicht von selbst erkannt)</button>':""}
  <div id="trcam"></div>
  <button id="fin" class="trfin">Beenden und speichern</button></div></div></div>`}
+// v82: Hinweis/Tastatur unter dem Pfeil-Overlay im Training
+function trHint(n,k){return FIX?fxKeys():n?(k?'<div class="trfh chk">Orange = unsicher (knapp am Draht, Kameras uneinig oder nur eine Kamera) – bitte kurz prüfen. Falsch? Pfeil antippen.</div>':'<div class="trfh">Falsch erkannt? Pfeil antippen. Nicht erkannt? Freien Pfeil antippen.</div>'):'<div class="trfh">Pfeil nicht erkannt? Pfeil antippen und Feld eintippen.</div>'}
+// v82: rechte Quote im Overlay (Advanced): je Abschnitt
+function aSide(){const b=s.bl[s.bi]||s.bl[s.bl.length-1],sx=b.sx,L=s.bl.filter(x=>x.sx==sx),D=DL.slice(0,s.dn||DL.length).filter(d=>d.sx==sx),p=(a,n)=>n?Math.round(a/n*100)+"%":"–";
+ if(sx=="wu")return null;
+ if(COG.includes(sx)){const done=L.filter(x=>x.d>0&&(x.h||x.d>=x.n)),ok=done.filter(x=>x.h);return{l:"Checkout-Quote",v:p(ok.length,done.length)}}
+ if(sx=="hs"){const pts=vSum(D.map(d=>d.v||0));return{l:"Average",v:D.length?f1(pts/D.length*3):"–"}}
+ const d=vSum(L.map(x=>x.d)),h=vSum(L.map(x=>x.h));return{l:"Trefferquote",v:p(h,d)}}
 const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
 const mon=d=>{const x=new Date(d+"T12:00:00");x.setDate(x.getDate()-(x.getDay()+6)%7);return x},zw=w=>35+12.5*w/12;
 function rows(){const S=DB.sessions.slice().reverse(),W=[...Array(12)].map(()=>({}));
@@ -918,7 +957,10 @@ fr:{kpi:["Doppel getroffen",S=>vSum(S.map(r=>r.bl?vSum(r.bl.map(b=>b.h)):null))]
 sa:{kpi:["Legs",S=>vSum(S.map(r=>(r.legs||[]).length))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO LEG",leg:1},
  rows:[["Average",r=>r.avg,{d:2}],["First 9",vF9,{d:2}],["Checkout-Quote",vCO,{p:1}],["Checkout-Punkte",vCOP,{d:0}],["Pfeile pro Leg",r=>r.legs&&r.legs.length?vMean(r.legs):null,{d:1,lb:1}],["Bestes Leg",r=>r.legs&&r.legs.length?Math.min(...r.legs):null,{lb:1,best:1,u:"Pfeile"}]]},
 so:{kpi:["Minuten",S=>vSum(S.map(r=>r.dur))],chips:["Alle"],tr:["Average",r=>r.avg,{d:2}],cnt:{lab:"PRO EINHEIT"},
- rows:[["Average",r=>r.avg,{d:2}],["Pfeile",r=>r.darts,{d:0}],["Dauer",r=>r.dur,{d:0,u:"min"}]]}};Object.assign(VS,VSA);
+ rows:[["Average",r=>r.avg,{d:2}],["Pfeile",r=>r.darts,{d:0}],["Dauer",r=>r.dur,{d:0,u:"min"}]]}};Object.values(VSA).forEach(c=>c.sbars=1);Object.assign(VS,VSA);
+// v82: Round the Board – Quote je Zahl (1–20) über die gewählten Einheiten
+function aNumBars(C,ttl){const L=NUM.map(i=>{const B=[].concat(...C.map(r=>aBl(r,"rtb").filter(b=>b.t=="N"+i))),d=vSum(B.map(b=>b.d));return[String(i),d?vSum(B.map(b=>b.h))/d*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]);if(!ok.length)return"";
+ const mx=Math.max(...ok),mn=Math.min(...ok);return`<div class="vcard anb"><div class="vh3">${ttl}</div>${vBars(L.map(x=>[x[0],x[1],mx>mn&&x[1]==mx?"g":mx>mn&&x[1]==mn?"b":""]),{p:1})}<div class="vnote l">Treffer je Zahl in Prozent (3 Pfeile je Zahl und Einheit). Grün = deine beste Zahl, Rot = deine schwächste.</div></div>`}
 function vFmt(v,o){if(v==null||!isFinite(v))return"–";o=o||{};if(o.p)return v.toFixed(1)+"<i>%</i>";if(o.mm)return v.toFixed(0)+"<i> mm</i>";
  const d=o.d!=null?o.d:(Math.abs(v-Math.round(v))<1e-9?0:1),s=v.toFixed(d);return o.u?s+"<i> "+(typeof o.u=="number"?"/ "+o.u:o.u)+"</i>":s}
 const vDate=d=>d?d.split("-").reverse().slice(0,2).join(".")+".":"";
@@ -951,8 +993,9 @@ function vDay(k){const S=vSes(k),cfg=VS[k],C=VP?S.slice(0,VP):S,Pv=VP?S.slice(VP
  if(cfg.sbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Single (Ø)</div>${vBars(hard(NUM.map(i=>[String(i),vAvgD(C,"N"+i,"s")])))}<div class="vnote l">Rot = deine 3 schwierigsten Felder.</div></div>`;
  if(cfg.dbars)t+=`<div class="vcard"><div class="vh3">Pfeile bis zum Treffer je Doppel (Ø)</div>${vBars(NUM.map(i=>"D"+i).concat(["DB"]).map(d=>{const v=vAvgD(C,d,"d");return[d=="DB"?"Bull":d,v,v!=null&&v>=DW.WKD?"b":""]}))}<div class="vnote l">Rot = ${DW.WKD} oder mehr Pfeile bis zum Treffer – diese Doppel übst du nach der Doppel-Runde noch einmal.</div></div>`;
  if(cfg.wk)t+=vWeak();
+ if(cfg.sbars)t+=aNumBars(C,"Round the Board · Quote je Zahl");
  if(cfg.abars){const L=NUM.map(i=>"D"+i).concat(["DB"]).map(tg=>{const B=[].concat(...C.map(r=>aBl(r,cfg.abars).filter(b=>b.t==tg))),d=vSum(B.map(b=>b.d));return[tg=="DB"?"Bull":tg,d?vSum(B.map(b=>b.h))/d*100:null]}),ok=L.filter(x=>x[1]!=null).map(x=>x[1]),mx=Math.max(...ok),mn=Math.min(...ok);
-  t+=`<div class="vcard"><div class="vh3">Quote je Doppel (Bob's 27, Routine, Around the Clock)</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}<div class="vnote l">Grün = dein bestes Doppel, Rot = dein schwächstes.</div></div>`}
+  t+=`<div class="vcard"><div class="vh3">Quote je Doppel (Bob's 27, Routine, Round the Board)</div>${vBars(L.map(x=>[x[0],x[1],x[1]==mx?"g":x[1]==mn?"b":""]),{p:1})}<div class="vnote l">Grün = dein bestes Doppel, Rot = dein schwächstes.</div></div>`}
  return t+"</div></div>"}
 function vHeatBox(C,k){const fl=vFl,D=[].concat(...C.map(r=>vDl(r,fl))),pos=D.filter(d=>d.x!=null).length,miss=D.length-pos,withDl=C.filter(r=>r.dl).length;
  return`<div class="vhl">PFEILE MIT POSITION: ${pos}<br>AUS ${withDl} ${withDl==1?"EINHEIT":"EINHEITEN"}${miss?" · "+miss+" OHNE POSITION":""}</div><canvas id="vhc" data-k="${k}"></canvas>${pos?"":`<div class="vempty">${C.length&&!withDl?"Diese Einheiten sind älter als Version 23 – da wurden die Positionen noch nicht gespeichert. Ab jetzt schon.":"Noch keine Pfeile mit Position."}</div>`}`}
@@ -1082,7 +1125,7 @@ function trainDone(){if(s.cu)return cuDone();if(!s.saved||!DB.sessions.length||D
  if(cfg.chips&&cfg.chips.length&&!cfg.chips.includes(FHF))FHF=cfg.chips[0];
  t+=`<div class="vgrid"><div><div class="vcard vheat"><div class="vhl">DEINE PFEILE HEUTE${FHF!="Alle"&&(cfg.chips||[]).includes(FHF)?" · "+esc(FHF):""} · ${vDl(r,d=>d.x!=null&&(!(cfg.chips||[]).includes(FHF)||fhFl(d))).length} MIT POSITION</div>${fhChips(cfg.chips)}<canvas id="fhc"></canvas></div></div><div>
  <div class="vpanel"><div class="vrow f4 vhd"><div></div><div>HEUTE</div><div>LETZTES MAL</div><div>BESTWERT</div></div>${rowsH.replace(/class="vrow"/g,'class="vrow f4"')}</div>
- ${cnt?`<div class="vcard fincnt"><div class="vh3">Aufnahmen heute</div><div class="trst">${cnt}</div></div>`:""}${cfg.grp?vGrpPanel([r],cfg.grp):""}${cfg.wk?vWeak():""}
+ ${cnt?`<div class="vcard fincnt"><div class="vh3">Aufnahmen heute</div><div class="trst">${cnt}</div></div>`:""}${cfg.grp?vGrpPanel([r],cfg.grp):""}${cfg.wk?vWeak():""}${r.adv?aNumBars([r],"Round the Board · Quote je Zahl heute"):""}
  <div class="vcard"><div class="vh3">Notiz</div><input id="note" placeholder="Wie lief es? (optional)" value="${esc(r.note||"")}" class="finin"></div>
  <div class="trbtn"><button id="fvl">Im Verlauf ansehen</button><button id="new" class="wpgo2">${isAdv()?"Zu den Plänen":"Zum Wochenplan"}</button></div></div></div></div>`;
  return t}
@@ -2257,7 +2300,7 @@ function autoTry(n){setTimeout(()=>{if(!cv.srcObject)return;const fc=()=>"Farbpu
 $("#c8").onclick=()=>{cm("Ich suche die Scheibe …");autoTry(0)};
 $("#c9").onclick=()=>{try{snap()}catch(e){cm("Standbild konnte nicht gespeichert werden: "+(e&&e.message||e))}};
 function snap(){if(!cv.videoWidth)return cm("Kein Kamerabild.");const vw=cv.videoWidth,vh=cv.videoHeight,k=Math.min(1,1600/vw),w=Math.round(vw*k),h=Math.round(vh*k),pn=ref?3:2,
- lines=["Version 81 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
+ lines=["Version 82 | Kamera "+cv.videoWidth+"×"+cv.videoHeight+" | Analyse "+AW+" px | Ausrichtung "+LSH.map(v=>v.toFixed(2)).join("/")+" px | Bewegung "+Math.round(MV*100)+"% (Grenze "+Math.round(MT*100)+"%) | Status: "+$("#cst2").textContent.replace("● ","")+" | Zoom "+(AZ?"Auto ":"")+Z+"x Mitte "+ZC.map(v=>v.toFixed(2)).join("/")+" | Brennweite "+FOC.toFixed(2)+" | Objektiv "+HZ+"x | "+camLabel()+" | Treffer ok "+(DB.cam.ok||0)+" falsch "+(DB.cam.bad||0),"Meldung: "+$("#cmsg").textContent,TURN.length?"Aufnahme: "+TURN.map((t,i)=>(i+1)+". "+t.c+(t.r?(t.r=="ok"?" ✓":" ✗"):"")).join("  "):"Aufnahme: noch kein Pfeil",DPX?"Pfeil-Pixel (gelb): "+DPX.px.length+" | sonstige Änderungen (orange): "+(DPX.nz||[]).length:"Noch kein Vergleich gemacht","Verlauf: "+(LOG.slice(-6).join(" | ")||"–"),"2. Kamera: "+(ROLE=="side"?"dieses Gerät ist die zweite Kamera":"")+" "+duoState()+(DUO.last?" | letzter Abgleich: "+DUO.last:"")+" | beide "+DUO.cnt.both+", nur Tablet "+DUO.cnt.main+", nur Handy "+DUO.cnt.side];
  const pt=h>w,P=[0,1,2].map(i=>pt?[i*w,0]:[0,i*h]),cw=Math.max(pt?w*pn:w,960),ih=pt?h:h*pn;
  const c=document.createElement("canvas");c.width=cw;let g=c.getContext("2d");g.font="16px Arial";const wl=[];lines.forEach(l=>{let cur="";const mw=t=>{try{const m=g.measureText(t);return m&&m.width>=0?m.width:t.length*8}catch(e){return t.length*8}};l.split(" ").forEach(p=>{const t=cur?cur+" "+p:p;if(cur&&mw(t)>cw-16){wl.push(cur.replace(/ \|$/,""));cur="   "+(p=="|"?"":p)}else cur=t});wl.push(cur)});
  c.height=ih+30+wl.length*24;g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);
@@ -2748,7 +2791,7 @@ function autoTr(){if(!trOn()||typeof TURN=="undefined")return;const now=Date.now
  for(const T of TURN){if(T.tr||T.r=="bad")continue;const ok=!T.R||T.R.length>=L||now-T.at>=AUTOW;if(!ok)break;autoOne(T);if(!trOn())break}}
 // v77: späte Kamera-Änderung an einer schon beendeten Aufnahme (Checkout/Bust) oder an einem von Hand korrigierten Pfeil: nicht übernehmen
 function fixLock(T,old,why){try{LOG.push(hm()+" spätere Kamera-Meldung: Pfeil wäre "+cshort(T.c)+" statt "+cshort(old)+" – nicht übernommen ("+why+")");
- trMsg("Eine Kamera sieht einen Pfeil nachträglich als "+cshort(T.c)+" (gezählt: "+cshort(old)+"). Gezählt bleibt "+cshort(old)+" – falls "+cshort(T.c)+" stimmt: Kästchen antippen.");
+ trMsg("Eine Kamera sieht einen Pfeil nachträglich als "+cshort(T.c)+" (gezählt: "+cshort(old)+"). Gezählt bleibt "+cshort(old)+" – falls "+cshort(T.c)+" stimmt: "+(MCH&&!MCH.done?"Kästchen":"Pfeil")+" antippen.");
  T.c=old;T.v=cval(old);T.lk=1;render()}catch(e){}}
 function autoFix(T,old){if(T.man)return;const warn=()=>{trMsg("Achtung: Ein früherer Pfeil wurde nachträglich als "+cshort(T.c)+" erkannt (gezählt ist "+cshort(old)+"). Bitte prüfen.");render()};
  if(MCH&&T.sid===MCH.id){if(!T.tr||T.c==old||MCH.done)return;if(DW.VEND&&!isG()){const n0=TURN.filter(U=>U!==T&&U.tr&&U.sid===MCH.id&&U.mi>T.mi).length,V=MCH.vis.slice(-(n0+1));if(T.end||MCH.newLeg||V.some(e=>e&&(e.f||e.b||e.hand))){fixLock(T,old,T.end||V.some(e=>e&&(e.f||e.b))?"Aufnahme schon zu Ende":"von Hand korrigiert");return}}
@@ -2803,7 +2846,7 @@ function duoUI(){const b=$("#dbox");if(!b)return;const st=duoState(),col=s=>s=="
 function tdSave(){clearTimeout(DUO.tdT);const T=DUO.td;DUO.td=null;if(!T)return;let nb=0;
  // Kameras, die nicht geantwortet haben (z. B. Pi abgestürzt): aus der laufenden Sicherung auf dem Tablet
  for(const id in (DUO.cbk||{}))if(!T.cams[id]){const b=DUO.cbk[id];if(!b.log.length&&!b.rec.length)continue;nb++;T.cams[id]={id,log:b.log.slice(),rec:b.rec.slice(),zahl:b.z,aw:800,w:1280,h:720,st:"Sicherung",cal:b.rec.length?b.rec[b.rec.length-1].cal:null,turn:[],backup:1}}const k=Object.keys(T.cams).length;if(!k){cm("Keine Testdaten angekommen. Sind die Kameras verbunden?");return}
- try{const o={app:"dart-testdaten",v:81,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+ try{const o={app:"dart-testdaten",v:82,at:new Date().toISOString(),log:LOG.slice(-2500),turn:TURN.map(t=>({c:t.c,x:t.x,y:t.y,src:t.src})),pf:pfDump(),cams:T.cams},bl=new Blob([JSON.stringify(o)],{type:"application/json"}),a=document.createElement("a"),d=new Date();
   a.href=URL.createObjectURL(bl);a.download="dart-testdaten-"+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,"0")).join("")+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
   cm("Testdaten von "+k+" Kamera"+(k==1?"":"s")+" gespeichert, mit "+PFL.length+" Pfeilen der Sitzung (davon "+PFL.filter(t=>t.man).length+" von Hand korrigiert)"+(nb?" ("+nb+" davon aus der Sicherung auf dem Tablet, weil die Kamera nicht geantwortet hat)":"")+" (Ordner „Downloads“). Die Datei kannst du im Chat hochladen.")}catch(e){cm("Testdaten konnten nicht gespeichert werden: "+(e&&e.message||e))}}
 function duoImgClick(e){const el=e.target&&e.target.closest?e.target.closest("img[data-src]"):null;if(!el)return;const r=el.getBoundingClientRect(),id=el.dataset.src,s=DUO.src[id];
