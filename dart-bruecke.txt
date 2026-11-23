@@ -1,4 +1,4 @@
-// Dart-Kameras: Brücke zum Tablet ohne Browser (dart-bruecke.js + Bibliothek ws 8.23.0, gebaut 2026-11-15)
+// Dart-Kameras: Brücke zum Tablet ohne Browser (dart-bruecke.js + Bibliothek ws 8.23.0, gebaut 2026-11-23)
 "use strict";
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __commonJS = (cb, mod) => function __require() {
@@ -3768,7 +3768,7 @@ var path = require("path");
 var crypto = require("crypto");
 var os = require("os");
 var WebSocket = require_ws();
-var BR_VERSION = "1.0";
+var BR_VERSION = "1.1";
 var DIR = __dirname;
 var log = (...a) => {
   try {
@@ -3796,6 +3796,51 @@ function ladeNDC() {
 var PI = { host: "127.0.0.1", port: +(process.env.DART_PORT || 8771) };
 var PEER_URL = (process.env.DART_PEER || "wss://0.peerjs.com:443/").replace(/\/?$/, "/");
 var ICE = process.env.DART_ICE != null ? process.env.DART_ICE.split(",").filter(Boolean) : ["stun:stun.l.google.com:19302", "turn:peerjs:peerjsp@eu-0.turn.peerjs.com:3478", "turn:peerjs:peerjsp@us-0.turn.peerjs.com:3478"];
+var BULK = /* @__PURE__ */ new Set(["rb", "lg", "img", "imgF", "bkC"]);
+var WEGWERFBAR = /* @__PURE__ */ new Set(["rb", "lg"]);
+var BULKMAX = 196608;
+var STAU_WEG = 6e6;
+var HAENGT = +(process.env.DART_HAENGT || 1e4);
+var TSTUCK = /^K(\d)@(\d+)$/.exec(process.env.DART_TEST_STUCK || "");
+var TSTUCK_N = 0;
+function drossel(dc, k) {
+  const env = process.env.DART_TEST_RATE, R0 = env === void 0 || env === "" ? null : +env;
+  const st = TSTUCK && +TSTUCK[1] == k && !TSTUCK_N++ ? mono() + 1e3 * +TSTUCK[2] : 0;
+  if (R0 == null && !st) return dc;
+  let q = [], ba = 0, low = null, thr = 0, cr = 0;
+  const rate = () => st && mono() > st ? 0 : R0 == null ? 1e9 : R0;
+  setInterval(() => {
+    const R = rate();
+    cr = Math.min(cr + R / 20, Math.max(R, 8192));
+    while (q.length && q[0].length <= cr) {
+      const b = q.shift();
+      ba -= b.length;
+      cr -= b.length;
+      try {
+        dc.sendMessageBinary(b);
+      } catch (e) {
+      }
+    }
+    if (!q.length) cr = 0;
+    if (low && ba <= thr) low();
+  }, 50).unref();
+  return new Proxy(dc, { get(t, p) {
+    if (p === "bufferedAmount") return () => ba;
+    if (p === "sendMessageBinary") return (b) => {
+      q.push(b);
+      ba += b.length;
+      return true;
+    };
+    if (p === "setBufferedAmountLowThreshold") return (v2) => {
+      thr = v2;
+    };
+    if (p === "onBufferedAmountLow") return (f) => {
+      low = f;
+    };
+    const v = t[p];
+    return typeof v == "function" ? v.bind(t) : v;
+  } });
+}
 function selbsttest() {
   let NDC;
   try {
@@ -4189,6 +4234,11 @@ function betrieb() {
       this.q = [];
       this.qb = 0;
       this.ans = false;
+      this.qx = [];
+      this.qxb = 0;
+      this.gesendet = 0;
+      this.lp = mono();
+      this.ld = 0;
       const sig = V[k].sig, dst = "ldart-" + CODE;
       const pc = this.pc = new NDC.PeerConnection("K" + k, { iceServers: ICE });
       pc.onLocalDescription((sdp, type) => {
@@ -4202,7 +4252,7 @@ function betrieb() {
       pc.onStateChange((s) => {
         if (!this.tot && (s == "failed" || s == "closed")) this.schluss("Verbindung " + (s == "failed" ? "abgerissen" : "geschlossen"));
       });
-      const dc = this.dc = pc.createDataChannel(this.id);
+      const dc = this.dc = drossel(pc.createDataChannel(this.id), k);
       dc.onOpen(() => {
         if (this.tot) return;
         this.open = true;
@@ -4218,6 +4268,8 @@ function betrieb() {
         }
         log("K" + k + " verbunden nach " + (mono() - this.t0) + " ms" + (weg ? " (" + weg + ")" : ""));
         post({ t: "_open" }, k);
+        if (weg) post({ t: "_br", e: ("K" + k + " verbunden: " + weg).slice(0, 40), vis: "Br\xFCcke " + BR_VERSION }, 0);
+        this.lp = mono();
       });
       dc.onMessage((m) => {
         if (this.tot) return;
@@ -4242,7 +4294,7 @@ function betrieb() {
         if (!this.tot) log("K" + k + " Datenkanal-Fehler: " + String(e).slice(0, 120));
       });
       try {
-        dc.setBufferedAmountLowThreshold(262144);
+        dc.setBufferedAmountLowThreshold(65536);
         dc.onBufferedAmountLow(() => this.weiter());
       } catch (e) {
       }
@@ -4264,16 +4316,31 @@ function betrieb() {
     }
     // große Nachrichten in Stücken (wie bisher die Brücke im Browser): PeerJS nimmt je Nachricht höchstens 16 kB
     sende(o) {
-      const j = JSON.stringify(o);
-      if (j.length <= 4e3) return this.roh(j);
-      const key = Date.now().toString(36) + Math.random().toString(36).slice(2, 6), n = Math.ceil(j.length / 4e3);
-      for (let i = 0; i < n; i++) this.roh(JSON.stringify({ t: "pt", k: key, i, n, d: j.slice(i * 4e3, (i + 1) * 4e3) }));
+      const j = JSON.stringify(o), gross = BULK.has(o && o.t);
+      if (j.length <= 4e3) return this.roh([Buffer.from(j, "utf8")], gross, o && o.t);
+      const key = Date.now().toString(36) + Math.random().toString(36).slice(2, 6), n = Math.ceil(j.length / 4e3), L = [];
+      for (let i = 0; i < n; i++) L.push(Buffer.from(JSON.stringify({ t: "pt", k: key, i, n, d: j.slice(i * 4e3, (i + 1) * 4e3) }), "utf8"));
+      this.roh(L, gross, o && o.t);
     }
-    roh(j) {
-      const b = Buffer.from(j, "utf8");
-      this.q.push(b);
-      this.qb += b.length;
-      if (this.qb > 64e6) return this.schluss("Sendestau");
+    roh(L, gross, t) {
+      const n = L.reduce((a, b) => a + b.length, 0);
+      if (!gross) {
+        for (const b of L) this.q.push(b);
+        this.qb += n;
+        if (this.qb > 64e6) return this.schluss("Sendestau");
+      } else {
+        this.qx.push({ t, L });
+        this.qxb += n;
+        for (let i = 1; this.qxb > STAU_WEG && i < this.qx.length; ) {
+          const e = this.qx[i];
+          if (WEGWERFBAR.has(e.t)) {
+            this.qxb -= e.L.reduce((a, b) => a + b.length, 0);
+            this.qx.splice(i, 1);
+            this.weg = (this.weg || 0) + 1;
+          } else i++;
+        }
+        if (this.qxb > 64e6) return this.schluss("Sendestau (gro\xDFe Nachrichten)");
+      }
       this.weiter();
     }
     weiter() {
@@ -4283,23 +4350,56 @@ function betrieb() {
           const b = this.q.shift();
           this.qb -= b.length;
           this.dc.sendMessageBinary(b);
+          this.gesendet += b.length;
+          NTX++;
+        }
+        while (!this.q.length && this.qx.length && this.dc.bufferedAmount() < BULKMAX) {
+          const e = this.qx[0], b = e.L.shift();
+          this.qxb -= b.length;
+          if (!e.L.length) this.qx.shift();
+          this.dc.sendMessageBinary(b);
+          this.gesendet += b.length;
           NTX++;
         }
       } catch (e) {
         return this.schluss("Senden: " + e.message);
       }
-      if (this.q.length && !this.tq) this.tq = setTimeout(() => {
+      if ((this.q.length || this.qx.length) && !this.tq) this.tq = setTimeout(() => {
         this.tq = null;
         this.weiter();
       }, 40);
     }
     puffer() {
-      let b = this.qb;
+      let b = this.qb + this.qxb;
       try {
         b += this.dc.bufferedAmount();
       } catch (e) {
       }
       return b;
+    }
+    // Wächter (alle 5 s): kommt nichts mehr durch, obwohl etwas wartet -> Verbindung neu aufbauen
+    pruefe(now) {
+      if (!this.open || this.tot) return;
+      let ba = 0;
+      try {
+        ba = this.dc.bufferedAmount();
+      } catch (e) {
+      }
+      const raus = this.gesendet - ba;
+      if (raus > this.ld || ba == 0 && !this.q.length) {
+        this.lp = now;
+        this.ld = raus;
+      }
+      if (this.weg) {
+        log("K" + this.k + " Stau: " + this.weg + " Sicherungskopien weggelassen");
+        this.weg = 0;
+      }
+      if (now - this.lp > HAENGT) {
+        const kb = Math.round(this.puffer() / 1024);
+        log("K" + this.k + " Leitung h\xE4ngt: seit " + Math.round((now - this.lp) / 1e3) + " s geht nichts durch (" + kb + " kB warten) \u2013 neu verbinden");
+        post({ t: "_br", e: ("K" + this.k + " Leitung hing " + Math.round((now - this.lp) / 1e3) + " s \u2013 neu verbunden").slice(0, 40), vis: kb + " kB" }, 0);
+        this.schluss("Leitung h\xE4ngt");
+      }
     }
     schluss(warum, still) {
       if (this.tot) return;
@@ -4384,7 +4484,9 @@ function betrieb() {
       for (const x in v.pt) if (now - v.pt[x].at > 9e4) delete v.pt[x];
       const c = v.c;
       if (c && !c.tot) {
-        if (c.open && now - c.rx > 15e3) c.schluss("15 s nichts vom Tablet geh\xF6rt");
+        if (c.open) c.pruefe(now);
+        if (c.tot) {
+        } else if (c.open && now - c.rx > 15e3) c.schluss("15 s nichts vom Tablet geh\xF6rt");
         else if (!c.open && now - c.t0 > 12e3) c.schluss("Aufbau dauert zu lange");
       }
       if (!v.c || v.c.tot) wahl(k);
